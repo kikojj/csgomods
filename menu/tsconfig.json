@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "outDir": "./dist/server",
+    "paths": {
+      "@ts": ["src/ts/index"],
+      "@ts/*": ["src/ts/*"],
+      "@utils": ["src/utils/index"],
+      "@utils/*": ["src/utils/*"],
+      "@components": ["src/components/index"],
+      "@components/*": ["src/components/*"],
+      "@containers": ["src/containers/index"],
+      "@containers/*": ["src/containers/*"]
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  }
+}

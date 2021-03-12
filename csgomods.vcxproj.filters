@@ -1,0 +1,384 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="SDK">
+      <UniqueIdentifier>{fe54982f-1b93-43bd-a56e-c114db41e461}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{a15caeee-4ec5-4066-958a-8c502d234a1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Memory">
+      <UniqueIdentifier>{6e6d7f72-7f37-495c-a3c6-6576ddfba05a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features">
+      <UniqueIdentifier>{96930f3d-fe30-4134-9ed7-f9c76789ce58}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\AimBot">
+      <UniqueIdentifier>{6d19f522-37bf-421d-b758-0ba1e3dee0cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\GlowEsp">
+      <UniqueIdentifier>{559e2108-30c5-4432-b2c9-76caf579060a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Offsets">
+      <UniqueIdentifier>{4189a02c-83de-47cd-afa5-e683e0030e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Misc">
+      <UniqueIdentifier>{9f0d5d66-7504-4076-bd74-6c9093b5226f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\TriggerBot">
+      <UniqueIdentifier>{8cda5792-c883-4ae8-9aeb-34a07c469740}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Helpers">
+      <UniqueIdentifier>{fa770e53-e9e0-42b8-b764-dc6330d93eda}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game">
+      <UniqueIdentifier>{52663678-00bf-45d3-8b74-3d2ec4fc6e75}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client">
+      <UniqueIdentifier>{591a7ed2-05f9-4a33-953d-d32ab3863e80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client\EntityList">
+      <UniqueIdentifier>{5b2b3b2a-aea2-4225-965f-6ddf720c9dd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Engine">
+      <UniqueIdentifier>{25fde9b3-e9a3-4b8c-b71e-bcc85ff12e6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Engine\ClientState">
+      <UniqueIdentifier>{e9a4f798-f6e1-452a-b3ec-c4c849a378b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Bsp-parser">
+      <UniqueIdentifier>{35f5ee73-8fc1-47e3-b031-17da4cae5900}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client\GlowObjectManager">
+      <UniqueIdentifier>{b3e7aebc-3e6e-45cb-b44d-56ce20fcd4cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{61575c0d-5fa9-4e8d-89e4-dcad1eab3e8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu\Server">
+      <UniqueIdentifier>{37d9305c-f00d-4f50-a958-64c38aa93cf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Settings">
+      <UniqueIdentifier>{5fe74e20-3ee9-47eb-b51f-1828af569717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\JsonXX">
+      <UniqueIdentifier>{d4f16b0a-500f-4c19-9d3c-38dba1151e53}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Features\Skinchanger">
+      <UniqueIdentifier>{94197332-fa79-4b75-bff4-9818e06bba48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Scanner">
+      <UniqueIdentifier>{9ed9c6d5-11e8-49e4-99ce-cf3149f0351c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Scanner\RFW-Modules">
+      <UniqueIdentifier>{22dce193-09c8-4721-a89e-1a9d7b432164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Scanner\Utils">
+      <UniqueIdentifier>{a35316a7-08eb-4651-a4f2-2b19c2f3d19a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client\BaseEntity">
+      <UniqueIdentifier>{236300bd-40cf-4a6d-8ff9-6782cc2d2912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client\BasePlayer">
+      <UniqueIdentifier>{a493cd70-1b49-446f-8466-630f4d859806}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client\BaseCombatWeapon">
+      <UniqueIdentifier>{f4c20b24-2043-4c84-9892-93099c54b2e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils\Game\Client\BaseLocalPlayer">
+      <UniqueIdentifier>{cda84dd3-2bb3-4fe8-a440-52bb2ca49620}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Memory.hpp">
+      <Filter>Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="GlowEsp.hpp">
+      <Filter>Features\GlowEsp</Filter>
+    </ClInclude>
+    <ClInclude Include="Client.hpp">
+      <Filter>Utils\Game\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityList.hpp">
+      <Filter>Utils\Game\Client\EntityList</Filter>
+    </ClInclude>
+    <ClInclude Include="PModule.hpp">
+      <Filter>Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="IGlowObjectDefinition.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.hpp">
+      <Filter>Utils\Game\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientState.hpp">
+      <Filter>Utils\Game\Engine\ClientState</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorRGBA.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Offsets.hpp">
+      <Filter>Utils\Offsets</Filter>
+    </ClInclude>
+    <ClInclude Include="Skeleton.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Vector.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="KeyEvent.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="FlagsState.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamNum.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="AimBot.hpp">
+      <Filter>Features\AimBot</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneVector.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Math.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\Mod.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\patternscan.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\proc.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\ProcEx.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\ProcIn.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\rfw_ntapi.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\rfw_ntdll.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\stdafx.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\rfw-modules\util.h">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\stdafx.h">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\targetver.h">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\SigData.h">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\Netvar.h">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="dumper\SrcSDK.h">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Defines.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ClientStates.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Misc.hpp">
+      <Filter>Features\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="TriggerBot.hpp">
+      <Filter>Features\TriggerBot</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDefinitionIndex.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassID.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Helpers.hpp">
+      <Filter>Utils\Helpers</Filter>
+    </ClInclude>
+    <ClInclude Include="Modules.hpp">
+      <Filter>Utils\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="bsb-parser\bsp_parser.hpp">
+      <Filter>Utils\Bsp-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="bsb-parser\matrix.hpp">
+      <Filter>Utils\Bsp-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="bsb-parser\requirements.hpp">
+      <Filter>Utils\Bsp-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="bsb-parser\valve_structs.hpp">
+      <Filter>Utils\Bsp-parser</Filter>
+    </ClInclude>
+    <ClInclude Include="BspParser.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="GlowObjectManager.hpp">
+      <Filter>Utils\Game\Client\GlowObjectManager</Filter>
+    </ClInclude>
+    <ClInclude Include="Input.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="LifeState.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="MenuServer.hpp">
+      <Filter>Menu\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="jsonxx\jsonxx.h">
+      <Filter>Utils\JsonXX</Filter>
+    </ClInclude>
+    <ClInclude Include="Settings.hpp">
+      <Filter>Utils\Settings</Filter>
+    </ClInclude>
+    <ClInclude Include="Globlas.hpp">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Skinchanger.hpp">
+      <Filter>Features\Skinchanger</Filter>
+    </ClInclude>
+    <ClInclude Include="EntityQuality.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="Scanner.hpp">
+      <Filter>Utils\Scanner</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseEntity.hpp">
+      <Filter>Utils\Game\Client\BaseEntity</Filter>
+    </ClInclude>
+    <ClInclude Include="BasePlayer.hpp">
+      <Filter>Utils\Game\Client\BasePlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseCombatWeapon.hpp">
+      <Filter>Utils\Game\Client\BaseCombatWeapon</Filter>
+    </ClInclude>
+    <ClInclude Include="BaseLocalPlayer.hpp">
+      <Filter>Utils\Game\Client\BaseLocalPlayer</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinRarity.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Client.cpp">
+      <Filter>Utils\Game\Client</Filter>
+    </ClCompile>
+    <ClCompile Include="EntityList.cpp">
+      <Filter>Utils\Game\Client\EntityList</Filter>
+    </ClCompile>
+    <ClCompile Include="GlowEsp.cpp">
+      <Filter>Features\GlowEsp</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Utils\Game\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientState.cpp">
+      <Filter>Utils\Game\Engine\ClientState</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="AimBot.cpp">
+      <Filter>Features\AimBot</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\Mod.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\patternscan.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\proc.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\ProcEx.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\ProcIn.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\rfw_ntapi.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\rfw-modules\util.cpp">
+      <Filter>Utils\Scanner\RFW-Modules</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\stdafx.cpp">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\SigData.cpp">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\Netvar.cpp">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="dumper\SrcSDK.cpp">
+      <Filter>Utils\Scanner\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Misc.cpp">
+      <Filter>Features\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="TriggerBot.cpp">
+      <Filter>Features\TriggerBot</Filter>
+    </ClCompile>
+    <ClCompile Include="Offsets.cpp">
+      <Filter>Utils\Offsets</Filter>
+    </ClCompile>
+    <ClCompile Include="Helpers.cpp">
+      <Filter>Utils\Helpers</Filter>
+    </ClCompile>
+    <ClCompile Include="bsb-parser\bsp_parser.cpp">
+      <Filter>Utils\Bsp-parser</Filter>
+    </ClCompile>
+    <ClCompile Include="GlowObjectManager.cpp">
+      <Filter>Utils\Game\Client\GlowObjectManager</Filter>
+    </ClCompile>
+    <ClCompile Include="MenuServer.cpp">
+      <Filter>Menu\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonxx\jsonxx.cc">
+      <Filter>Utils\JsonXX</Filter>
+    </ClCompile>
+    <ClCompile Include="Settings.cpp">
+      <Filter>Utils\Settings</Filter>
+    </ClCompile>
+    <ClCompile Include="Skinchanger.cpp">
+      <Filter>Features\Skinchanger</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDefinitionIndex.cpp">
+      <Filter>SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="Scanner.cpp">
+      <Filter>Utils\Scanner</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseEntity.cpp">
+      <Filter>Utils\Game\Client\BaseEntity</Filter>
+    </ClCompile>
+    <ClCompile Include="BasePlayer.cpp">
+      <Filter>Utils\Game\Client\BasePlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseCombatWeapon.cpp">
+      <Filter>Utils\Game\Client\BaseCombatWeapon</Filter>
+    </ClCompile>
+    <ClCompile Include="BaseLocalPlayer.cpp">
+      <Filter>Utils\Game\Client\BaseLocalPlayer</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="dumper.json">
+      <Filter>Utils\Scanner</Filter>
+    </None>
+    <None Include="skins.json">
+      <Filter>Utils</Filter>
+    </None>
+  </ItemGroup>
+</Project>
