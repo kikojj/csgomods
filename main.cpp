@@ -2,7 +2,7 @@
 #include <thread>
 #include <map>
 
-#include "Globlas.hpp"
+#include "GlobalVars.hpp"
 #include "MenuServer.hpp"
 #include "Defines.hpp"
 #include "Memory.hpp"
@@ -24,8 +24,7 @@
 
 using namespace std;
 
-bool isWorking = true;
-
+#pragma region Global Vars
 MenuServer menuServer;
 Memory mem;
 PModule clientDll;
@@ -36,13 +35,17 @@ Engine engine;
 
 rn::bsp_parser bsp_parser;
 
+map<ItemDefinitionIndex, int> modelIndexes;
+#pragma endregion
+
+bool isWorking = true;
+
 GlowEsp glowEsp;
 AimBot aimBot;
 TriggerBot triggetBot;
 Skinchanger skinchanger;
 Misc misc;
 
-std::map<ItemDefinitionIndex, int> modelIndexes;
 
 int main() {
 	try

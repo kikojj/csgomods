@@ -155,7 +155,7 @@
     <ClInclude Include="ClientStates.hpp" />
     <ClInclude Include="ColorRGBA.hpp" />
     <ClInclude Include="EntityQuality.hpp" />
-    <ClInclude Include="Globlas.hpp" />
+    <ClInclude Include="GlobalVars.hpp" />
     <ClInclude Include="Settings.hpp" />
     <ClInclude Include="Scanner.hpp" />
     <ClInclude Include="dumper\Netvar.h" />

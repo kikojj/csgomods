@@ -3,7 +3,7 @@
 #include <Windows.h>
 #include <string>
 
-#include "Globlas.hpp"
+#include "GlobalVars.hpp"
 #include "Memory.hpp"
 #include "Modules.hpp"
 #include "Client.hpp"

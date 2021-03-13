@@ -10,7 +10,7 @@
 
 #include "jsonxx/jsonxx.h"
 
-#include "Globlas.hpp"
+#include "GlobalVars.hpp"
 #include "Settings.hpp"
 #include "Client.hpp"
 #include "Engine.hpp"
