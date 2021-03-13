@@ -287,8 +287,7 @@ void Offsets::getSignatures(){
   Offsets::signatures::dwForceForward               = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 51 53 8A 5D 08", { 245 });
   Offsets::signatures::dwForceJump                  = Scanner::getSignature(CLIENT_DLL_NAME, "8B 0D ? ? ? ? 8B D6 8B C1 83 CA 02", { 2 });
   Offsets::signatures::dwForceLeft                  = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 51 53 8A 5D 08", { 465 });
-  Offsets::signatures::dwForceRight                 = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 51 53 8A 5D 08", {512});
-  Offsets::signatures::dwGameDir                    = Scanner::getSignature(CLIENT_DLL_NAME, "68 ? ? ? ? 8D 85 ? ? ? ? 50 68 ? ? ? ? 68", { 1 });
+  Offsets::signatures::dwForceRight                 = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 51 53 8A 5D 08", { 512 });
   Offsets::signatures::dwGameRulesProxy             = Scanner::getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? 85 C0 0F 84 ? ? ? ? 80 B8 ? ? ? ? ? 74 7A", { 1 });
   Offsets::signatures::dwGlobalVars                 = Scanner::getSignature(CLIENT_DLL_NAME, "68 ? ? ? ? 68 ? ? ? ? FF 50 08 85 C0", { 1 });
   Offsets::signatures::dwGlowObjectManager          = Scanner::getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? A8 01 75 4B", { 1 }, 4);
@@ -339,6 +338,7 @@ void Offsets::getSignatures(){
   Offsets::signatures::model_ambient_min                  = Scanner::getSignature(ENGINE_DLL_NAME, "F3 0F 10 0D ? ? ? ? F3 0F 11 4C 24 ? 8B 44 24 20 35 ? ? ? ? 89 44 24 0C", { 4 });
   Offsets::signatures::overlayActivated1                  = Scanner::getSignature(ENGINE_DLL_NAME, "50 51 8D 85 ? ? ? ? B9", { 9 });
   Offsets::signatures::overlayActivated2                  = Scanner::getSignature(ENGINE_DLL_NAME, "88 86 ? ? 00 00 5E 84", { 2 });
+  Offsets::signatures::dwGameDir                          = Scanner::getSignature(ENGINE_DLL_NAME, "68 ? ? ? ? 8D 85 ? ? ? ? 50 68 ? ? ? ? 68", { 1 });
 
   //VSTDLIB_DLL_NAME
   Offsets::signatures::interface_engine_cvar  = Scanner::getSignature(VSTDLIB_DLL_NAME, "8B 0D ? ? ? ? C7 05", { 2 });

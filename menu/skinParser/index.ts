@@ -4,7 +4,7 @@ import { ItemDefinitionIndex } from "../src/utils/weapon";
 
 const weaponsUrls = [
   //PISTOLS
-  "https://csgostash.com/weapon/USP-S",
+  // "https://csgostash.com/weapon/USP-S",
   // "https://csgostash.com/weapon/Tec-9",
   // "https://csgostash.com/weapon/R8+Revolver",
   // "https://csgostash.com/weapon/P250",
@@ -21,7 +21,7 @@ const weaponsUrls = [
   // "https://csgostash.com/weapon/FAMAS",
   // "https://csgostash.com/weapon/G3SG1",
   // "https://csgostash.com/weapon/Galil+AR",
-  // "https://csgostash.com/weapon/M4A1-S",
+  "https://csgostash.com/weapon/M4A1-S",
   // "https://csgostash.com/weapon/M4A4",
   // "https://csgostash.com/weapon/SCAR-20",
   // "https://csgostash.com/weapon/SG+553",

@@ -7,7 +7,7 @@
     "dev": "cross-env NODE_ENV=development webpack-dev-server",
     "dev-server": "cross-env NODE_ENV=development ts-node-dev server.ts",
     "build": "cross-env NODE_ENV=production webpack",
-    "parseSkin": "ts-node ./skinParser/index.ts"
+    "parser": "ts-node ./skinParser/index.ts"
   },
   "author": "Vladislav Bykovskii <vladislav.bykovskiy@gmail.com>",
   "license": "ISC",

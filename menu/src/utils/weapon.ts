@@ -132,7 +132,7 @@ export const weaponNames = [
   { idi: ItemDefinitionIndex.WEAPON_DecoyGrenade, name: "Decoy" },
   { idi: ItemDefinitionIndex.WEAPON_IncendiaryGrenade, name: "Incendiary" },
   { idi: ItemDefinitionIndex.WEAPON_KnifeT, name: "KnifeT" },
-  { idi: ItemDefinitionIndex.WEAPON_M4A1S, name: "M4A1S" },
+  { idi: ItemDefinitionIndex.WEAPON_M4A1S, name: "M4A1-S" },
   { idi: ItemDefinitionIndex.WEAPON_USPS, name: "USP-S" },
   { idi: ItemDefinitionIndex.WEAPON_CZ75Auto, name: "CZ75-Auto" },
   { idi: ItemDefinitionIndex.WEAPON_R8Revolver, name: "R8 Revolver" },

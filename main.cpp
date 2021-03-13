@@ -165,6 +165,7 @@ int main() {
 					//for bsp parser
 					auto gameDir = engine.dwGameDir().data();
 					auto mapDir = engine.clientState->mapDirectory().data();
+
 					bsp_parser.load_map(gameDir, mapDir);
 
 					//for skinchanger
