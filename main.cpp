@@ -158,6 +158,11 @@ int main() {
 			Sleep(1);
 		}});
 
+		thread thMiscAntiFlash([]() { while (isWorking) {
+			misc.antiFlash();
+			Sleep(1);
+		}});
+
 		thread thMap([]() {
 			auto lastClientState = 0;
 			while (isWorking) {
@@ -197,6 +202,7 @@ int main() {
 		thMiscRadarHack.join();
 		thMiscBhop.join();
 		thMiscAutoPistols.join();
+		thMiscAntiFlash.join();
 		thMap.join();
 		thVisibleCheck.join();
 	}

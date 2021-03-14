@@ -40,6 +40,25 @@ export const MiscContent: React.FC = () => {
             ""
           )}
         </Group>
+        <Group marginTop={35} label="Anti flash">
+          <CheckboxField
+            label="Enable"
+            checked={settings.misc_antiFlash_enable}
+            onChange={(v) => updateValue("misc_antiFlash_enable", v)}
+          />
+          {settings.misc_antiFlash_enable ? (
+            <RangeField
+              label={`Max alpha: ${settings.misc_antiFlash_maxAlpha}`}
+              min={0}
+              max={255}
+              step={1}
+              value={settings.misc_antiFlash_maxAlpha}
+              onChange={(v) => updateValue("misc_antiFlash_maxAlpha", v)}
+            />
+          ) : (
+            ""
+          )}
+        </Group>
       </div>
       <div>
         <Group marginLeft={35} label="Auto accept">

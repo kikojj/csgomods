@@ -162,6 +162,8 @@ export type TSettings = {
   misc_autoPistols_enable: boolean;
   misc_autoPistols_delay: number;
   misc_autoAccept_enable: boolean;
+  misc_antiFlash_enable: boolean;
+  misc_antiFlash_maxAlpha: number;
   ///
 };
 
@@ -299,5 +301,7 @@ export const DEFAULT_SETTINGS: TSettings = {
   misc_autoPistols_enable: true,
   misc_autoPistols_delay: 50,
   misc_autoAccept_enable: true,
+  misc_antiFlash_enable: false,
+  misc_antiFlash_maxAlpha: 255,
   ///
 };

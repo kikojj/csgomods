@@ -56,10 +56,16 @@ const Socket = () => {
     socket.onclose = function (event) {
       console.log("[WebSocket]: closed.");
       setConnected(false);
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     };
 
     socket.onerror = function (error) {
       console.log("[WebSocket]: error.", error);
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
     };
   }, []);
 

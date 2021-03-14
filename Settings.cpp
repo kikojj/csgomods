@@ -338,6 +338,8 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	else if (name == "misc_autoPistols_enable") misc_autoPistols_enable = value->get<bool>();
 	else if (name == "misc_autoPistols_delay") misc_autoPistols_delay = value->get<jsonxx::Number>();
 	else if (name == "misc_autoAccept_enable") misc_autoAccept_enable = value->get<bool>();
+	else if (name == "misc_antiFlash_enable") misc_antiFlash_enable = value->get<bool>();
+	else if (name == "misc_antiFlash_maxAlpha") misc_antiFlash_maxAlpha = value->get<jsonxx::Number>();
 }
 
 jsonxx::Object Settings::toJsonxxObject() {
@@ -447,7 +449,9 @@ jsonxx::Object Settings::toJsonxxObject() {
 		<< "misc_autoPistols_enable" << Settings::misc_autoPistols_enable
 		<< "misc_autoPistols_delay" << Settings::misc_autoPistols_delay
 		<< "misc_autoAccept_enable" << Settings::misc_autoAccept_enable
-		<< "skinchanger_enable" << Settings::skinchanger_enable;
+		<< "skinchanger_enable" << Settings::skinchanger_enable
+		<< "misc_antiFlash_enable" << Settings::misc_antiFlash_enable
+		<< "misc_antiFlash_maxAlpha" << Settings::misc_antiFlash_maxAlpha;
 	
 	return settings;
 }
@@ -558,4 +562,5 @@ bool Settings::misc_bhop_enable = true;
 bool Settings::misc_autoPistols_enable = false;
 int Settings::misc_autoPistols_delay = 50;
 bool Settings::misc_autoAccept_enable = true;
+bool Settings::misc_antiFlash_enable = false;
 int Settings::misc_antiFlash_maxAlpha = 255;

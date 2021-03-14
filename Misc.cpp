@@ -94,7 +94,22 @@ void Misc::autoPistols(){
 }
 
 void Misc::antiFlash(){
+	if (!Settings::misc_antiFlash_enable) {
+		return;
+	}
 
+	if (
+		engine.clientState->state() != INGAME ||
+		client.localPlayer->m_iHealth() <= 0 ||
+		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		engine.clientState->m_nDeltaTick() == -1
+		) {
+		return;
+	}
+
+	if (client.localPlayer->m_flFlashMaxAlpha() != Settings::misc_antiFlash_maxAlpha) {
+		client.localPlayer->m_flFlashMaxAlpha(Settings::misc_antiFlash_maxAlpha);
+	}
 }
 
 void Misc::autoAccept(){
