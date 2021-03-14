@@ -1,21 +1,27 @@
 import React from "react";
 
-import { FormControlLabel, Switch as _Switch } from "@material-ui/core";
 import { useStyles } from "./styles";
-import { TMargin } from "@utils";
 
 export type GroupProps = {
-  className?: string;
-  title: string;
-  marginTop?: TMargin;
-  children?: React.ReactNode;
+  label?: React.ReactChild;
+  width?: string | number;
+  marginTop?: number;
+  marginLeft?: number;
 };
-export const Group: React.FC<GroupProps> = ({ className, title, marginTop, children }) => {
-  const classes = useStyles();
+export const Group: React.FC<GroupProps> = ({ label, width = 300, children, marginTop = 0, marginLeft = 0 }) => {
+  const classes = useStyles({ width });
+
   return (
-    <div className={className} style={{ marginTop }}>
-      <h6 className={classes.title}>{title}</h6>
-      {children}
+    <div className={classes.container} style={{ marginTop, marginLeft }}>
+      {label ? (
+        <div className={classes.label}>
+          <div className={classes.label_text}>{label}</div>
+          <div className={classes.label_border} />
+        </div>
+      ) : (
+        ""
+      )}
+      {children ? <div className={classes.content}>{children}</div> : ""}
     </div>
   );
 };

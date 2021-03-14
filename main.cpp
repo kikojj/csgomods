@@ -15,7 +15,7 @@
 #include "Settings.hpp"
 #include "Offsets.hpp"
 
-#include "GlowEsp.hpp"
+#include "Visuals.hpp"
 #include "AimBot.hpp"
 #include "TriggerBot.hpp"
 #include "Skinchanger.hpp"
@@ -40,7 +40,7 @@ map<ItemDefinitionIndex, int> modelIndexes;
 
 bool isWorking = true;
 
-GlowEsp glowEsp;
+Visuals visuals;
 AimBot aimBot;
 TriggerBot triggetBot;
 Skinchanger skinchanger;
@@ -116,8 +116,8 @@ int main() {
 			}
 		}});
 
-		thread thGlowEsp([]() { while (isWorking) {
-			glowEsp.loop();
+		thread thVisuals([]() { while (isWorking) {
+			visuals.loop();
 			Sleep(1);
 		}});
 
@@ -181,7 +181,7 @@ int main() {
 		thMenuServer.detach();
 		thMenuData.join();
 		thMenuOpen.join();
-		thGlowEsp.join();
+		thVisuals.join();
 		thAimBot.join();
 		thTriggerBot.join();
 		thSkinchanger.join();

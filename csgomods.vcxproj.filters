@@ -16,9 +16,6 @@
     <Filter Include="Features\AimBot">
       <UniqueIdentifier>{6d19f522-37bf-421d-b758-0ba1e3dee0cc}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Features\GlowEsp">
-      <UniqueIdentifier>{559e2108-30c5-4432-b2c9-76caf579060a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\Offsets">
       <UniqueIdentifier>{4189a02c-83de-47cd-afa5-e683e0030e28}</UniqueIdentifier>
     </Filter>
@@ -88,13 +85,16 @@
     <Filter Include="Utils\Game\Client\BaseLocalPlayer">
       <UniqueIdentifier>{cda84dd3-2bb3-4fe8-a440-52bb2ca49620}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Features\Visuals">
+      <UniqueIdentifier>{559e2108-30c5-4432-b2c9-76caf579060a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.hpp">
       <Filter>Utils\Memory</Filter>
     </ClInclude>
-    <ClInclude Include="GlowEsp.hpp">
-      <Filter>Features\GlowEsp</Filter>
+    <ClInclude Include="Visuals.hpp">
+      <Filter>Features\Visuals</Filter>
     </ClInclude>
     <ClInclude Include="Client.hpp">
       <Filter>Utils\Game\Client</Filter>
@@ -278,8 +278,8 @@
     <ClCompile Include="EntityList.cpp">
       <Filter>Utils\Game\Client\EntityList</Filter>
     </ClCompile>
-    <ClCompile Include="GlowEsp.cpp">
-      <Filter>Features\GlowEsp</Filter>
+    <ClCompile Include="Visuals.cpp">
+      <Filter>Features\Visuals</Filter>
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Utils\Game\Engine</Filter>

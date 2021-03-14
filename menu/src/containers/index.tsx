@@ -1,12 +1,13 @@
-export { Window } from "./Window";
-export { Header } from "./Header";
-export { Tabs } from "./Tabs";
-export { Items, ItemsProps } from "./Items";
+export { WeaponSelect, WeaponSelectProps } from "./WeaponSelect";
+export { BoneSelect, BoneSelectProps } from "./BoneSelect";
+export { QualitySelect, QualitySelectProps } from "./QualitySelect";
 
 export { LoadingContent } from "./LoadingContent";
 export { VisualsContent } from "./VisualsContent";
 export { AimbotContent } from "./AimbotContent";
-export { TriggerContent } from "./TriggerContent";
 export { SkinchangerContent } from "./SkinchangerContent";
 export { MiscContent } from "./MiscContent";
-export { ConfigContent } from "./ConfigContent";
+export { ConfigsContent } from "./ConfigsContent";
+
+export { Menu, MenuProps } from "./Menu";
+export { Window } from "./Window";

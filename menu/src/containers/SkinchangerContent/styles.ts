@@ -2,62 +2,24 @@ import { makeStyles } from "@material-ui/styles";
 import { colors } from "@utils";
 
 export const useStyles = makeStyles({
-  content: {
-    marginTop: 20,
-
-    "&-btn": {
-      display: "flex",
-      alignItems: "flex-start",
-      justifyContent: "space-between",
-
-      "& $cards": {
-        margin: "0",
-      },
-    },
+  container: {
+    display: "flex",
   },
-  cards: {
-    margin: "0 auto",
-    width: 860,
+  items_containers: {
     display: "grid",
-    gridTemplateColumns: "200px 200px 200px 200px",
-    gridAutoRows: 210,
-    gridColumnGap: 20,
-    gridRowGap: 20,
+    gridTemplateColumns: "133px 133px 133px 133px",
+    gridColumnGap: 12,
+    gridAutoRows: 160,
+    gridRowGap: 12,
   },
-  btn_back: {
-    marginBottom: 30,
-  },
-  skin_view_main: {
+  title_back: {
     display: "flex",
-    justifyContent: "space-between",
-  },
-  skin_view_main_skin: {
-    marginRight: 15,
-  },
-  skin_view_main_props: {
-    padding: 20,
-    flex: 1,
-  },
-  skin_view_info: {
-    marginTop: 20,
-  },
-  skin_view_info_collection: {
-    marginRight: 20,
-
-    width: 150,
-    height: 200,
-
-    display: "flex",
-    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
 
-    "&>img": {
-      maxWidth: 100,
-      maxHeight: 100,
+    "& > img": {
+      display: "block",
+      marginRight: 10,
+      cursor: "pointer",
     },
-  },
-  skin_view_main_props_apply: {
-    marginTop: 20,
   },
 });

@@ -27,7 +27,7 @@ struct SkinchangerWeapon {
   float wear = 0.0001f;
   std::string customName = "";
   int statTrack = -1;
-  int seed = -1;
+  int seed = 0;
   ItemDefinitionIndex itemDI;
 };
 

@@ -1,39 +1,37 @@
 import { makeStyles } from "@material-ui/styles";
-import { colors } from "@utils";
-import { RGBColor } from "react-color";
 
-export type TProps = {
-  marginTop?: number;
-  color: RGBColor;
+import { colors } from "@utils";
+
+import { ColorRGBA } from ".";
+
+export type Props = {
+  color: ColorRGBA;
 };
 export const useStyles = makeStyles({
-  colorPicker: {
-    marginTop: (props: TProps) => props.marginTop,
-
-    display: "flex",
-    alignItems: "center",
+  container: {
+    position: "relative",
   },
-  colorPicker_label: {
-    fontSize: 14,
-    fontWeight: 400,
-    color: colors.black,
-  },
-  colorPicker_value: {
-    marginLeft: 10,
+  colorContainer: {
     width: 20,
     height: 20,
 
-    border: "1px solid rgba(0,0,0,0.2)",
+    background: (props: Props) => `rgba(${props.color.r}, ${props.color.g}, ${props.color.b}, ${props.color.a})`,
+    border: `2px solid ${colors.secondary}`,
+    boxSizing: "border-box",
     borderRadius: 4,
-    backgroundColor: (props: TProps) => `rgba(${props.color.r}, ${props.color.g}, ${props.color.b}, ${props.color.a})`,
 
     cursor: "pointer",
-    position: "relative",
   },
-  colorPicker_picker: {
+  pickerContainer: {
+    padding: 20,
+    width: 300,
+
+    borderRadius: 5,
+    backgroundColor: colors.darkBlue,
+
     position: "absolute",
-    top: 20,
-    left: 20,
+    top: 22,
+    left: 22,
     zIndex: 1,
   },
 });

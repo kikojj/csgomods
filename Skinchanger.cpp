@@ -24,7 +24,7 @@ void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, SkinchangerWeapon
 		}
 		weapon.m_nFallbackStatTrak(settings.statTrack);
 	}
-	if (settings.seed >= 0) {
+	if (settings.seed > 0) {
 		weapon.m_nFallbackSeed(settings.seed);
 	}
 }
@@ -77,7 +77,7 @@ void Skinchanger::loop() {
 
 	int knifeViewModelID = client.localPlayer->m_hViewModel() & 0xfff;
 	auto knife = BaseCombatWeapon(client.entityList->getByID((knifeViewModelID - 1)));
-	if (knife.get() == 0 || !Settings::skinchanger_knifes[localPlayerTeam].enable) {
+	if (!knife.get() || !Settings::skinchanger_knifes[localPlayerTeam].enable) {
 		return;
 	}
 

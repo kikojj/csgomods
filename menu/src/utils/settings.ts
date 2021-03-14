@@ -1,4 +1,4 @@
-import { ColorRGBA } from "src/newVersion/components";
+import { ColorRGBA } from "@components";
 import { ItemDefinitionIndex } from "./weapon";
 
 export enum EntityQuality {
@@ -33,7 +33,7 @@ export const DEFAULT_WEAPON_SETTINGS: ISkinchangerWeapon = {
   wear: 0.00001,
   customName: "",
   statTrack: -1,
-  seed: -1,
+  seed: 0,
   itemDI: ItemDefinitionIndex.INVALID_ITEM_DI,
 };
 

@@ -1,23 +1,33 @@
 import { makeStyles } from "@material-ui/styles";
-import { colors } from "@utils";
+import { colors, hexAlpha } from "@utils";
 
-export type TProps = {
-  marginTop?: number;
-};
 export const useStyles = makeStyles({
-  keyInput: {
-    marginTop: (props: TProps) => props.marginTop,
+  container: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  icon: {
+    display: "block",
 
+    "&:first-of-type": {
+      marginRight: 5,
+    },
+  },
+  icons: {
+    marginRight: 7,
     display: "flex",
     alignItems: "center",
   },
-  keyInput_label: {
-    marginRight: 10,
+  input: {
+    padding: "7px 10px",
+    width: "calc(100% - 41px)",
+
+    flex: 1,
+    backgroundColor: hexAlpha(colors.primary, 5),
+    borderRadius: 2,
+
     fontSize: 14,
-    fontWeight: 400,
-    color: colors.black,
-  },
-  keyInput_input: {
-    width: 50,
+    color: "#fff",
   },
 });

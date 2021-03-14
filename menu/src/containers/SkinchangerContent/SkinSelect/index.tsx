@@ -1,45 +1,90 @@
 import React from "react";
 
-import { DataContext } from "../../../contexts";
-import { Items } from "@containers";
+import { DataContext, SettingsContext } from "@contexts";
+import { Group, SkinchangerItem } from "@components";
 
-import { IconButton } from "@material-ui/core";
-import { ArrowBack as IconArrowBack } from "@material-ui/icons";
-
-import { Skin, Weapon, TeamNum, getDefaultSkin } from "@utils";
+import { getDefaultSkin, ISkinchangerWeapon, TeamNum, Weapon } from "@utils";
+import BackIcon from "../images/BackIcon.svg";
 import { useStyles } from "../styles";
 
-export type TSkinsSelectProps = {
+export type SkinSelectProps = {
   activeTeam?: TeamNum;
   activeWeapon: Weapon;
-  setActiveSkin: React.Dispatch<React.SetStateAction<Skin | undefined>>;
-  onBack: () => void;
+  setActiveWeapon: React.Dispatch<React.SetStateAction<Weapon | undefined>>;
 };
-export const SkinsSelect: React.FC<TSkinsSelectProps> = ({ activeWeapon, setActiveSkin, onBack }) => {
+export const SkinSelect: React.FC<SkinSelectProps> = ({ activeTeam, activeWeapon, setActiveWeapon }) => {
   const classes = useStyles();
 
-  const { skins, defaultSkins } = React.useContext(DataContext);
+  const { settings, setSettings } = React.useContext(SettingsContext);
+  const { skins, defaultSkins, fullForceUpdate } = React.useContext(DataContext);
+
+  const weaponSkins = [
+    getDefaultSkin(activeWeapon.itemDI, defaultSkins[activeWeapon.itemDI] as string),
+    ...skins.filter((skin) => +skin.weaponDI === +activeWeapon.itemDI).sort((s1, s2) => (s1.name > s2.name ? 1 : -1)),
+  ];
+
+  let weaponSettings: ISkinchangerWeapon | undefined = undefined;
+  if (activeWeapon) {
+    if (activeWeapon.isKnife() && activeTeam) {
+      weaponSettings = settings.skinchanger_knifes[activeTeam];
+    } else {
+      weaponSettings = settings.skinchanger_weapons[activeWeapon.itemDI];
+    }
+  }
+
+  function applyPaintKit(paintKit: number) {
+    if (activeWeapon.isKnife()) {
+      if (activeTeam && (activeTeam === TeamNum.TERRORIST || activeTeam === TeamNum.COUNTER_TERRORIST)) {
+        setSettings({
+          ...settings,
+          skinchanger_knifes: {
+            ...settings.skinchanger_knifes,
+            [activeTeam]: {
+              ...settings.skinchanger_knifes[activeTeam],
+              paintKit,
+            },
+          },
+        });
+        fullForceUpdate();
+      }
+    } else {
+      setSettings({
+        ...settings,
+        skinchanger_weapons: {
+          ...settings.skinchanger_weapons,
+          [activeWeapon.itemDI]: {
+            ...settings.skinchanger_weapons[activeWeapon.itemDI],
+            paintKit,
+          },
+        },
+      });
+      fullForceUpdate();
+    }
+  }
 
   return (
-    <div className={classes.content + ` ${classes.content}-btn`}>
-      <IconButton className={classes.btn_back} onClick={onBack} color="primary">
-        <IconArrowBack />
-      </IconButton>
-      <Items
-        className={classes.cards}
-        data={[
-          getDefaultSkin(activeWeapon.itemDI, defaultSkins[activeWeapon.itemDI] as string),
-          ...skins
-            .filter((skin) => +skin.weaponDI === +activeWeapon.itemDI)
-            .sort((s1, s2) => (s1.name > s2.name ? 1 : -1)),
-        ].map((skin) => ({
-          image: skin.image,
-          title: `${activeWeapon.name} | ${skin.name}`,
-          onClick: () => {
-            setActiveSkin(skin);
-          },
-        }))}
-      />
-    </div>
+    <Group
+      marginTop={35}
+      width="100%"
+      label={
+        <div className={classes.title_back}>
+          <img src={BackIcon} alt="<-" onClick={() => setActiveWeapon(undefined)} />
+          Skins
+        </div>
+      }
+    >
+      <div className={classes.items_containers}>
+        {weaponSkins.map((skin, key) => (
+          <SkinchangerItem
+            key={key}
+            image={skin.image}
+            name={`${activeWeapon.name} | ${skin.name}`}
+            rarity={skin.rarityID}
+            active={weaponSettings && weaponSettings?.paintKit === skin.paintKit}
+            onClick={() => applyPaintKit(skin.paintKit)}
+          />
+        ))}
+      </div>
+    </Group>
   );
 };

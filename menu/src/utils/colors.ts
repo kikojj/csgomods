@@ -1,18 +1,11 @@
 export const colors = {
-  primary: "#3F51B5",
-  green: "#19D220",
-  yellow: "#FFBE2F",
-  red: "#FF5F58",
-  black: "rgba(0,0,0,0.9)",
-};
-
-export const colors_ = {
   primary: "#1A73E8",
   secondary: "#16191C",
   teritary: "#1C2430",
   gray: "#4B535C",
   lightGray: "#646465",
   darkBlue: "#161E27",
+  dark: "#182637",
   blue: "#234062",
   blue2: "#15283E",
 };

@@ -1,40 +1,96 @@
 import React from "react";
+import ClickAwayListener from "react-click-away-listener";
 
-import { ChromePicker, ColorResult, RGBColor } from "react-color";
-import { ClickAwayListener, Radio as _Radio } from "@material-ui/core";
+import { RangeField } from "@components";
+import { rgbToHex } from "@utils";
+
 import { useStyles } from "./styles";
-import { TMargin } from "@utils";
+
+export type ColorRGBA = {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
+};
 
 export type ColorPickerProps = {
-  label: string;
-  marginTop?: TMargin;
-  value?: RGBColor;
-  onChange?: (color: RGBColor, event: React.ChangeEvent<HTMLInputElement>) => void;
+  color?: ColorRGBA;
+  onChnage?: (v: ColorRGBA) => void;
 };
-export const ColorPicker: React.FC<ColorPickerProps> = ({
-  label,
-  marginTop,
-  value = { r: 0, g: 0, b: 0, a: 255 },
-  onChange,
-}) => {
-  const classes = useStyles({ marginTop, color: value });
+export const ColorPicker: React.FC<ColorPickerProps> = ({ color: _color, onChnage: onChange }) => {
   const [show, setShow] = React.useState<boolean>(false);
+  const [color, setColor] = React.useState<ColorRGBA>({ r: 0, g: 0, b: 0, a: 255, ..._color });
+
+  const classes = useStyles({ color });
+
   return (
-    <div className={classes.colorPicker} style={{ marginTop }}>
-      <h5 className={classes.colorPicker_label}>{label}</h5>
-      <div className={classes.colorPicker_value} onClick={() => setShow(true)}>
-        {show ? (
-          <ClickAwayListener onClickAway={() => setShow(false)}>
-            <ChromePicker
-              className={classes.colorPicker_picker}
-              color={{ ...value, a: (value.a || 0) / 255 }}
-              onChange={(c, e) => onChange && onChange({ ...c.rgb, a: (c.rgb.a || 0) * 255 }, e)}
-            />
-          </ClickAwayListener>
-        ) : (
-          ""
-        )}
-      </div>
+    <div className={classes.container}>
+      <div className={classes.colorContainer} onClick={() => setShow(true)} />
+      {show ? (
+        <ClickAwayListener
+          onClickAway={() => {
+            setShow(false);
+            onChange && onChange({ ...color });
+          }}
+        >
+          <div className={classes.pickerContainer}>
+            <Picker color={color} onChange={setColor} />
+          </div>
+        </ClickAwayListener>
+      ) : (
+        ""
+      )}
+    </div>
+  );
+};
+
+export type PickerProps = {
+  color: ColorRGBA;
+  onChange: (v: ColorRGBA) => void;
+};
+export const Picker: React.FC<PickerProps> = ({ color, onChange }) => {
+  return (
+    <div>
+      <RangeField
+        marginTop={0}
+        label={`Red: ${color.r}`}
+        value={color.r}
+        onChange={(v) => onChange({ ...color, r: v })}
+        min={0}
+        max={255}
+        step={1}
+        color="#FF0000"
+      />
+      <RangeField
+        marginTop={15}
+        label={`Green: ${color.g}`}
+        value={color.g}
+        onChange={(v) => onChange({ ...color, g: v })}
+        min={0}
+        max={255}
+        step={1}
+        color="#00FF00"
+      />
+      <RangeField
+        marginTop={15}
+        label={`Blue: ${color.b}`}
+        value={color.b}
+        onChange={(v) => onChange({ ...color, b: v })}
+        min={0}
+        max={255}
+        step={1}
+        color="#0000FF"
+      />
+      <RangeField
+        marginTop={15}
+        label={`Alpha: ${color.a}`}
+        value={color.a}
+        onChange={(v) => onChange({ ...color, a: v })}
+        min={0}
+        max={255}
+        step={1}
+        color={rgbToHex(color.r, color.g, color.b)}
+      />
     </div>
   );
 };

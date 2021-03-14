@@ -198,6 +198,18 @@ export class Weapon {
     }
   }
 
+  isWeapon = (): boolean => {
+    return (
+      this.isPistol() ||
+      this.isSMG() ||
+      this.isShotgun() ||
+      this.isRifle() ||
+      this.isHeavy() ||
+      this.isSnipers() ||
+      this.isKnife()
+    );
+  };
+
   isPistol = (): boolean => {
     if (
       this.itemDI == ItemDefinitionIndex.WEAPON_DesertEagle ||

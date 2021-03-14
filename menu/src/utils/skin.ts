@@ -20,6 +20,16 @@ export enum SkinRarity {
   RARITY_EXCEEDINGLY_RARE, //rgb - 202,171,5
   RARITY_IMMORTAL, //rgb - 242,188,75
 }
+export const rarityColors = {
+  [SkinRarity.RARITY_COMMON]: "rgba(175,175,175)",
+  [SkinRarity.RARITY_UNCOMMON]: "rgba(135,199,255)",
+  [SkinRarity.RARITY_RARE]: "rgba(17,85,221)",
+  [SkinRarity.RARITY_MYTHICAL]: "rgba(136,71,255)",
+  [SkinRarity.RARITY_LEGENDARY]: "rgba(211,44,230)",
+  [SkinRarity.RARITY_ANCIENT]: "rgba(235,75,75)",
+  [SkinRarity.RARITY_EXCEEDINGLY_RARE]: "rgba(202,171,5)",
+  [SkinRarity.RARITY_IMMORTAL]: "rgba(242,188,75)",
+};
 
 export class Skin {
   collections: string[] = [];
@@ -41,7 +51,7 @@ export class Skin {
       this.collectionsImage = obj.collectionsImage;
     }
     if (obj.weaponDI) {
-      this.weapon = new Weapon(obj.weaponDI);
+      this.weapon = new Weapon({ itemDI: obj.weaponDI });
       this.weaponDI = obj.weaponDI;
     }
     if (obj.name) {
@@ -75,7 +85,7 @@ export const getDefaultSkin = (weaponDI: ItemDefinitionIndex, image: string) => 
     paintKit: 0,
     image,
     rarity: "Common",
-    rarityID: SkinRarity.RARITY_COMMON,
+    rarityID: new Weapon({ itemDI: weaponDI }).isKnife() ? SkinRarity.RARITY_ANCIENT : SkinRarity.RARITY_COMMON,
     description: "",
   });
 };

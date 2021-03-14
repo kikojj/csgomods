@@ -124,7 +124,7 @@ int BasePlayer::m_fFlags(){
 
 void BasePlayer::m_clrRender(colorRGBA color) {
 	//std::cout << "m_clrRender()" << std::endl;
-	struct { BYTE r; BYTE g; BYTE b; BYTE a; } clrColor;
+	struct SClrColor{ BYTE r; BYTE g; BYTE b; BYTE a; } clrColor;
 	clrColor.r = color.r;
 	clrColor.g = color.g;
 	clrColor.b = color.b;

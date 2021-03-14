@@ -1,34 +1,43 @@
 import React from "react";
 
-import { TextField } from "@material-ui/core";
+import { join } from "../utils";
+
+import { MouseIcon, KeyboardIcon } from "./images";
 import { useStyles } from "./styles";
-import { TMargin } from "@utils";
 
 export type KeyInputProps = {
-  label: string;
-  marginTop?: TMargin;
+  className?: string;
   value?: number;
   onChange?: (v: number) => void;
 };
-export const KeyInput: React.FC<KeyInputProps> = ({ label, marginTop, value = 0, onChange }) => {
-  const classes = useStyles({ marginTop });
+export const KeyInput: React.FC<KeyInputProps> = ({ className, value: _value, onChange: _onChange }) => {
+  const classes = useStyles();
+
+  const [__value, __onChange] = React.useState<number>(1);
+
+  const value = _value !== undefined && _onChange !== undefined ? _value : __value;
+  const onChange = _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
 
   return (
-    <div className={classes.keyInput} style={{ marginTop }}>
-      <h5 className={classes.keyInput_label}>{label}</h5>
-      <TextField
-        className={classes.keyInput_input}
-        value={value}
+    <div className={join(classes.container, className)}>
+      <span className={classes.icons}>
+        <img className={classes.icon} src={KeyboardIcon} alt="keyboard" />
+        <img src={MouseIcon} alt="mouse" />
+      </span>
+      <input
+        className={classes.input}
+        value={value.toString()}
         onKeyDown={(e) => {
-          onChange && onChange(e.keyCode);
+          onChange(e.keyCode);
         }}
         onMouseDown={(e) => {
           if (e.button === 0) {
-            onChange && onChange(1);
+            onChange(1);
           } else if (e.button === 2) {
-            onChange && onChange(2);
+            onChange(2);
           }
         }}
+        onChange={() => 0}
       />
     </div>
   );
