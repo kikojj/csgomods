@@ -56,7 +56,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
 
   return (
     <Group
-      marginTop={!activeTeam ? 0 : 35}
+      marginTop={35}
       width="100%"
       label={
         activeTeam ? (

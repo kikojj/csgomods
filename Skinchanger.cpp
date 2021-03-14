@@ -50,6 +50,10 @@ void Skinchanger::loop() {
 		return;
 	}
 
+	if (!Settings::skinchanger_enable) {
+		return;
+	}
+
 	auto localPlayerTeam = client.localPlayer->m_iTeamNum();
 
 	for (auto weaponId : client.localPlayer->myWeapons()) {

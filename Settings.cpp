@@ -328,6 +328,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	else if (name == "visuals_chams_friends_color") visuals_chams_friends_color = getColorFromJsonXX(value);
 
 	//SKINCHANGER
+	else if (name == "skinchanger_enable") skinchanger_enable = value->get<bool>();
 	else if (name == "skinchanger_weapons") skinchanger_weapons = getWeaponSkinsFroJsonXX(value);
 	else if (name == "skinchanger_knifes") skinchanger_knifes = getKnifesSkinsFromJsonXX(value);
 
@@ -445,7 +446,8 @@ jsonxx::Object Settings::toJsonxxObject() {
 		<< "misc_bhop_enable" << Settings::misc_bhop_enable
 		<< "misc_autoPistols_enable" << Settings::misc_autoPistols_enable
 		<< "misc_autoPistols_delay" << Settings::misc_autoPistols_delay
-		<< "misc_autoAccept_enable" << Settings::misc_autoAccept_enable;
+		<< "misc_autoAccept_enable" << Settings::misc_autoAccept_enable
+		<< "skinchanger_enable" << Settings::skinchanger_enable;
 	
 	return settings;
 }
@@ -546,58 +548,9 @@ bool Settings::visuals_chams_show_friends = false;
 colorRGBA Settings::visuals_chams_friends_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 //SKINCHAGER
-std::map<ItemDefinitionIndex, SkinchangerWeapon> Settings::skinchanger_weapons = {
-	{WEAPON_AK47, {
-			true,
-			180,
-			INVALID_QUALITY,
-			0.0001f,
-			"1Taps",
-			100,
-			-1,
-	}},
-	{WEAPON_Glock18, {
-			true,
-			957,
-			INVALID_QUALITY,
-			0.0001f,
-			"",
-			-1,
-			-1,
-	}},
-	{WEAPON_USPS, {
-			true,
-			991,
-			INVALID_QUALITY,
-			0.0001f,
-			"",
-			-1,
-			-1,
-	}},
-};
-
-std::map<TeamNum, SkinchangerWeapon> Settings::skinchanger_knifes = {
-	{TERRORIST, {
-		true,
-		413,
-		QUALITY_UNUSUAL,
-		0.0001f,
-		"",
-		-1,
-		-1,
-		WEAPON_M9Bayonet
-	}},
-	{COUNTER_TERRORIST, {
-		true,
-		413,
-		QUALITY_UNUSUAL,
-		0.0001f,
-		"",
-		-1,
-		-1,
-		WEAPON_FlipKnife
-	}}
-};
+bool Settings::skinchanger_enable = true;
+std::map<ItemDefinitionIndex, SkinchangerWeapon> Settings::skinchanger_weapons = {};
+std::map<TeamNum, SkinchangerWeapon> Settings::skinchanger_knifes = {};
 
 //MISC
 bool Settings::misc_ingameRadar_enable = true;

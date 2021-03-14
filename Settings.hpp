@@ -150,6 +150,7 @@ public:
   static colorRGBA visuals_chams_friends_color;
 
   //SKINCHANGER
+  static bool skinchanger_enable;
   static std::map<ItemDefinitionIndex, SkinchangerWeapon> skinchanger_weapons;
   static std::map<TeamNum, SkinchangerWeapon> skinchanger_knifes;
 

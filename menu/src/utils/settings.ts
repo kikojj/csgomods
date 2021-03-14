@@ -151,6 +151,7 @@ export type TSettings = {
   ///
 
   //SKINCHANGER
+  skinchanger_enable: boolean;
   skinchanger_weapons: { [T in ItemDefinitionIndex]?: ISkinchangerWeapon };
   skinchanger_knifes: { [T in TeamNum]?: ISkinchangerWeapon };
   //
@@ -287,6 +288,7 @@ export const DEFAULT_SETTINGS: TSettings = {
   ///
 
   //SKINCHANGER
+  skinchanger_enable: true,
   skinchanger_weapons: {},
   skinchanger_knifes: {},
   //

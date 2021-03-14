@@ -26,7 +26,7 @@ export const Window = () => {
     <div className={classes.container}>
       <Menu activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className={classes.content}>
-        {!connected || skins.length <= 0 ? (
+        {!connected ? (
           <LoadingContent />
         ) : activeTab === ActiveTab.TAB_VISUALS ? (
           <VisualsContent />
