@@ -20,6 +20,7 @@ public:
 	void radarHack();
 	void bhop();
 	void autoPistols();
+	void antiFlash();
 
 private:
 	bool found = false;

@@ -3,6 +3,7 @@
 #include <string>
 
 #include "Memory.hpp"
+#include "Modules.hpp"
 #include "Offsets.hpp"
 
 #include "ColorRGBA.hpp"
@@ -31,4 +32,6 @@ public:
 	/// </summary>
 	/// <returns>glow index</returns>
 	int m_iGlowIndex();
+
+	int getEntityID();
 };

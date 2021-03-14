@@ -558,3 +558,4 @@ bool Settings::misc_bhop_enable = true;
 bool Settings::misc_autoPistols_enable = false;
 int Settings::misc_autoPistols_delay = 50;
 bool Settings::misc_autoAccept_enable = true;
+int Settings::misc_antiFlash_maxAlpha = 255;

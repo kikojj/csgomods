@@ -1,5 +1,5 @@
 #include "AimBot.hpp"
-#include <bitset>
+
 AimBot::AimBot() {}
 
 Vector3 AimBot::getBonePos(BasePlayer& player, Skeleton bone) {
@@ -62,8 +62,10 @@ void AimBot::loop() {
 
 	if (
 		engine.clientState->state() != INGAME ||
+		engine.clientState->m_nDeltaTick() == -1 ||
 		client.localPlayer->m_iHealth() <= 0 ||
 		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_bDormant() ||
 		!Helpers::isMouseActive()
 		) {
 		return;
@@ -153,6 +155,8 @@ void AimBot::loop() {
 	else if (activeWeapon.isKnife()) {
 		return;
 	}
+	else if (activeWeapon.isZeusX27()) {
+	}
 	else if (activeWeapon.isBomb()) {
 		return;
 	}
@@ -187,7 +191,7 @@ void AimBot::loop() {
 			continue;
 		}
 
-		if (Settings::aimbot_visible_check && !player.isBspVisibleFrom(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset())) {
+		if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(player)) {
 			continue;
 		}
 
@@ -202,7 +206,7 @@ void AimBot::loop() {
 		for (auto bone : aimBones) {
 			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
 			auto bonePos = getBonePos(player, bone);
-			if (!bsp_parser.is_visible(localPlayerPos.toMatrix(), bonePos.toMatrix())) {
+			if (!client.localPlayer->canSeePlayer(player, bone)) {
 				continue;
 			}
 			auto enemyAngle = calcAngle(localPlayerPos, bonePos);
@@ -225,7 +229,7 @@ void AimBot::loop() {
 		while (
 			GetAsyncKeyState(VK_LBUTTON) &&
 			closestEnemy.m_iHealth() > 0 &&
-			(!Settings::aimbot_visible_check || closestEnemy.isBspVisibleFrom(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset()))
+			(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy))
 			) {
 			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
 			auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
@@ -237,7 +241,7 @@ void AimBot::loop() {
 				closestAngle = 360.f;
 				for (auto bone : MAIN_BONES) {
 					auto bonePos = getBonePos(closestEnemy, bone);
-					if (!bsp_parser.is_visible((client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset()).toMatrix(), bonePos.toMatrix())) {
+					if (!client.localPlayer->canSeePlayer(closestEnemy, bone)) {
 						continue;
 					}
 					auto _enemyAngle = calcAngle(localPlayerPos, bonePos);
@@ -275,7 +279,7 @@ void AimBot::loop() {
 	else {
 		if (
 			closestEnemy.m_iHealth() > 0 &&
-			(!Settings::aimbot_visible_check || closestEnemy.isBspVisibleFrom(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset()))
+			(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy))
 			) {
 			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
 			auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));

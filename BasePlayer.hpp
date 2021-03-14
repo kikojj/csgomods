@@ -176,4 +176,6 @@ public:
 	int m_iObserverMode();
 
 	void m_iObserverMode(int);
+
+	bool m_bDormant();
 };

@@ -212,3 +212,7 @@ void BasePlayer::m_iObserverMode(int v){
 	mem.Write(get() + Offsets::netvars::m_iObserverMode, v);
 }
 
+bool BasePlayer::m_bDormant(){
+	return mem.Read<bool>(get() + Offsets::netvars::m_bDormant);
+}
+

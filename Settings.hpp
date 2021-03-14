@@ -160,4 +160,6 @@ public:
   static bool misc_autoPistols_enable;
   static int misc_autoPistols_delay;
   static bool misc_autoAccept_enable;
+  static bool misc_antiFlash_enable;
+  static int misc_antiFlash_maxAlpha;
 };

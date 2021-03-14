@@ -94,8 +94,9 @@ namespace Offsets {
     static int m_flCustomAutoExposureMin;
     static int m_flCustomAutoExposureMax;
     static int m_hWeaponWorldModel;
+    static int m_bDormant;
   } netvars;
-  void getNetvars();
+  void initNetvars();
 
   static struct signatures {
     static int dwClientState;
@@ -155,15 +156,22 @@ namespace Offsets {
     static int anim_overlays;
     static int m_flSpawnTime;
     static int find_hud_element;
+
     //for steam overlay activated check
     static int overlayActivated1;
     //for steam overlay activated check
     static int overlayActivated2;
+
     //for autoaccept
     static int hConfirmMatch;
 
-  } signatures;
-  void getSignatures();
+    //for visible check
+    static int dwClientMode;
+    //for visible check
+    static int dwTraceLine;
 
-  void get();
+  } signatures;
+  void initSignatures();
+
+  void init();
 };

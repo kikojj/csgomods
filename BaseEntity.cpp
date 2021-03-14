@@ -26,3 +26,13 @@ int BaseEntity::m_iGlowIndex(){
 	//std::cout << "Player::m_iGlowIndex():" << glowIndex << std::endl;
 	return glowIndex;
 }
+
+int BaseEntity::getEntityID(){
+	for (int i = 0; i <= 64; i++) {
+		int pEntity = mem.Read<int>(clientDll.dwBase + Offsets::signatures::dwEntityList + i * 0x10);
+		if (pEntity == this->dwBase) {
+			return i;
+		}
+	}
+	return -1;
+}

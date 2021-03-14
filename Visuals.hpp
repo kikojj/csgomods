@@ -11,6 +11,7 @@
 
 #include "ColorRGBA.hpp"
 #include "IGlowObjectDefinition.hpp"
+#include "visibleCheck/VisibleCheck.h"
 
 class Visuals {
 private:

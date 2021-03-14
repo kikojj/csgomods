@@ -7,10 +7,10 @@
 #include "PModule.hpp"
 
 class Memory {
-private:
+public:
 	HANDLE _process;
 	DWORD _pId;
-public:
+
 	inline bool Attach(const char* pName, DWORD dwAccess) {
 		HANDLE handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 

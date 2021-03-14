@@ -56,4 +56,6 @@ public:
 	int dwModelPrecache();
 
 	void m_nDeltaTick(int);
+
+	int m_nDeltaTick();
 };

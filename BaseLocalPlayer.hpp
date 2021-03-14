@@ -8,6 +8,8 @@
 
 #include "BasePlayer.hpp"
 #include "Vector.hpp"
+#include "Skeleton.hpp"
+#include "visibleCheck/VisibleCheck.h"
 
 class BaseLocalPlayer : public BasePlayer {
 private:
@@ -27,4 +29,6 @@ public:
 	/// </summary>
 	/// <returns></returns>
 	int m_iCrosshairId();
+
+	bool canSeePlayer(BasePlayer, int = -1);
 };

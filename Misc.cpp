@@ -7,7 +7,7 @@ void Misc::radarHack(){
 		return;
 	}
 
-	if (engine.clientState->state() != INGAME) {
+	if (engine.clientState->state() != INGAME || engine.clientState->m_nDeltaTick() == -1) {
 		return;
 	}
 
@@ -41,6 +41,7 @@ void Misc::bhop() {
 		engine.clientState->state() != INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
 		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		engine.clientState->m_nDeltaTick() == -1 ||
 		!Helpers::isMouseActive()
 		) {
 		return;
@@ -71,6 +72,7 @@ void Misc::autoPistols(){
 		engine.clientState->state() != INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
 		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		engine.clientState->m_nDeltaTick() == -1 ||
 		!Helpers::isMouseActive()
 		) {
 		return;
@@ -89,6 +91,10 @@ void Misc::autoPistols(){
 			Sleep(Settings::misc_autoPistols_delay);
 		}
 	}
+}
+
+void Misc::antiFlash(){
+
 }
 
 void Misc::autoAccept(){

@@ -26,7 +26,7 @@ void Visuals::loop() {
 		return;
 	}
 
-	if (engine.clientState->state() != INGAME) {
+	if (engine.clientState->state() != INGAME || engine.clientState->m_nDeltaTick() == -1) {
 		return;
 	}
 
@@ -77,10 +77,8 @@ void Visuals::loop() {
 
 			if (Settings::visuals_glowEsp_enable && Settings::visuals_glowEsp_show_enemies) {
 				if (Settings::visuals_glowEsp_mode == VISUALS_GLOWESP_MODE_COLOR) {
-					//auto spottedByMask = player.m_bSpottedByMask(engine.clientState->getLocalPlayer());
-					//drawEntity(glowObject, spottedByMask ? Settings::visuals_glowEsp_enemy_visible_color : Settings::visuals_glowEsp_enemy_invisible_color, GLOW_STYLE_FULL_BODY);
-
-					auto isVisible = player.isBspVisibleFrom(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset());
+					//auto isVisible = player.isBspVisibleFrom(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset());
+					auto isVisible = client.localPlayer->canSeePlayer(player);
 					drawEntity(glowObject, isVisible ? Settings::visuals_glowEsp_enemy_visible_color : Settings::visuals_glowEsp_enemy_invisible_color, Settings::visuals_glowEsp_style);
 				}
 				else {

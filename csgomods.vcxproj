@@ -106,6 +106,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -150,12 +151,18 @@
     <ClInclude Include="bsb-parser\requirements.hpp" />
     <ClInclude Include="bsb-parser\valve_structs.hpp" />
     <ClInclude Include="BspParser.hpp" />
+    <ClInclude Include="CBaseTrace.hpp" />
+    <ClInclude Include="CGameTrace.hpp" />
     <ClInclude Include="ClassID.hpp" />
     <ClInclude Include="ClientState.hpp" />
     <ClInclude Include="ClientStates.hpp" />
     <ClInclude Include="ColorRGBA.hpp" />
+    <ClInclude Include="CPlane.hpp" />
+    <ClInclude Include="CSurface.hpp" />
+    <ClInclude Include="CUserCmd.hpp" />
     <ClInclude Include="EntityQuality.hpp" />
     <ClInclude Include="GlobalVars.hpp" />
+    <ClInclude Include="IEngineTrace.hpp" />
     <ClInclude Include="Settings.hpp" />
     <ClInclude Include="Scanner.hpp" />
     <ClInclude Include="dumper\Netvar.h" />
@@ -184,6 +191,7 @@
     <ClInclude Include="BasePlayer.hpp" />
     <ClInclude Include="EntityList.hpp" />
     <ClInclude Include="FlagsState.hpp" />
+    <ClInclude Include="visibleCheck\VisibleCheck.h" />
     <ClInclude Include="Visuals.hpp" />
     <ClInclude Include="IGlowObjectDefinition.hpp" />
     <ClInclude Include="Client.hpp" />
@@ -231,6 +239,7 @@
     <ClCompile Include="MenuServer.cpp" />
     <ClCompile Include="BasePlayer.cpp" />
     <ClCompile Include="EntityList.cpp" />
+    <ClCompile Include="visibleCheck\VisibleCheck.cpp" />
     <ClCompile Include="Visuals.cpp" />
     <ClCompile Include="BaseLocalPlayer.cpp" />
     <ClCompile Include="main.cpp" />

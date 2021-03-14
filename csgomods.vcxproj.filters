@@ -88,6 +88,9 @@
     <Filter Include="Features\Visuals">
       <UniqueIdentifier>{559e2108-30c5-4432-b2c9-76caf579060a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\VisibleCheck">
+      <UniqueIdentifier>{e72cfaf3-b3c1-4a01-bbc7-33895da329c9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.hpp">
@@ -270,6 +273,27 @@
     <ClInclude Include="SkinRarity.hpp">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="CUserCmd.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="visibleCheck\VisibleCheck.h">
+      <Filter>Utils\VisibleCheck</Filter>
+    </ClInclude>
+    <ClInclude Include="CBaseTrace.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="CPlane.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="CSurface.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="CGameTrace.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="IEngineTrace.hpp">
+      <Filter>SDK</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -371,6 +395,9 @@
     </ClCompile>
     <ClCompile Include="BaseLocalPlayer.cpp">
       <Filter>Utils\Game\Client\BaseLocalPlayer</Filter>
+    </ClCompile>
+    <ClCompile Include="visibleCheck\VisibleCheck.cpp">
+      <Filter>Utils\VisibleCheck</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

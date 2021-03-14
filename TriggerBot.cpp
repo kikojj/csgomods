@@ -9,8 +9,10 @@ void TriggerBot::loop() {
 
 	if (
 		engine.clientState->state() != INGAME ||
+		engine.clientState->m_nDeltaTick() == -1 ||
 		client.localPlayer->m_iHealth() <= 0 ||
 		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_bDormant() ||
 		!Helpers::isMouseActive()
 		) {
 		return;
@@ -68,6 +70,9 @@ void TriggerBot::loop() {
 		return;
 	}
 	else if (activeWeapon.isGrenade()) {
+		return;
+	}
+	else if (activeWeapon.isZeusX27()) {
 		return;
 	}
 	else {

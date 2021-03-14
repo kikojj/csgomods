@@ -18,3 +18,16 @@ Vector3 BaseLocalPlayer::m_vecVelocity(){
 int BaseLocalPlayer::m_iCrosshairId(){
 	return mem.Read<int>(get() + Offsets::netvars::m_iCrosshairId);
 }
+
+bool BaseLocalPlayer::canSeePlayer(BasePlayer player, int bone){
+	auto playerID = player.getEntityID();
+	if (playerID == -1) {
+		return false;
+	}
+	if (bone == -1) {
+		return visibleCheck.isVisible(playerID);
+	}
+	else {
+		return visibleCheck.isVisible(playerID, bone);
+	}
+}

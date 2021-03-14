@@ -43,7 +43,7 @@ int Helpers::getModelIndex(std::string name) {
 	int dwModelPrecache = engine.clientState->dwModelPrecache();
 	int modelBase = mem.Read<int>(mem.Read<int>(dwModelPrecache + 0x40) + 0xC) + 0xC;
 
-	for (int i = 300; i < 1024; i++) {
+	for (int i = 0; i < 1024; i++) {
 		int model = mem.Read<int>(modelBase + (i * 0x34));
 
 		std::string modelString = std::string(mem.Read<std::array<char, 128>>(model).data());

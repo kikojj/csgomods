@@ -65,3 +65,7 @@ void ClientState::m_nDeltaTick(int v){
 	mem.Write(get() + Offsets::signatures::clientstate_delta_ticks, v);
 }
 
+int ClientState::m_nDeltaTick(){
+	return mem.Read<int>(get() + Offsets::signatures::clientstate_delta_ticks);
+}
+

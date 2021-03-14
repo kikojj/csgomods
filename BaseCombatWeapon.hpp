@@ -100,6 +100,8 @@ public:
 	/// <returns>True if grenade</returns>
 	bool isGrenade();
 
+	bool isZeusX27();
+
 	unsigned long m_nFallbackPaintKit();
 
 	void m_nFallbackPaintKit(unsigned long);

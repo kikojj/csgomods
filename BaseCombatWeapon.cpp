@@ -95,6 +95,14 @@ bool BaseCombatWeapon::isGrenade(){
 	return false;
 }
 
+bool BaseCombatWeapon::isZeusX27(){
+	auto itemDI = m_iItemDefinitionIndex();
+	if (itemDI == WEAPON_Zeusx27) {
+		return true;
+	}
+	return false;
+}
+
 unsigned long BaseCombatWeapon::m_nFallbackPaintKit(){
 	return mem.Read<unsigned long>(get() + Offsets::netvars::m_nFallbackPaintKit);
 }

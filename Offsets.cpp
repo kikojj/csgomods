@@ -91,6 +91,7 @@ int Offsets::netvars::m_flCustomBloomScale;
 int Offsets::netvars::m_flCustomAutoExposureMin;
 int Offsets::netvars::m_flCustomAutoExposureMax;
 int Offsets::netvars::m_hWeaponWorldModel;
+int Offsets::netvars::m_bDormant;
 #pragma endregion
 
 #pragma region signatures
@@ -154,9 +155,13 @@ int Offsets::signatures::find_hud_element;
 int Offsets::signatures::overlayActivated1;
 int Offsets::signatures::overlayActivated2;
 int Offsets::signatures::hConfirmMatch;
+int Offsets::signatures::dwClientMode;
+int Offsets::signatures::dwTraceLine;
 #pragma endregion
 
-void Offsets::getNetvars(){
+void Offsets::initNetvars(){
+  Offsets::netvars::m_bDormant = 0xED;
+
   //DT_BaseEntity
   Offsets::netvars::m_bSpotted        = Scanner::getNetvar("m_bSpotted",       "m_bSpotted",       "DT_BaseEntity");
   Offsets::netvars::m_bSpottedByMask  = Scanner::getNetvar("m_bSpottedByMask", "m_bSpottedByMask", "DT_BaseEntity");
@@ -276,7 +281,7 @@ void Offsets::getNetvars(){
   Offsets::netvars::m_flCustomAutoExposureMax   = Scanner::getNetvar("m_flCustomAutoExposureMax",    "m_flCustomAutoExposureMax",    "DT_EnvTonemapController");
 }
 
-void Offsets::getSignatures(){
+void Offsets::initSignatures(){
   Offsets::signatures::dwGetAllClasses = Scanner::getAllClassesSignature();
 
   //CLIENT_DLL_NAME
@@ -317,6 +322,8 @@ void Offsets::getSignatures(){
   Offsets::signatures::m_flSpawnTime                = Scanner::getSignature(CLIENT_DLL_NAME, "89 86 ? ? ? ? E8 ? ? ? ? 80 BE ? ? ? ? ?", { 2 }, 0, false);
   Offsets::signatures::find_hud_element             = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 53 8B 5D 08 56 57 8B F9 33 F6 39 77 28", {  }, 0, false);
   Offsets::signatures::hConfirmMatch                = Scanner::getSignature(CLIENT_DLL_NAME, "56 8B 35 ? ? ? ? 57 83 BE", { 0 }, -4, true, false);
+  Offsets::signatures::dwClientMode                 = Scanner::getSignature(CLIENT_DLL_NAME, "8B 0D ? ? ? ? FF 75 08 8B 01 FF 50 64", { 0 }, 2, false, false);
+  Offsets::signatures::dwTraceLine                  = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 E4 F0 83 EC 7C 56 52", {0}, 0, false, false);
 
   //ENGINE_DLL_NAME
   Offsets::signatures::dwClientState                      = Scanner::getSignature(ENGINE_DLL_NAME, "A1 ? ? ? ? 33 D2 6A 00 6A 00 33 C9 89 B0", { 1 });
@@ -345,7 +352,7 @@ void Offsets::getSignatures(){
   Offsets::signatures::convar_name_hash_table = Scanner::getSignature(VSTDLIB_DLL_NAME, "8B 3C 85", { 3 });
 }
 
-void Offsets::get(){
-  getSignatures();
-  getNetvars();
+void Offsets::init(){
+  initSignatures();
+  initNetvars();
 }

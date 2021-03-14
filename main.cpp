@@ -21,6 +21,7 @@
 #include "Skinchanger.hpp"
 #include "Misc.hpp"
 #include "Helpers.hpp"
+#include "visibleCheck/VisibleCheck.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ Client client;
 Engine engine;
 
 rn::bsp_parser bsp_parser;
+CVisibleCheck visibleCheck;
 
 map<ItemDefinitionIndex, int> modelIndexes;
 #pragma endregion
@@ -70,9 +72,9 @@ int main() {
 		}
 		cout << "[Main]: Module '" << ENGINE_DLL_NAME << "' loaded. DwBase: " << engineDll.dwBase << endl;
 
-		Offsets::get();
+		Offsets::init();
 
-		Settings::getFromFile("default.json");		
+		Settings::getFromFile("default.json");
 
 		thread thMenuData([]() {
 			int lastActiveWeaponIDI = -1;
@@ -178,6 +180,13 @@ int main() {
 			}
 		});
 
+		thread thVisibleCheck([]() {
+			while (!visibleCheck.init()) {}
+			while (true) {
+				visibleCheck.updateVisibleStruct();
+			}
+		});
+
 		thMenuServer.detach();
 		thMenuData.join();
 		thMenuOpen.join();
@@ -189,6 +198,7 @@ int main() {
 		thMiscBhop.join();
 		thMiscAutoPistols.join();
 		thMap.join();
+		thVisibleCheck.join();
 	}
 	catch (const exception& err){
 		cout << "[Main]: Catch. Error: '" << err.what() << endl;
