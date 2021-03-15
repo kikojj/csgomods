@@ -10,8 +10,6 @@
 #include "Engine.hpp"
 #include "Offsets.hpp"
 
-#include "BasePlayer.hpp"
-
 #include "ItemDefinitionIndex.hpp"
 
 class Helpers {

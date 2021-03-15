@@ -61,15 +61,18 @@ export const ConfigsContent: React.FC = () => {
           />
           <div className={classes.configListBtns}>
             <div className={classes.configListBtns_left}>
-              <Button className={classes.configListBtns_save}>
-                <img src={SaveIcon} alt="save" onClick={() => selectedConfig && saveConfig(selectedConfig)} />
+              <Button
+                className={classes.configListBtns_save}
+                onClick={() => selectedConfig && saveConfig(selectedConfig)}
+              >
+                <img src={SaveIcon} alt="save" />
               </Button>
               <Button color="#E81A1A" onClick={() => selectedConfig && deleteConfig(selectedConfig)}>
                 <img src={DeleteIcon} alt="delete" />
               </Button>
             </div>
-            <Button>
-              <img src={LoadIcon} alt="load" onClick={() => selectedConfig && loadConfig(selectedConfig)} />
+            <Button onClick={() => selectedConfig && loadConfig(selectedConfig)}>
+              <img src={LoadIcon} alt="load" />
             </Button>
           </div>
         </Group>

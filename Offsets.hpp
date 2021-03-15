@@ -170,6 +170,9 @@ namespace Offsets {
     //for visible check
     static int dwTraceLine;
 
+    //for lineThroughSmoke
+    static int dwLineThroughSmoke;
+
   } signatures;
   void initSignatures();
 

@@ -2,8 +2,10 @@
 
 #include <Windows.h>
 #include <TlHelp32.h>
-#include <string>
 #include <comdef.h>
+#include <string>
+#include <map>
+
 #include "PModule.hpp"
 
 class Memory {
@@ -64,10 +66,9 @@ public:
 		WriteProcessMemory(_process, LPVOID(dwAddress), &value, sizeof(T), NULL);
 	}
 
-
-	inline void CreateThread(uintptr_t address, LPVOID parameter = 0){
+	inline void CreateThread(uintptr_t address, LPVOID parameter = 0) {
 		HANDLE hThread = CreateRemoteThread(_process, 0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(address), parameter, 0, 0);
-		if (!hThread){
+		if (!hThread) {
 			return;
 		}
 		WaitForSingleObject(hThread, 5000);
@@ -76,6 +77,39 @@ public:
 
 	void Exit() {
 		CloseHandle(_process);
+	}
+
+	//smart allocator
+	std::map<LPVOID, uintptr_t> allocators;
+
+	LPVOID allocateNewPage(uintptr_t size) {
+		auto address = VirtualAllocEx(_process, NULL, (size > 4096 ? size : 4096), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+		allocators[address] = size;
+		return address;
+	}
+
+	void free() {
+		for (auto allocator : allocators) {
+			free(allocator.first);
+		}
+	}
+
+	void free(LPVOID address) {
+		if (allocators[address] > 0) {
+			VirtualFreeEx(_process, address, 4096, MEM_COMMIT | MEM_RESERVE);
+		}
+	}
+
+	LPVOID allocate(uintptr_t size = 4096) {
+		for (auto allocator : allocators) {
+			uintptr_t value = allocator.second + size;
+			if (value < 4096) {
+				LPVOID currentAddres = LPVOID(uintptr_t(allocator.first) + allocator.second);
+				allocator.second = value;
+				return currentAddres;
+			}
+		}
+		return allocateNewPage(size);
 	}
 };
 

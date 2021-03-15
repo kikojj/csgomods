@@ -12,14 +12,14 @@
 #include "GlowObjectManager.hpp"
 
 #include "IGlowObjectDefinition.hpp"
-#include "Input.hpp"
+#include "CInput.hpp"
 #include "KeyEvent.hpp"
 
 class Client {
 public:
-	BaseLocalPlayer* localPlayer = nullptr;
-	EntityList* entityList = nullptr;
-	GlowObjectManager* glowObjectManager = nullptr;
+	BaseLocalPlayer* localPlayer;
+	EntityList* entityList;
+	GlowObjectManager* glowObjectManager;
 
 	Client();
 

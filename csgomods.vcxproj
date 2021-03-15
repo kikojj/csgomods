@@ -183,7 +183,7 @@
     <ClInclude Include="BaseEntity.hpp" />
     <ClInclude Include="GlowObjectManager.hpp" />
     <ClInclude Include="Helpers.hpp" />
-    <ClInclude Include="Input.hpp" />
+    <ClInclude Include="CInput.hpp" />
     <ClInclude Include="jsonxx\jsonxx.h" />
     <ClInclude Include="LifeState.hpp" />
     <ClInclude Include="MenuServer.hpp" />
@@ -191,6 +191,7 @@
     <ClInclude Include="BasePlayer.hpp" />
     <ClInclude Include="EntityList.hpp" />
     <ClInclude Include="FlagsState.hpp" />
+    <ClInclude Include="VirtualFunction.hpp" />
     <ClInclude Include="visibleCheck\VisibleCheck.h" />
     <ClInclude Include="Visuals.hpp" />
     <ClInclude Include="IGlowObjectDefinition.hpp" />
@@ -239,6 +240,7 @@
     <ClCompile Include="MenuServer.cpp" />
     <ClCompile Include="BasePlayer.cpp" />
     <ClCompile Include="EntityList.cpp" />
+    <ClCompile Include="VirtualFunction.cpp" />
     <ClCompile Include="visibleCheck\VisibleCheck.cpp" />
     <ClCompile Include="Visuals.cpp" />
     <ClCompile Include="BaseLocalPlayer.cpp" />

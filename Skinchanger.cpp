@@ -45,8 +45,7 @@ void Skinchanger::loop() {
 	if (
 		engine.clientState->state() != INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST ||
-		client.localPlayer->m_bDormant()
+		client.localPlayer->m_iTeamNum() < TERRORIST
 		) {
 		return;
 	}

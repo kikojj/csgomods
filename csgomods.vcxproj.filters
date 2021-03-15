@@ -91,6 +91,9 @@
     <Filter Include="Utils\VisibleCheck">
       <UniqueIdentifier>{e72cfaf3-b3c1-4a01-bbc7-33895da329c9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\VirtualFunction">
+      <UniqueIdentifier>{855c9b3f-cb38-41cc-a80d-b3eb3b14db71}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.hpp">
@@ -231,7 +234,7 @@
     <ClInclude Include="GlowObjectManager.hpp">
       <Filter>Utils\Game\Client\GlowObjectManager</Filter>
     </ClInclude>
-    <ClInclude Include="Input.hpp">
+    <ClInclude Include="CInput.hpp">
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="LifeState.hpp">
@@ -293,6 +296,9 @@
     </ClInclude>
     <ClInclude Include="IEngineTrace.hpp">
       <Filter>SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="VirtualFunction.hpp">
+      <Filter>Utils\VirtualFunction</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -398,6 +404,9 @@
     </ClCompile>
     <ClCompile Include="visibleCheck\VisibleCheck.cpp">
       <Filter>Utils\VisibleCheck</Filter>
+    </ClCompile>
+    <ClCompile Include="VirtualFunction.cpp">
+      <Filter>Utils\VirtualFunction</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

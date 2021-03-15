@@ -6,6 +6,7 @@
 #include "../Memory.hpp"
 #include "../Modules.hpp"
 #include "../Offsets.hpp"
+#include "../VirtualFunction.hpp"
 
 #include "../Vector.hpp"
 #include "../IEngineTrace.hpp"
@@ -54,12 +55,13 @@ private:
 	bool hooked;
 	DWORD dwVisibleStruct;
 	IVisible visibleStruct;
-
-	DWORD getVFunc(DWORD, int);
-	void hook(DWORD, int, DWORD);
+	LPVOID allocatedAddressTraceOutput;
+	LPVOID allocatedAddressVisibleStruct;
+	LPVOID allocatedAddressHookCode;
 
 public:
 	CVisibleCheck();
+	~CVisibleCheck();
 
 	bool 	init();
 	bool 	updateVisibleStruct();

@@ -157,6 +157,7 @@ int Offsets::signatures::overlayActivated2;
 int Offsets::signatures::hConfirmMatch;
 int Offsets::signatures::dwClientMode;
 int Offsets::signatures::dwTraceLine;
+int Offsets::signatures::dwLineThroughSmoke;
 #pragma endregion
 
 void Offsets::initNetvars(){
@@ -324,6 +325,7 @@ void Offsets::initSignatures(){
   Offsets::signatures::hConfirmMatch                = Scanner::getSignature(CLIENT_DLL_NAME, "56 8B 35 ? ? ? ? 57 83 BE", { 0 }, -4, true, false);
   Offsets::signatures::dwClientMode                 = Scanner::getSignature(CLIENT_DLL_NAME, "8B 0D ? ? ? ? FF 75 08 8B 01 FF 50 64", { 0 }, 2, false, false);
   Offsets::signatures::dwTraceLine                  = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 E4 F0 83 EC 7C 56 52", {0}, 0, false, false);
+  Offsets::signatures::dwLineThroughSmoke           = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0", {0}, 0, false, false);
 
   //ENGINE_DLL_NAME
   Offsets::signatures::dwClientState                      = Scanner::getSignature(ENGINE_DLL_NAME, "A1 ? ? ? ? 33 D2 6A 00 6A 00 33 C9 89 B0", { 1 });

@@ -86,6 +86,18 @@ CVisibleCheck::CVisibleCheck(){
 		}
 	}
 }
+
+CVisibleCheck::~CVisibleCheck() {
+	if (allocatedAddressTraceOutput) {
+		mem.free(allocatedAddressTraceOutput);
+	}
+	if (allocatedAddressVisibleStruct) {
+		mem.free(allocatedAddressVisibleStruct);
+	}
+	if (allocatedAddressHookCode) {
+		mem.free(allocatedAddressHookCode);
+	}
+}
 	
 bool CVisibleCheck::updateVisibleStruct(){
 	if (!hooked) {
@@ -143,45 +155,22 @@ bool CVisibleCheck::init(){
 	if (hooked) {
 		return true;
 	}
-
-	DWORD dwClientMode = mem.Read<DWORD>(Offsets::signatures::dwClientMode);
-				dwClientMode = mem.Read<DWORD>(dwClientMode);
-	DWORD dwTraceLine = Offsets::signatures::dwTraceLine;
-	DWORD dwLocalPlayer = clientDll.dwBase + Offsets::signatures::dwLocalPlayer;
-	DWORD dwEntityList = clientDll.dwBase + Offsets::signatures::dwEntityList;
-	DWORD dwClientState = mem.Read<DWORD>(engineDll.dwBase + Offsets::signatures::dwClientState);
-	DWORD m_nDeltaTick = mem.Read<DWORD>(engineDll.dwBase + Offsets::signatures::clientstate_delta_ticks);
-
-	DWORD m_dwBoneMatrix = Offsets::netvars::m_dwBoneMatrix;
-	DWORD m_vecViewOffset = Offsets::netvars::m_vecViewOffset;
-	DWORD m_vecOrigin = Offsets::netvars::m_vecOrigin;
-	DWORD m_lifeState = Offsets::netvars::m_lifeState;
-	DWORD m_iTeamNum = Offsets::netvars::m_iTeamNum;
-	DWORD m_iHealth = Offsets::netvars::m_iHealth;
-	DWORD m_bDormant = Offsets::netvars::m_bDormant;
-	
-	// Check offsets
-	if (!dwClientMode || !dwTraceLine || !dwLocalPlayer || !dwEntityList || !dwClientState || !m_nDeltaTick) {
-		return false;
-	}
-	if (!m_dwBoneMatrix || !m_vecViewOffset || !m_vecOrigin || !m_lifeState || !m_iTeamNum || !m_iHealth || !m_bDormant) {
-		return false;
-	}
-	
+		
 	// Set CreateMove local Vars
 	ICreateMoveVars hkCreateMoveVars;
-	hkCreateMoveVars.dwClientState 		= dwClientState;
-	hkCreateMoveVars.dwEntityList 		= dwEntityList;
-	hkCreateMoveVars.dwLocalPlayer 		= dwLocalPlayer;
-	hkCreateMoveVars.m_nDeltaTick 		= m_nDeltaTick;
-	hkCreateMoveVars.m_dwBoneMatrix 	= m_dwBoneMatrix;
-	hkCreateMoveVars.m_vecViewOffset 	= m_vecViewOffset;
-	hkCreateMoveVars.m_vecOrigin 			= m_vecOrigin;
-	hkCreateMoveVars.m_lifeState 			= m_lifeState;
-	hkCreateMoveVars.m_iTeamNum 			= m_iTeamNum;
-	hkCreateMoveVars.m_iHealth 				= m_iHealth;
-	hkCreateMoveVars.m_bDormant 			= m_bDormant;
-	hkCreateMoveVars.dwTraceLine 			= dwTraceLine;
+	#pragma region hkCreateMoveVars initialization
+	hkCreateMoveVars.dwClientState 		= mem.Read<DWORD>(engineDll.dwBase + Offsets::signatures::dwClientState);
+	hkCreateMoveVars.dwEntityList 		= clientDll.dwBase + Offsets::signatures::dwEntityList;
+	hkCreateMoveVars.dwLocalPlayer 		= clientDll.dwBase + Offsets::signatures::dwLocalPlayer;
+	hkCreateMoveVars.m_nDeltaTick 		= mem.Read<DWORD>(engineDll.dwBase + Offsets::signatures::clientstate_delta_ticks);
+	hkCreateMoveVars.m_dwBoneMatrix 	= Offsets::netvars::m_dwBoneMatrix;
+	hkCreateMoveVars.m_vecViewOffset 	= Offsets::netvars::m_vecViewOffset;
+	hkCreateMoveVars.m_vecOrigin 			= Offsets::netvars::m_vecOrigin;
+	hkCreateMoveVars.m_lifeState 			= Offsets::netvars::m_lifeState;
+	hkCreateMoveVars.m_iTeamNum 			= Offsets::netvars::m_iTeamNum;
+	hkCreateMoveVars.m_iHealth 				= Offsets::netvars::m_iHealth;
+	hkCreateMoveVars.m_bDormant 			= Offsets::netvars::m_bDormant;
+	hkCreateMoveVars.dwTraceLine 			= Offsets::signatures::dwTraceLine;
 	hkCreateMoveVars.min_fraction			= 0.97f;
 	hkCreateMoveVars.all_bones[0] = 3;
 	hkCreateMoveVars.all_bones[1] = 4;
@@ -200,15 +189,19 @@ bool CVisibleCheck::init(){
 	hkCreateMoveVars.all_bones[14] = 77;
 	hkCreateMoveVars.all_bones[15] = 78;
 	hkCreateMoveVars.all_bones[16] = 79;
+	#pragma endregion
 	
 	// Allocate memory for result TraceLine function
-	hkCreateMoveVars.traceOutput = (CGameTrace*)VirtualAllocEx(mem._process, NULL, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	allocatedAddressTraceOutput = mem.allocate();
+	hkCreateMoveVars.traceOutput = (CGameTrace*)allocatedAddressTraceOutput;
 	
 	// Allocate memory for visibleStruct
-	hkCreateMoveVars.visibleStruct = (IVisible*)VirtualAllocEx(mem._process, NULL, sizeof(IVisible), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	allocatedAddressVisibleStruct = mem.allocate(sizeof(IVisible));
+	hkCreateMoveVars.visibleStruct = (IVisible*)allocatedAddressVisibleStruct;
 	
 	// Allocate memory for Hook
-	LPVOID hookCodeAddress = VirtualAllocEx(mem._process, NULL, 4096, MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+	allocatedAddressHookCode = mem.allocate();
+	LPVOID hookCodeAddress = allocatedAddressHookCode;
 		
 	if (!hkCreateMoveVars.traceOutput || !hkCreateMoveVars.visibleStruct || !(DWORD)hookCodeAddress)
 		return false;
@@ -225,28 +218,14 @@ bool CVisibleCheck::init(){
 	// Set pointer to hkCreateMoveVars
 	if (!WriteProcessMemory(mem._process, (LPVOID)((DWORD)hookCodeAddress + 0x9), &dw_hkCreateMoveVars, sizeof(DWORD), NULL))
 		return false;
-		
-	hook(dwClientMode, 24, (DWORD)hookCodeAddress);
+
+	DWORD dwClientMode = mem.Read<DWORD>(mem.Read<DWORD>(Offsets::signatures::dwClientMode));
+
+	VirtualFunction vfClientMode(dwClientMode);
+	vfClientMode.hook(24, (DWORD)hookCodeAddress);
 	
 	dwVisibleStruct = (DWORD)hkCreateMoveVars.visibleStruct;
 	hooked = true;
 
-	std::cout << "[VisibleCheck]: Hooked." << std::endl;
-
 	return hooked;
-}
-
-DWORD CVisibleCheck::getVFunc(DWORD inst, int Index){
-	DWORD table;
-	ReadProcessMemory(mem._process, (LPVOID)inst, &table, sizeof(DWORD), NULL);
-	DWORD func = table + sizeof(DWORD) * Index;
-	return func;
-}
-
-void CVisibleCheck::hook(DWORD Instance, int Index, DWORD HookFunc){
-	uintptr_t VFunc = getVFunc(Instance, Index);
-	DWORD dwProtection;
-	VirtualProtectEx(mem._process, (LPVOID)VFunc, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dwProtection);
-	WriteProcessMemory(mem._process, (LPVOID)VFunc, &HookFunc, sizeof(DWORD), NULL);
-	VirtualProtectEx(mem._process, (LPVOID)VFunc, sizeof(DWORD), dwProtection, &dwProtection);
 }

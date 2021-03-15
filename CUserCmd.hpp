@@ -22,3 +22,8 @@ public:
   bool    hasbeenpredicted;   // 0x48 Client only, tracks whether we've predicted this command at least once
   char    pad_0x4C[0x18];     // 0x4C Current sizeof( usercmd ) =  100  = 0x64
 };
+
+struct VerifiedUserCmd {
+  CUserCmd m_cmd;
+  unsigned long  m_crc;
+};

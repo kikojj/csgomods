@@ -1,7 +1,16 @@
-﻿  Skinchanger.cpp
+﻿  AimBot.cpp
+  Client.cpp
+  Helpers.cpp
+  MenuServer.cpp
+  Visuals.cpp
+  main.cpp
+  Misc.cpp
+D:\Documents\VSProjects\csgomods\Misc.cpp(111,51): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+  Skinchanger.cpp
+  TriggerBot.cpp
   Generating code
-  2 of 9012 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  2 of 9184 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+    18 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   csgomods.vcxproj -> D:\Documents\VSProjects\csgomods\Release\csgomods.exe
