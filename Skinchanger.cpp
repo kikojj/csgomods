@@ -1,6 +1,6 @@
 #include "Skinchanger.hpp"
 
-void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, SkinchangerWeapon settings){
+void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, ISkinchangerWeapon settings){
 	weapon.m_iItemIDHigh(-1);
 	weapon.m_iAccountID(weapon.m_OriginalOwnerXuidLow());
 
@@ -29,7 +29,7 @@ void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, SkinchangerWeapon
 	}
 }
 
-void Skinchanger::applyKnifeSettings(BaseCombatWeapon knife, SkinchangerWeapon settings){
+void Skinchanger::applyKnifeSettings(BaseCombatWeapon knife, ISkinchangerWeapon settings){
 	auto weaponModel = modelIndexes[settings.itemDI];
 
 	knife.m_iItemDefinitionIndex(settings.itemDI);

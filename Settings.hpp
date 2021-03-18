@@ -16,11 +16,11 @@
 #include "ItemDefinitionIndex.hpp"
 #include "TeamNum.hpp"
 
-enum Visuals_glowEsp_mode {
+enum EVisualsGlowEspMode {
   VISUALS_GLOWESP_MODE_COLOR, VISUALS_GLOWESP_MODE_HP_BASED
 };
 
-struct SkinchangerWeapon {
+struct ISkinchangerWeapon {
   bool enable = false;
   int paintKit = 0;
   EntityQuality quality = INVALID_QUALITY;
@@ -31,16 +31,33 @@ struct SkinchangerWeapon {
   ItemDefinitionIndex itemDI;
 };
 
+struct IAimbotSettings {
+  bool enable = false;
+  float fov = 0.0f;
+  Skeleton bone = NEAREST;
+  float smooth = 0.0f;
+  bool rcs_enable = false;
+  float rcs_scale_x = 0.0f;
+  float rcs_scale_y = 0.0f;
+};
+
 class Settings {
 public:
   static colorRGBA getColorFromJsonXX(jsonxx::Value*);
   static jsonxx::Value rgbaToJsonXX(colorRGBA);
 
-  static std::map<ItemDefinitionIndex, SkinchangerWeapon> getWeaponSkinsFroJsonXX(jsonxx::Value*);
-  static jsonxx::Value weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, SkinchangerWeapon>);
+  static ISkinchangerWeapon getWeaponSkinFromJsonXX(jsonxx::Value*);
+  static jsonxx::Value weaponSkinToJsonXX(ISkinchangerWeapon);
 
-  static std::map<TeamNum, SkinchangerWeapon> getKnifesSkinsFromJsonXX(jsonxx::Value*);
-  static jsonxx::Value knifesSkinsToJsonXX(std::map<TeamNum, SkinchangerWeapon>);
+  static std::map<ItemDefinitionIndex, ISkinchangerWeapon> getWeaponSkinsFromJsonXX(jsonxx::Value*);
+  static jsonxx::Value weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, ISkinchangerWeapon>);
+  static std::map<TeamNum, ISkinchangerWeapon> getKnifesSkinsFromJsonXX(jsonxx::Value*);
+  static jsonxx::Value knifesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon>);
+
+  static IAimbotSettings getAimbotSettingsFromJsonXX(jsonxx::Value*);
+  static jsonxx::Value aimbotSettingsToJsonXX(IAimbotSettings);
+  static std::map<ItemDefinitionIndex, IAimbotSettings> getAimbotWeaponsSettingsFromJsonXX(jsonxx::Value*);
+  static jsonxx::Value aimbotWeaponsSettingsToJsonXX(std::map<ItemDefinitionIndex, IAimbotSettings>);
 
   static std::filesystem::path getConfigDirectoryPath();
   static void setValue(std::string, jsonxx::Value*);
@@ -61,53 +78,15 @@ public:
   static bool aimbot_jump_check;
   static bool aimbot_friendly_fire;
 
-  static bool aimbot_pistols_enable;
-  static float aimbot_pistols_fov;
-  static Skeleton aimbot_pistols_bone;
-  static float aimbot_pistols_smooth;
-  static bool aimbot_pistols_rcs_enable;
-  static float aimbot_pistols_rcs_scale_x;
-  static float aimbot_pistols_rcs_scale_y;
+  static IAimbotSettings aimbot_global;
+  static IAimbotSettings aimbot_pistols;
+  static IAimbotSettings aimbot_heavies;
+  static IAimbotSettings aimbot_shoutguns;
+  static IAimbotSettings aimbot_smgs;
+  static IAimbotSettings aimbot_rifles;
+  static IAimbotSettings aimbot_snipers;
 
-  static bool aimbot_heavies_enable;
-  static float aimbot_heavies_fov;
-  static Skeleton aimbot_heavies_bone;
-  static float aimbot_heavies_smooth;
-  static bool aimbot_heavies_rcs_enable;
-  static float aimbot_heavies_rcs_scale_x;
-  static float aimbot_heavies_rcs_scale_y;
-
-  static bool aimbot_shoutguns_enable;
-  static float aimbot_shoutguns_fov;
-  static Skeleton aimbot_shoutguns_bone;
-  static float aimbot_shoutguns_smooth;
-  static bool aimbot_shoutguns_rcs_enable;
-  static float aimbot_shoutguns_rcs_scale_x;
-  static float aimbot_shoutguns_rcs_scale_y;
-
-  static bool aimbot_smgs_enable;
-  static float aimbot_smgs_fov;
-  static Skeleton aimbot_smgs_bone;
-  static float aimbot_smgs_smooth;
-  static bool aimbot_smgs_rcs_enable;
-  static float aimbot_smgs_rcs_scale_x;
-  static float aimbot_smgs_rcs_scale_y;
-
-  static bool aimbot_rifles_enable;
-  static float aimbot_rifles_fov;
-  static Skeleton aimbot_rifles_bone;
-  static float aimbot_rifles_smooth;
-  static bool aimbot_rifles_rcs_enable;
-  static float aimbot_rifles_rcs_scale_x;
-  static float aimbot_rifles_rcs_scale_y;
-
-  static bool aimbot_snipers_enable;
-  static float aimbot_snipers_fov;
-  static Skeleton aimbot_snipers_bone;
-  static float aimbot_snipers_smooth;
-  static bool aimbot_snipers_rcs_enable;
-  static float aimbot_snipers_rcs_scale_x;
-  static float aimbot_snipers_rcs_scale_y;
+  static std::map<ItemDefinitionIndex, IAimbotSettings> aimbot_weapons;
 
   //TRIGGER_BOT
   static bool triggerbot_enable;
@@ -129,7 +108,7 @@ public:
   static bool visuals_glowEsp_enable;
   static bool visuals_glowEsp_show_enemies;
   static bool visuals_glowEsp_show_friends;
-  static Visuals_glowEsp_mode visuals_glowEsp_mode;
+  static EVisualsGlowEspMode visuals_glowEsp_mode;
   static GlowStyle visuals_glowEsp_style;
   //if color mode
   static colorRGBA visuals_glowEsp_enemy_visible_color;
@@ -151,8 +130,8 @@ public:
 
   //SKINCHANGER
   static bool skinchanger_enable;
-  static std::map<ItemDefinitionIndex, SkinchangerWeapon> skinchanger_weapons;
-  static std::map<TeamNum, SkinchangerWeapon> skinchanger_knifes;
+  static std::map<ItemDefinitionIndex, ISkinchangerWeapon> skinchanger_weapons;
+  static std::map<TeamNum, ISkinchangerWeapon> skinchanger_knifes;
 
   //MISC
   static bool misc_ingameRadar_enable;

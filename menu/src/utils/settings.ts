@@ -44,6 +44,26 @@ export enum TeamNum {
   COUNTER_TERRORIST = 3,
 }
 
+export interface IAimbotSettings {
+  enable: boolean;
+  fov: number;
+  bone: number;
+  smooth: number;
+  rcs_enable: boolean;
+  rcs_scale_x: number;
+  rcs_scale_y: number;
+}
+
+export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
+  enable: false,
+  fov: 0,
+  bone: 0,
+  smooth: 0,
+  rcs_enable: false,
+  rcs_scale_x: 0,
+  rcs_scale_y: 0,
+};
+
 export type TSettings = {
   //AIMBOT
   aimbot_enable: boolean;
@@ -55,53 +75,15 @@ export type TSettings = {
   aimbot_jump_check: boolean;
   aimbot_friendly_fire: boolean;
 
-  aimbot_pistols_enable: boolean;
-  aimbot_pistols_fov: number;
-  aimbot_pistols_bone: number;
-  aimbot_pistols_smooth: number;
-  aimbot_pistols_rcs_enable: boolean;
-  aimbot_pistols_rcs_scale_x: number;
-  aimbot_pistols_rcs_scale_y: number;
+  aimbot_global: IAimbotSettings;
+  aimbot_pistols: IAimbotSettings;
+  aimbot_heavies: IAimbotSettings;
+  aimbot_shoutguns: IAimbotSettings;
+  aimbot_smgs: IAimbotSettings;
+  aimbot_rifles: IAimbotSettings;
+  aimbot_snipers: IAimbotSettings;
 
-  aimbot_heavies_enable: boolean;
-  aimbot_heavies_fov: number;
-  aimbot_heavies_bone: number;
-  aimbot_heavies_smooth: number;
-  aimbot_heavies_rcs_enable: boolean;
-  aimbot_heavies_rcs_scale_x: number;
-  aimbot_heavies_rcs_scale_y: number;
-
-  aimbot_shoutguns_enable: boolean;
-  aimbot_shoutguns_fov: number;
-  aimbot_shoutguns_bone: number;
-  aimbot_shoutguns_smooth: number;
-  aimbot_shoutguns_rcs_enable: boolean;
-  aimbot_shoutguns_rcs_scale_x: number;
-  aimbot_shoutguns_rcs_scale_y: number;
-
-  aimbot_smgs_enable: boolean;
-  aimbot_smgs_fov: number;
-  aimbot_smgs_bone: number;
-  aimbot_smgs_smooth: number;
-  aimbot_smgs_rcs_enable: boolean;
-  aimbot_smgs_rcs_scale_x: number;
-  aimbot_smgs_rcs_scale_y: number;
-
-  aimbot_rifles_enable: boolean;
-  aimbot_rifles_fov: number;
-  aimbot_rifles_bone: number;
-  aimbot_rifles_smooth: number;
-  aimbot_rifles_rcs_enable: boolean;
-  aimbot_rifles_rcs_scale_x: number;
-  aimbot_rifles_rcs_scale_y: number;
-
-  aimbot_snipers_enable: boolean;
-  aimbot_snipers_fov: number;
-  aimbot_snipers_bone: number;
-  aimbot_snipers_smooth: number;
-  aimbot_snipers_rcs_enable: boolean;
-  aimbot_snipers_rcs_scale_x: number;
-  aimbot_snipers_rcs_scale_y: number;
+  aimbot_weapons: { [T in ItemDefinitionIndex]?: IAimbotSettings };
   ///
 
   ///TRIGGER
@@ -180,65 +162,16 @@ export const DEFAULT_SETTINGS: TSettings = {
   aimbot_friendly_fire: false,
   ///
 
-  ///PISTOLS
-  aimbot_pistols_enable: true,
-  aimbot_pistols_fov: 2,
-  aimbot_pistols_bone: 8,
-  aimbot_pistols_smooth: 0,
-  aimbot_pistols_rcs_enable: false,
-  aimbot_pistols_rcs_scale_x: 0,
-  aimbot_pistols_rcs_scale_y: 0,
-  ///
+  aimbot_global: { ...DEFAULT_AIMBOT_SETTINGS },
 
-  ///HEAVIES
-  aimbot_heavies_enable: true,
-  aimbot_heavies_fov: 8,
-  aimbot_heavies_bone: 0,
-  aimbot_heavies_smooth: 5,
-  aimbot_heavies_rcs_enable: true,
-  aimbot_heavies_rcs_scale_x: 100,
-  aimbot_heavies_rcs_scale_y: 100,
-  ///
+  aimbot_pistols: { ...DEFAULT_AIMBOT_SETTINGS },
+  aimbot_heavies: { ...DEFAULT_AIMBOT_SETTINGS },
+  aimbot_shoutguns: { ...DEFAULT_AIMBOT_SETTINGS },
+  aimbot_smgs: { ...DEFAULT_AIMBOT_SETTINGS },
+  aimbot_rifles: { ...DEFAULT_AIMBOT_SETTINGS },
+  aimbot_snipers: { ...DEFAULT_AIMBOT_SETTINGS },
 
-  //SHOUTGUNS
-  aimbot_shoutguns_enable: true,
-  aimbot_shoutguns_fov: 15,
-  aimbot_shoutguns_bone: 0,
-  aimbot_shoutguns_smooth: 0,
-  aimbot_shoutguns_rcs_enable: false,
-  aimbot_shoutguns_rcs_scale_x: 0,
-  aimbot_shoutguns_rcs_scale_y: 0,
-  ///
-
-  ///SMGS
-  aimbot_smgs_enable: true,
-  aimbot_smgs_fov: 5,
-  aimbot_smgs_bone: 0,
-  aimbot_smgs_smooth: 3,
-  aimbot_smgs_rcs_enable: true,
-  aimbot_smgs_rcs_scale_x: 90,
-  aimbot_smgs_rcs_scale_y: 90,
-  ///
-
-  ///RIFLES
-  aimbot_rifles_enable: true,
-  aimbot_rifles_fov: 3,
-  aimbot_rifles_bone: 0,
-  aimbot_rifles_smooth: 0,
-  aimbot_rifles_rcs_enable: true,
-  aimbot_rifles_rcs_scale_x: 100,
-  aimbot_rifles_rcs_scale_y: 100,
-  ///
-
-  ///SNIPERS
-  aimbot_snipers_enable: true,
-  aimbot_snipers_fov: 10,
-  aimbot_snipers_bone: 0,
-  aimbot_snipers_smooth: 0,
-  aimbot_snipers_rcs_enable: false,
-  aimbot_snipers_rcs_scale_x: 0,
-  aimbot_snipers_rcs_scale_y: 0,
-  ///
+  aimbot_weapons: {},
   ///
 
   ///TRIGGER

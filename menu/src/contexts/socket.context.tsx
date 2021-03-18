@@ -18,7 +18,9 @@ import {
   TGetTeamResponse,
 } from "@ts/requests/";
 
-const socket = new WebSocket("ws://localhost:2222");
+const SOCKET_URL = "ws://localhost:2222";
+
+const socket = new WebSocket(SOCKET_URL);
 
 type TMassage =
   | TGetAllSettingsResponse
@@ -56,15 +58,13 @@ const Socket = () => {
     socket.onclose = function (event) {
       console.log("[WebSocket]: closed.");
       setConnected(false);
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
     };
 
     socket.onerror = function (error) {
       console.log("[WebSocket]: error.", error);
-      setTimeout(() => {
-        location.reload();
+      setInterval(() => {
+        const _socket = new WebSocket(SOCKET_URL);
+        _socket.onopen = () => location.reload();
       }, 1000);
     };
   }, []);

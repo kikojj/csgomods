@@ -26,7 +26,7 @@ void Visuals::loop() {
 		return;
 	}
 
-	if (engine.clientState->state() != INGAME || engine.clientState->m_nDeltaTick() == -1) {
+	if (engine.clientState->state() != INGAME || engine.clientState->m_nDeltaTick() == -1 || client.localPlayer->m_bDormant()) {
 		return;
 	}
 
@@ -48,15 +48,10 @@ void Visuals::loop() {
 			continue;
 		}
 
-		if (entityClassID == CCSPlayer &&
-			(
-				Settings::visuals_glowEsp_show_enemies || Settings::visuals_glowEsp_show_friends ||
-				Settings::visuals_chams_show_enemies || Settings::visuals_chams_show_friends
-				)
-			) {
+		if (entityClassID == CCSPlayer && (Settings::visuals_glowEsp_show_enemies || Settings::visuals_glowEsp_show_friends || Settings::visuals_chams_show_enemies || Settings::visuals_chams_show_friends)) {
 			BasePlayer player(entity);
 
-			if (player.m_iHealth() <= 0) {
+			if (player.m_iHealth() <= 0 || player.m_bDormant()) {
 				continue;
 			}
 
@@ -77,9 +72,16 @@ void Visuals::loop() {
 
 			if (Settings::visuals_glowEsp_enable && Settings::visuals_glowEsp_show_enemies) {
 				if (Settings::visuals_glowEsp_mode == VISUALS_GLOWESP_MODE_COLOR) {
-					//auto isVisible = player.isBspVisibleFrom(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset());
-					auto isVisible = client.localPlayer->canSeePlayer(player);
-					drawEntity(glowObject, isVisible ? Settings::visuals_glowEsp_enemy_visible_color : Settings::visuals_glowEsp_enemy_invisible_color, Settings::visuals_glowEsp_style);
+					drawEntity(
+						glowObject,
+
+						//visible check
+						client.localPlayer->canSeePlayer(player) ?
+						Settings::visuals_glowEsp_enemy_visible_color :
+						Settings::visuals_glowEsp_enemy_invisible_color,
+
+						Settings::visuals_glowEsp_style
+					);
 				}
 				else {
 					drawEntity(glowObject, getHpBasedColor(player), Settings::visuals_glowEsp_style);

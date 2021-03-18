@@ -55,6 +55,77 @@ void AimBot::setAngle(Vector2 dstAngle) {
 	engine.clientState->dwViewAngles(dstAngle);
 }
 
+void AimBot::applyWeaponSettings(IAimbotSettings settings){
+	this->fov = settings.fov;
+	this->bone = settings.bone;
+	this->smooth = settings.smooth;
+	this->rcsEnable = settings.rcs_enable;
+	this->rcsScaleX = settings.rcs_scale_x;
+	this->rcsScaleY = settings.rcs_scale_y;
+}
+
+bool AimBot::applyWeaponsSettings(BaseCombatWeapon weapon){
+	auto itemDI = weapon.m_iItemDefinitionIndex();
+
+	//weapon settings
+	if (Settings::aimbot_weapons[itemDI].enable) {
+		applyWeaponSettings(Settings::aimbot_weapons[itemDI]);
+		return true;
+	}
+
+	//section settings
+	if (weapon.isPistol()) {
+		if (Settings::aimbot_pistols.enable) {
+			applyWeaponSettings(Settings::aimbot_pistols);
+			return true;
+		}
+	}
+	else if (weapon.isHeavy()) {
+		if (Settings::aimbot_heavies.enable) {
+			applyWeaponSettings(Settings::aimbot_heavies);
+			return true;
+		}
+	}
+	else if (weapon.isShotgun()) {
+		if (Settings::aimbot_shoutguns.enable) {
+			applyWeaponSettings(Settings::aimbot_shoutguns);
+			return true;
+		}
+	}
+	else if (weapon.isSMG()) {
+		if (Settings::aimbot_smgs.enable) {
+			applyWeaponSettings(Settings::aimbot_smgs);
+			return true;
+		}
+	}
+	else if (weapon.isRifle()) {
+		if (Settings::aimbot_rifles.enable) {
+			applyWeaponSettings(Settings::aimbot_rifles);
+			return true;
+		}
+	}
+	else if (weapon.isSnipers()) {
+		if (Settings::aimbot_snipers.enable) {
+			applyWeaponSettings(Settings::aimbot_snipers);
+			return true;
+		}
+	}
+	else if (weapon.isKnife() || weapon.isZeusX27() || weapon.isBomb() || weapon.isGrenade()) {
+		return false;
+	}
+	else {
+		return false;
+	}
+
+	//global settings
+	if (Settings::aimbot_global.enable) {
+		applyWeaponSettings(Settings::aimbot_global);
+		return true;
+	}
+
+	return false;
+}
+
 void AimBot::loop() {
 	if (!Settings::aimbot_enable) {
 		return;
@@ -86,85 +157,7 @@ void AimBot::loop() {
 	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
 	BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
 
-	if (activeWeapon.isPistol()) {
-		if (!Settings::aimbot_pistols_enable) {
-			return;
-		}
-		this->fov = Settings::aimbot_pistols_fov;
-		this->bone = Settings::aimbot_pistols_bone;
-		this->smooth = Settings::aimbot_pistols_smooth;
-		this->rcsEnable = Settings::aimbot_pistols_rcs_enable;
-		this->rcsScaleX = Settings::aimbot_pistols_rcs_scale_x;
-		this->rcsScaleY = Settings::aimbot_pistols_rcs_scale_y;
-	}
-	else if (activeWeapon.isHeavy()) {
-		if (!Settings::aimbot_heavies_enable) {
-			return;
-		}
-		this->fov = Settings::aimbot_heavies_fov;
-		this->bone = Settings::aimbot_heavies_bone;
-		this->smooth = Settings::aimbot_heavies_smooth;
-		this->rcsEnable = Settings::aimbot_heavies_rcs_enable;
-		this->rcsScaleX = Settings::aimbot_heavies_rcs_scale_x;
-		this->rcsScaleY = Settings::aimbot_heavies_rcs_scale_y;
-	}
-	else if (activeWeapon.isShotgun()) {
-		if (!Settings::aimbot_shoutguns_enable) {
-			return;
-		}
-		this->fov = Settings::aimbot_shoutguns_fov;
-		this->bone = Settings::aimbot_shoutguns_bone;
-		this->smooth = Settings::aimbot_shoutguns_smooth;
-		this->rcsEnable = Settings::aimbot_shoutguns_rcs_enable;
-		this->rcsScaleX = Settings::aimbot_shoutguns_rcs_scale_x;
-		this->rcsScaleY = Settings::aimbot_shoutguns_rcs_scale_y;
-	}
-	else if (activeWeapon.isSMG()) {
-		if (!Settings::aimbot_smgs_enable) {
-			return;
-		}
-		this->fov = Settings::aimbot_smgs_fov;
-		this->bone = Settings::aimbot_smgs_bone;
-		this->smooth = Settings::aimbot_smgs_smooth;
-		this->rcsEnable = Settings::aimbot_smgs_rcs_enable;
-		this->rcsScaleX = Settings::aimbot_smgs_rcs_scale_x;
-		this->rcsScaleY = Settings::aimbot_smgs_rcs_scale_y;
-	}
-	else if (activeWeapon.isRifle()) {
-		if (!Settings::aimbot_rifles_enable) {
-			return;
-		}
-		this->fov = Settings::aimbot_rifles_fov;
-		this->bone = Settings::aimbot_rifles_bone;
-		this->smooth = Settings::aimbot_rifles_smooth;
-		this->rcsEnable = Settings::aimbot_rifles_rcs_enable;
-		this->rcsScaleX = Settings::aimbot_rifles_rcs_scale_x;
-		this->rcsScaleY = Settings::aimbot_rifles_rcs_scale_y;
-	}
-	else if (activeWeapon.isSnipers()) {
-		if (!Settings::aimbot_snipers_enable) {
-			return;
-		}
-		this->fov = Settings::aimbot_snipers_fov;
-		this->bone = Settings::aimbot_snipers_bone;
-		this->smooth = Settings::aimbot_snipers_smooth;
-		this->rcsEnable = Settings::aimbot_snipers_rcs_enable;
-		this->rcsScaleX = Settings::aimbot_snipers_rcs_scale_x;
-		this->rcsScaleY = Settings::aimbot_snipers_rcs_scale_y;
-	}
-	else if (activeWeapon.isKnife()) {
-		return;
-	}
-	else if (activeWeapon.isZeusX27()) {
-	}
-	else if (activeWeapon.isBomb()) {
-		return;
-	}
-	else if (activeWeapon.isGrenade()) {
-		return;
-	}
-	else {
-		std::cout << "[Aim]: Undefined weapon ID = " << activeWeapon.m_iItemDefinitionIndex() << std::endl;
+	if (!activeWeapon.dwBase || !applyWeaponsSettings(activeWeapon)) {
 		return;
 	}
 
@@ -237,7 +230,7 @@ void AimBot::loop() {
 			setAngle(enemyAngle.toVector2());
 
 			//If nearest go to the main bone after closest bone
-			if (Settings::aimbot_heavies_bone == NEAREST && getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 && std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()) {
+			if (bone == NEAREST && getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 && std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()) {
 				closestAngle = 360.f;
 				for (auto bone : MAIN_BONES) {
 					auto bonePos = getBonePos(closestEnemy, bone);

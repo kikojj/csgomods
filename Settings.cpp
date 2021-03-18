@@ -20,119 +20,153 @@ jsonxx::Value Settings::rgbaToJsonXX(colorRGBA color) {
 	return o;
 }
 
-std::map<ItemDefinitionIndex, SkinchangerWeapon> Settings::getWeaponSkinsFroJsonXX(jsonxx::Value* v){
-	std::map<ItemDefinitionIndex, SkinchangerWeapon> data;
+ISkinchangerWeapon Settings::getWeaponSkinFromJsonXX(jsonxx::Value* skinObjC){
+	auto skinObj = skinObjC->get<jsonxx::Object>();
+
+	ISkinchangerWeapon skin;
+	if (skinObj.has<jsonxx::Boolean>("enable")) {
+		skin.enable = skinObj.get<jsonxx::Boolean>("enable");
+	}
+	if (skinObj.has<jsonxx::Number>("paintKit")) {
+		skin.paintKit = skinObj.get<jsonxx::Number>("paintKit");
+	}
+	if (skinObj.has<jsonxx::Number>("seed")) {
+		skin.seed = skinObj.get<jsonxx::Number>("seed");
+	}
+	if (skinObj.has<jsonxx::String>("customName")) {
+		skin.customName = skinObj.get<jsonxx::String>("customName");
+	}
+	if (skinObj.has<jsonxx::Number>("wear")) {
+		skin.wear = skinObj.get<jsonxx::Number>("wear");
+	}
+	if (skinObj.has<jsonxx::Number>("quality")) {
+		skin.quality = (EntityQuality)skinObj.get<jsonxx::Number>("quality");
+	}
+	if (skinObj.has<jsonxx::Number>("statTrack")) {
+		skin.statTrack = skinObj.get<jsonxx::Number>("statTrack");
+	}
+	if (skinObj.has<jsonxx::Number>("itemDI")) {
+		skin.itemDI = (ItemDefinitionIndex)skinObj.get<jsonxx::Number>("itemDI");
+	}
+
+	return skin;
+}
+
+jsonxx::Value Settings::weaponSkinToJsonXX(ISkinchangerWeapon skin){
+	jsonxx::Object o;
+	o <<
+		"enable" << skin.enable <<
+		"paintKit" << skin.paintKit <<
+		"seed" << skin.seed <<
+		"customName" << skin.customName <<
+		"statTrack" << skin.statTrack <<
+		"wear" << skin.wear <<
+		"quality" << (int)skin.quality <<
+		"itemDI" << (int)skin.itemDI;
+
+	return o;
+}
+
+std::map<ItemDefinitionIndex, ISkinchangerWeapon> Settings::getWeaponSkinsFromJsonXX(jsonxx::Value* v){
+	std::map<ItemDefinitionIndex, ISkinchangerWeapon> data;
 
 	for (auto skinObjC: v->get<jsonxx::Object>().kv_map()) {
-		auto skinObj = skinObjC.second->get<jsonxx::Object>();
-
-		SkinchangerWeapon skin;
-		if (skinObj.has<jsonxx::Boolean>("enable")) {
-			skin.enable = skinObj.get<jsonxx::Boolean>("enable");
-		}
-		if (skinObj.has<jsonxx::Number>("paintKit")) {
-			skin.paintKit = skinObj.get<jsonxx::Number>("paintKit");
-		}
-		if (skinObj.has<jsonxx::Number>("seed")) {
-			skin.seed = skinObj.get<jsonxx::Number>("seed");
-		}
-		if (skinObj.has<jsonxx::String>("customName")) {
-			skin.customName = skinObj.get<jsonxx::String>("customName");
-		}
-		if (skinObj.has<jsonxx::Number>("wear")) {
-			skin.wear = skinObj.get<jsonxx::Number>("wear");
-		}
-		if (skinObj.has<jsonxx::Number>("quality")) {
-			skin.quality = (EntityQuality)skinObj.get<jsonxx::Number>("quality");
-		}
-		if (skinObj.has<jsonxx::Number>("statTrack")) {
-			skin.statTrack = skinObj.get<jsonxx::Number>("statTrack");
-		}
-		if (skinObj.has<jsonxx::Number>("itemDI")) {
-			skin.itemDI = (ItemDefinitionIndex)skinObj.get<jsonxx::Number>("itemDI");
-		}
-
-		data[(ItemDefinitionIndex)stoi(skinObjC.first)] = skin;
+		data[(ItemDefinitionIndex)stoi(skinObjC.first)] = getWeaponSkinFromJsonXX(skinObjC.second);
 	}
 
 	return data;
 }
 
-jsonxx::Value Settings::weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, SkinchangerWeapon> data){
+jsonxx::Value Settings::weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, ISkinchangerWeapon> data){
 	jsonxx::Object v;
 
 	for (auto d: data) {
-		jsonxx::Object o;
-		o <<
-			"enable" << d.second.enable <<
-			"paintKit" << d.second.paintKit <<
-			"seed" << d.second.seed <<
-			"customName" << d.second.customName <<
-			"statTrack" << d.second.statTrack <<
-			"wear" << d.second.wear <<
-			"quality" << (int)d.second.quality <<
-			"itemDI" << (int)d.second.itemDI;
-
-		v << std::to_string(d.first) << o;
+		v << std::to_string(d.first) << weaponSkinToJsonXX(d.second);
 	}
 
 	return v;
 }
 
-std::map<TeamNum, SkinchangerWeapon> Settings::getKnifesSkinsFromJsonXX(jsonxx::Value* v){
-	std::map<TeamNum, SkinchangerWeapon> data;
+std::map<TeamNum, ISkinchangerWeapon> Settings::getKnifesSkinsFromJsonXX(jsonxx::Value* v){
+	std::map<TeamNum, ISkinchangerWeapon> data;
 
 	for (auto skinObjC : v->get<jsonxx::Object>().kv_map()) {
-		auto skinObj = skinObjC.second->get<jsonxx::Object>();
-
-		SkinchangerWeapon skin;
-		if (skinObj.has<jsonxx::Boolean>("enable")) {
-			skin.enable = skinObj.get<jsonxx::Boolean>("enable");
-		}
-		if (skinObj.has<jsonxx::Number>("paintKit")) {
-			skin.paintKit = skinObj.get<jsonxx::Number>("paintKit");
-		}
-		if (skinObj.has<jsonxx::Number>("seed")) {
-			skin.seed = skinObj.get<jsonxx::Number>("seed");
-		}
-		if (skinObj.has<jsonxx::String>("customName")) {
-			skin.customName = skinObj.get<jsonxx::String>("customName");
-		}
-		if (skinObj.has<jsonxx::Number>("wear")) {
-			skin.wear = skinObj.get<jsonxx::Number>("wear");
-		}
-		if (skinObj.has<jsonxx::Number>("quality")) {
-			skin.quality = (EntityQuality)skinObj.get<jsonxx::Number>("quality");
-		}
-		if (skinObj.has<jsonxx::Number>("statTrack")) {
-			skin.statTrack = skinObj.get<jsonxx::Number>("statTrack");
-		}
-		if (skinObj.has<jsonxx::Number>("itemDI")) {
-			skin.itemDI = (ItemDefinitionIndex)skinObj.get<jsonxx::Number>("itemDI");
-		}
-
-		data[(TeamNum)stoi(skinObjC.first)] = skin;
+		data[(TeamNum)stoi(skinObjC.first)] = getWeaponSkinFromJsonXX(skinObjC.second);
 	}
 
 	return data;
 }
 
-jsonxx::Value Settings::knifesSkinsToJsonXX(std::map<TeamNum, SkinchangerWeapon> data){
+jsonxx::Value Settings::knifesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon> data){
 	jsonxx::Object v;
 
 	for (auto d : data) {
-		jsonxx::Object o;
-		o <<
-			"enable" << d.second.enable <<
-			"paintKit" << d.second.paintKit <<
-			"seed" << d.second.seed <<
-			"customName" << d.second.customName <<
-			"statTrack" << d.second.statTrack <<
-			"wear" << d.second.wear <<
-			"quality" << (int)d.second.quality <<
-			"itemDI" << (int)d.second.itemDI;
+		v << std::to_string(d.first) << weaponSkinToJsonXX(d.second);
+	}
 
-		v << std::to_string(d.first) << o;
+	return v;
+}
+
+IAimbotSettings Settings::getAimbotSettingsFromJsonXX(jsonxx::Value* v){
+	auto obj = v->get<jsonxx::Object>();
+
+	IAimbotSettings settings;
+
+	if (obj.has<jsonxx::Boolean>("enable")) {
+		settings.enable = obj.get<jsonxx::Boolean>("enable");
+	}
+	if (obj.has<jsonxx::Number>("bone")) {
+		settings.bone = (Skeleton)obj.get<jsonxx::Number>("bone");
+	}
+	if (obj.has<jsonxx::Number>("fov")) {
+		settings.fov = (float)obj.get<jsonxx::Number>("fov");
+	}
+	if (obj.has<jsonxx::Number>("smooth")) {
+		settings.smooth = (float)obj.get<jsonxx::Number>("smooth");
+	}
+	if (obj.has<jsonxx::Boolean>("rcs_enable")) {
+		settings.rcs_enable = obj.get<jsonxx::Boolean>("rcs_enable");
+	}
+	if (obj.has<jsonxx::Number>("rcs_scale_x")) {
+		settings.rcs_scale_x = (float)obj.get<jsonxx::Number>("rcs_scale_x");
+	}
+	if (obj.has<jsonxx::Number>("rcs_scale_y")) {
+		settings.rcs_scale_y = (float)obj.get<jsonxx::Number>("rcs_scale_y");
+	}
+
+	return settings;
+}
+
+jsonxx::Value Settings::aimbotSettingsToJsonXX(IAimbotSettings settings){
+	jsonxx::Object o;
+
+	o <<
+		"enable" << settings.enable <<
+		"bone" << (int)settings.bone <<
+		"fov" << settings.fov <<
+		"smooth" << settings.smooth <<
+		"rcs_enable" << settings.rcs_enable <<
+		"rcs_scale_x" << settings.rcs_scale_x <<
+		"rcs_scale_y" << settings.rcs_scale_y;
+
+	return o;
+}
+
+std::map<ItemDefinitionIndex, IAimbotSettings> Settings::getAimbotWeaponsSettingsFromJsonXX(jsonxx::Value* v){
+	std::map<ItemDefinitionIndex, IAimbotSettings> data;
+
+	for (auto skinObjC : v->get<jsonxx::Object>().kv_map()) {
+		data[(ItemDefinitionIndex)stoi(skinObjC.first)] = getAimbotSettingsFromJsonXX(skinObjC.second);
+	}
+
+	return data;
+}
+
+jsonxx::Value Settings::aimbotWeaponsSettingsToJsonXX(std::map<ItemDefinitionIndex, IAimbotSettings> data){
+	jsonxx::Object v;
+
+	for (auto d : data) {
+		v << std::to_string(d.first) << aimbotSettingsToJsonXX(d.second);
 	}
 
 	return v;
@@ -243,53 +277,14 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	else if (name == "aimbot_jump_check") aimbot_jump_check = value->get<bool>();
 	else if (name == "aimbot_friendly_fire") aimbot_friendly_fire = value->get<bool>();
 
-	else if (name == "aimbot_pistols_enable") aimbot_pistols_enable = value->get<bool>();
-	else if (name == "aimbot_pistols_fov") aimbot_pistols_fov = value->get<jsonxx::Number>();
-	else if (name == "aimbot_pistols_bone") aimbot_pistols_bone = (Skeleton)value->get<jsonxx::Number>();
-	else if (name == "aimbot_pistols_smooth") aimbot_pistols_smooth = value->get<jsonxx::Number>();
-	else if (name == "aimbot_pistols_rcs_enable") aimbot_pistols_rcs_enable = value->get<bool>();
-	else if (name == "aimbot_pistols_rcs_scale_x") aimbot_pistols_rcs_scale_x = value->get<jsonxx::Number>();
-	else if (name == "aimbot_pistols_rcs_scale_y") aimbot_pistols_rcs_scale_y = value->get<jsonxx::Number>();
-
-	else if (name == "aimbot_heavies_enable") aimbot_heavies_enable = value->get<bool>();
-	else if (name == "aimbot_heavies_fov") aimbot_heavies_fov = value->get<jsonxx::Number>();
-	else if (name == "aimbot_heavies_bone") aimbot_heavies_bone = (Skeleton)value->get<jsonxx::Number>();
-	else if (name == "aimbot_heavies_smooth") aimbot_heavies_smooth = value->get<jsonxx::Number>();
-	else if (name == "aimbot_heavies_rcs_enable") aimbot_heavies_rcs_enable = value->get<bool>();
-	else if (name == "aimbot_heavies_rcs_scale_x") aimbot_heavies_rcs_scale_x = value->get<jsonxx::Number>();
-	else if (name == "aimbot_heavies_rcs_scale_y") aimbot_heavies_rcs_scale_y = value->get<jsonxx::Number>();
-
-	else if (name == "aimbot_shoutguns_enable") aimbot_shoutguns_enable = value->get<bool>();
-	else if (name == "aimbot_shoutguns_fov") aimbot_shoutguns_fov = value->get<jsonxx::Number>();
-	else if (name == "aimbot_shoutguns_bone") aimbot_shoutguns_bone = (Skeleton)value->get<jsonxx::Number>();
-	else if (name == "aimbot_shoutguns_smooth") aimbot_shoutguns_smooth = value->get<jsonxx::Number>();
-	else if (name == "aimbot_shoutguns_rcs_enable") aimbot_shoutguns_rcs_enable = value->get<bool>();
-	else if (name == "aimbot_shoutguns_rcs_scale_x") aimbot_shoutguns_rcs_scale_x = value->get<jsonxx::Number>();
-	else if (name == "aimbot_shoutguns_rcs_scale_y") aimbot_shoutguns_rcs_scale_y = value->get<jsonxx::Number>();
-
-	else if (name == "aimbot_smgs_enable") aimbot_smgs_enable = value->get<bool>();
-	else if (name == "aimbot_smgs_fov") aimbot_smgs_fov = value->get<jsonxx::Number>();
-	else if (name == "aimbot_smgs_bone") aimbot_smgs_bone = (Skeleton)value->get<jsonxx::Number>();
-	else if (name == "aimbot_smgs_smooth") aimbot_smgs_smooth = value->get<jsonxx::Number>();
-	else if (name == "aimbot_smgs_rcs_enable") aimbot_smgs_rcs_enable = value->get<bool>();
-	else if (name == "aimbot_smgs_rcs_scale_x") aimbot_smgs_rcs_scale_x = value->get<jsonxx::Number>();
-	else if (name == "aimbot_smgs_rcs_scale_y") aimbot_smgs_rcs_scale_y = value->get<jsonxx::Number>();
-
-	else if (name == "aimbot_rifles_enable") aimbot_rifles_enable = value->get<bool>();
-	else if (name == "aimbot_rifles_fov") aimbot_rifles_fov = value->get<jsonxx::Number>();
-	else if (name == "aimbot_rifles_bone") aimbot_rifles_bone = (Skeleton)value->get<jsonxx::Number>();
-	else if (name == "aimbot_rifles_smooth") aimbot_rifles_smooth = value->get<jsonxx::Number>();
-	else if (name == "aimbot_rifles_rcs_enable") aimbot_rifles_rcs_enable = value->get<bool>();
-	else if (name == "aimbot_rifles_rcs_scale_x") aimbot_rifles_rcs_scale_x = value->get<jsonxx::Number>();
-	else if (name == "aimbot_rifles_rcs_scale_y") aimbot_rifles_rcs_scale_y = value->get<jsonxx::Number>();
-
-	else if (name == "aimbot_snipers_enable") aimbot_snipers_enable = value->get<bool>();
-	else if (name == "aimbot_snipers_fov") aimbot_snipers_fov = value->get<jsonxx::Number>();
-	else if (name == "aimbot_snipers_bone") aimbot_snipers_bone = (Skeleton)value->get<jsonxx::Number>();
-	else if (name == "aimbot_snipers_smooth") aimbot_snipers_smooth = value->get<jsonxx::Number>();
-	else if (name == "aimbot_snipers_rcs_enable") aimbot_snipers_rcs_enable = value->get<bool>();
-	else if (name == "aimbot_snipers_rcs_scale_x") aimbot_snipers_rcs_scale_x = value->get<jsonxx::Number>();
-	else if (name == "aimbot_snipers_rcs_scale_y") aimbot_snipers_rcs_scale_y = value->get<jsonxx::Number>();
+	else if (name == "aimbot_global") aimbot_global = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_pistols") aimbot_pistols = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_heavies") aimbot_heavies = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_shoutguns") aimbot_shoutguns = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_smgs") aimbot_smgs = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_rifles") aimbot_rifles = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_snipers") aimbot_snipers = getAimbotSettingsFromJsonXX(value);
+	else if (name == "aimbot_weapons") aimbot_weapons = getAimbotWeaponsSettingsFromJsonXX(value);
 
 	//TRIGGERBOT
 	else if (name == "triggerbot_enable") triggerbot_enable = value->get<bool>();
@@ -309,7 +304,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	//VISUALS
 	else if (name == "visuals_glowEsp_enable") visuals_glowEsp_enable = value->get<bool>();
 	else if (name == "visuals_glowEsp_show_enemies") visuals_glowEsp_show_enemies = value->get<bool>();
-	else if (name == "visuals_glowEsp_mode") visuals_glowEsp_mode = (Visuals_glowEsp_mode)value->get<jsonxx::Number>();
+	else if (name == "visuals_glowEsp_mode") visuals_glowEsp_mode = (EVisualsGlowEspMode)value->get<jsonxx::Number>();
 	else if (name == "visuals_glowEsp_style") visuals_glowEsp_style = (GlowStyle)value->get<jsonxx::Number>();
 	else if (name == "visuals_glowEsp_enemy_visible_color") visuals_glowEsp_enemy_visible_color = getColorFromJsonXX(value);
 	else if (name == "visuals_glowEsp_enemy_invisible_color") visuals_glowEsp_enemy_invisible_color = getColorFromJsonXX(value);
@@ -329,7 +324,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 
 	//SKINCHANGER
 	else if (name == "skinchanger_enable") skinchanger_enable = value->get<bool>();
-	else if (name == "skinchanger_weapons") skinchanger_weapons = getWeaponSkinsFroJsonXX(value);
+	else if (name == "skinchanger_weapons") skinchanger_weapons = getWeaponSkinsFromJsonXX(value);
 	else if (name == "skinchanger_knifes") skinchanger_knifes = getKnifesSkinsFromJsonXX(value);
 
 	//MISC
@@ -354,53 +349,14 @@ jsonxx::Object Settings::toJsonxxObject() {
 		<< "aimbot_jump_check" << Settings::aimbot_jump_check
 		<< "aimbot_friendly_fire" << Settings::aimbot_friendly_fire
 
-		<< "aimbot_pistols_enable" << Settings::aimbot_pistols_enable
-		<< "aimbot_pistols_fov" << Settings::aimbot_pistols_fov
-		<< "aimbot_pistols_bone" << (int)Settings::aimbot_pistols_bone
-		<< "aimbot_pistols_smooth" << Settings::aimbot_pistols_smooth
-		<< "aimbot_pistols_rcs_enable" << Settings::aimbot_pistols_rcs_enable
-		<< "aimbot_pistols_rcs_scale_x" << Settings::aimbot_pistols_rcs_scale_x
-		<< "aimbot_pistols_rcs_scale_y" << Settings::aimbot_pistols_rcs_scale_y
-
-		<< "aimbot_heavies_enable" << Settings::aimbot_heavies_enable
-		<< "aimbot_heavies_fov" << Settings::aimbot_heavies_fov
-		<< "aimbot_heavies_bone" << (int)Settings::aimbot_heavies_bone
-		<< "aimbot_heavies_smooth" << Settings::aimbot_heavies_smooth
-		<< "aimbot_heavies_rcs_enable" << Settings::aimbot_heavies_rcs_enable
-		<< "aimbot_heavies_rcs_scale_x" << Settings::aimbot_heavies_rcs_scale_x
-		<< "aimbot_heavies_rcs_scale_y" << Settings::aimbot_heavies_rcs_scale_y
-
-		<< "aimbot_shoutguns_enable" << Settings::aimbot_shoutguns_enable
-		<< "aimbot_shoutguns_fov" << Settings::aimbot_shoutguns_fov
-		<< "aimbot_shoutguns_bone" << (int)Settings::aimbot_shoutguns_bone
-		<< "aimbot_heavies_smooth" << Settings::aimbot_heavies_smooth
-		<< "aimbot_shoutguns_smooth" << Settings::aimbot_shoutguns_smooth
-		<< "aimbot_shoutguns_rcs_scale_x" << Settings::aimbot_shoutguns_rcs_scale_x
-		<< "aimbot_shoutguns_rcs_scale_y" << Settings::aimbot_shoutguns_rcs_scale_y
-
-		<< "aimbot_smgs_enable" << Settings::aimbot_smgs_enable
-		<< "aimbot_smgs_fov" << Settings::aimbot_smgs_fov
-		<< "aimbot_smgs_bone" << (int)Settings::aimbot_smgs_bone
-		<< "aimbot_smgs_smooth" << Settings::aimbot_smgs_smooth
-		<< "aimbot_smgs_rcs_enable" << Settings::aimbot_smgs_rcs_enable
-		<< "aimbot_smgs_rcs_scale_x" << Settings::aimbot_smgs_rcs_scale_x
-		<< "aimbot_smgs_rcs_scale_y" << Settings::aimbot_smgs_rcs_scale_y
-
-		<< "aimbot_rifles_enable" << Settings::aimbot_rifles_enable
-		<< "aimbot_rifles_fov" << Settings::aimbot_rifles_fov
-		<< "aimbot_rifles_bone" << (int)Settings::aimbot_rifles_bone
-		<< "aimbot_rifles_smooth" << Settings::aimbot_rifles_smooth
-		<< "aimbot_rifles_rcs_enable" << Settings::aimbot_rifles_rcs_enable
-		<< "aimbot_rifles_rcs_scale_x" << Settings::aimbot_rifles_rcs_scale_x
-		<< "aimbot_rifles_rcs_scale_y" << Settings::aimbot_rifles_rcs_scale_y
-
-		<< "aimbot_snipers_enable" << Settings::aimbot_snipers_enable
-		<< "aimbot_snipers_fov" << Settings::aimbot_snipers_fov
-		<< "aimbot_snipers_bone" << (int)Settings::aimbot_snipers_bone
-		<< "aimbot_snipers_smooth" << Settings::aimbot_snipers_smooth
-		<< "aimbot_snipers_rcs_enable" << Settings::aimbot_snipers_rcs_enable
-		<< "aimbot_snipers_rcs_scale_x" << Settings::aimbot_snipers_rcs_scale_x
-		<< "aimbot_snipers_rcs_scale_y" << Settings::aimbot_snipers_rcs_scale_y
+		<< "aimbot_global" << aimbotSettingsToJsonXX(Settings::aimbot_global)
+		<< "aimbot_pistols" << aimbotSettingsToJsonXX(Settings::aimbot_pistols)
+		<< "aimbot_heavies" << aimbotSettingsToJsonXX(Settings::aimbot_heavies)
+		<< "aimbot_shoutguns" << aimbotSettingsToJsonXX(Settings::aimbot_shoutguns)
+		<< "aimbot_smgs" << aimbotSettingsToJsonXX(Settings::aimbot_smgs)
+		<< "aimbot_rifles" << aimbotSettingsToJsonXX(Settings::aimbot_rifles)
+		<< "aimbot_snipers" << aimbotSettingsToJsonXX(Settings::aimbot_snipers)
+		<< "aimbot_weapons" << aimbotWeaponsSettingsToJsonXX(Settings::aimbot_weapons)
 
 		//TRIGGERBOT
 		<< "triggerbot_enable" << Settings::triggerbot_enable
@@ -466,53 +422,70 @@ bool Settings::aimbot_flash_check = true;
 bool Settings::aimbot_jump_check = true;
 bool Settings::aimbot_friendly_fire = false;
 
-bool Settings::aimbot_pistols_enable = true;
-float Settings::aimbot_pistols_fov = 5;
-Skeleton Settings::aimbot_pistols_bone = HEAD;
-float Settings::aimbot_pistols_smooth = 5;
-bool Settings::aimbot_pistols_rcs_enable = true;
-float Settings::aimbot_pistols_rcs_scale_x = 100.0f;
-float Settings::aimbot_pistols_rcs_scale_y = 100.0f;
-
-bool Settings::aimbot_heavies_enable = true;
-float Settings::aimbot_heavies_fov = 5;
-Skeleton Settings::aimbot_heavies_bone = NEAREST;
-float Settings::aimbot_heavies_smooth = 5;
-bool Settings::aimbot_heavies_rcs_enable = true;
-float Settings::aimbot_heavies_rcs_scale_x = 90.0f;
-float Settings::aimbot_heavies_rcs_scale_y = 90.0f;
-
-bool Settings::aimbot_shoutguns_enable = false;
-float Settings::aimbot_shoutguns_fov = 10;
-Skeleton Settings::aimbot_shoutguns_bone = NEAREST;
-float Settings::aimbot_shoutguns_smooth = 0.0f;
-bool Settings::aimbot_shoutguns_rcs_enable = false;
-float Settings::aimbot_shoutguns_rcs_scale_x = 0.0f;
-float Settings::aimbot_shoutguns_rcs_scale_y = 0.0f;
-
-bool Settings::aimbot_smgs_enable = true;
-float Settings::aimbot_smgs_fov = 5;
-Skeleton Settings::aimbot_smgs_bone = NEAREST;
-float Settings::aimbot_smgs_smooth = 3;
-bool Settings::aimbot_smgs_rcs_enable = true;
-float Settings::aimbot_smgs_rcs_scale_x = 80.0f;
-float Settings::aimbot_smgs_rcs_scale_y = 80.0f;
-
-bool Settings::aimbot_rifles_enable = true;
-float Settings::aimbot_rifles_fov = 10;
-Skeleton Settings::aimbot_rifles_bone = NEAREST;
-float Settings::aimbot_rifles_smooth = 10;
-bool Settings::aimbot_rifles_rcs_enable = true;
-float Settings::aimbot_rifles_rcs_scale_x = 100.0f;
-float Settings::aimbot_rifles_rcs_scale_y = 100.0f;
-
-bool Settings::aimbot_snipers_enable = true;
-float Settings::aimbot_snipers_fov = 10;
-Skeleton Settings::aimbot_snipers_bone = NEAREST;
-float Settings::aimbot_snipers_smooth = 0;
-bool Settings::aimbot_snipers_rcs_enable = false;
-float Settings::aimbot_snipers_rcs_scale_x = 0.0f;
-float Settings::aimbot_snipers_rcs_scale_y = 0.0f;
+IAimbotSettings Settings::aimbot_global = {
+	true,
+	1,
+	NEAREST,
+	0,
+	true,
+	100.0f,
+	100.0f
+};
+IAimbotSettings Settings::aimbot_pistols = {
+	false,
+	5,
+	HEAD,
+	0,
+	false,
+	0.0f,
+	0.0f
+};
+IAimbotSettings Settings::aimbot_heavies = {
+	true,
+	5,
+	NEAREST,
+	5,
+	true,
+	100.0f,
+	100.0f
+};
+IAimbotSettings Settings::aimbot_shoutguns = {
+	true,
+	5,
+	NEAREST,
+	5,
+	true,
+	100.0f,
+	100.0f
+};
+IAimbotSettings Settings::aimbot_smgs = {
+	true,
+	5,
+	NEAREST,
+	5,
+	true,
+	100.0f,
+	100.0f
+};
+IAimbotSettings Settings::aimbot_rifles = {
+	true,
+	5,
+	NEAREST,
+	5,
+	true,
+	100.0f,
+	100.0f
+};
+IAimbotSettings Settings::aimbot_snipers = {
+	true,
+	5,
+	NEAREST,
+	5,
+	false,
+	100.0f,
+	100.0f
+};
+std::map<ItemDefinitionIndex, IAimbotSettings> Settings::aimbot_weapons = {};
 
 //TRIGGERBOT
 bool Settings::triggerbot_enable = true;
@@ -533,7 +506,7 @@ bool Settings::triggerbot_snipers_enable = true;
 //VISUALS
 bool Settings::visuals_glowEsp_enable = true;
 bool Settings::visuals_glowEsp_show_enemies = true;
-Visuals_glowEsp_mode Settings::visuals_glowEsp_mode = VISUALS_GLOWESP_MODE_COLOR;
+EVisualsGlowEspMode Settings::visuals_glowEsp_mode = VISUALS_GLOWESP_MODE_COLOR;
 GlowStyle Settings::visuals_glowEsp_style = GLOW_STYLE_FULL_BODY;
 colorRGBA Settings::visuals_glowEsp_enemy_visible_color = { 0.0f, 255.0f, 0.0f, 255.0f };
 colorRGBA Settings::visuals_glowEsp_enemy_invisible_color = { 255.0f, 0.0f, 0.0f, 255.0f };
@@ -553,8 +526,8 @@ colorRGBA Settings::visuals_chams_friends_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 //SKINCHAGER
 bool Settings::skinchanger_enable = true;
-std::map<ItemDefinitionIndex, SkinchangerWeapon> Settings::skinchanger_weapons = {};
-std::map<TeamNum, SkinchangerWeapon> Settings::skinchanger_knifes = {};
+std::map<ItemDefinitionIndex, ISkinchangerWeapon> Settings::skinchanger_weapons = {};
+std::map<TeamNum, ISkinchangerWeapon> Settings::skinchanger_knifes = {};
 
 //MISC
 bool Settings::misc_ingameRadar_enable = true;

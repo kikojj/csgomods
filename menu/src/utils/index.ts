@@ -7,6 +7,8 @@ export {
   TeamNum,
   DEFAULT_WEAPON_SETTINGS,
   EntityQuality,
+  IAimbotSettings,
+  DEFAULT_AIMBOT_SETTINGS,
 } from "./settings";
 export { TMargin } from "./margin";
 export { ActiveTab } from "./activeTab";
@@ -25,3 +27,4 @@ export {
   rarityColors,
 } from "./skin";
 export { unique } from "./unique";
+export { capitalizeFirstLetter } from "./capitalizeFirstLetter";

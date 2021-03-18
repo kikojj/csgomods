@@ -48,7 +48,6 @@ TriggerBot triggetBot;
 Skinchanger skinchanger;
 Misc misc;
 
-
 int main() {
 	try
 	{

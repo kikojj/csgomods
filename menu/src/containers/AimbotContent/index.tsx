@@ -2,9 +2,9 @@ import React from "react";
 
 import { DataContext, SettingsContext } from "@contexts";
 import { WeaponSelect, BoneSelect } from "@containers";
-import { Group, CheckboxField, RangeField, SelectField, SelectItem, KeyInputField } from "@components";
+import { Group, CheckboxField, RangeField, SelectField, SelectItem, KeyInputField, Button } from "@components";
 
-import { TSettings, Weapon } from "@utils";
+import { capitalizeFirstLetter, DEFAULT_AIMBOT_SETTINGS, IAimbotSettings, TSettings, Weapon } from "@utils";
 import { useStyles } from "./styles";
 
 export const AimbotContent: React.FC = () => {
@@ -14,16 +14,6 @@ export const AimbotContent: React.FC = () => {
   const { activeWeapon: gameActiveWeapon, getActiveWeapon } = React.useContext(DataContext);
 
   const [activeWeapon, setActiveWeapon] = React.useState<Weapon>(gameActiveWeapon);
-
-  const legitbotFields = {
-    enable: `aimbot_${activeWeapon.sectionName}_enable` as keyof TSettings,
-    fov: `aimbot_${activeWeapon.sectionName}_fov` as keyof TSettings,
-    bone: `aimbot_${activeWeapon.sectionName}_bone` as keyof TSettings,
-    smooth: `aimbot_${activeWeapon.sectionName}_smooth` as keyof TSettings,
-    rcs_enable: `aimbot_${activeWeapon.sectionName}_rcs_enable` as keyof TSettings,
-    rcs_scale_x: `aimbot_${activeWeapon.sectionName}_rcs_scale_x` as keyof TSettings,
-    rcs_scale_y: `aimbot_${activeWeapon.sectionName}_rcs_scale_y` as keyof TSettings,
-  };
 
   const triggerFields = {
     enable: `triggerbot_${activeWeapon.sectionName}_enable` as keyof TSettings,
@@ -45,6 +35,54 @@ export const AimbotContent: React.FC = () => {
       setActiveWeapon(gameActiveWeapon);
     }
   }, [gameActiveWeapon]);
+
+  const weaponSettings: IAimbotSettings =
+    settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable
+      ? (settings.aimbot_weapons[activeWeapon.itemDI] as IAimbotSettings)
+      : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable
+      ? (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings)
+      : settings.aimbot_global;
+
+  function changeSettings(value: IAimbotSettings) {
+    if (settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable) {
+      updateValue("aimbot_weapons", {
+        ...settings.aimbot_weapons,
+        [activeWeapon.itemDI]: {
+          ...settings.aimbot_weapons[activeWeapon.itemDI],
+          ...value,
+        },
+      });
+    } else if ((settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable) {
+      updateValue(`aimbot_${activeWeapon.sectionName}` as keyof TSettings, {
+        ...(settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings),
+        ...value,
+      });
+    } else {
+      updateValue("aimbot_global", {
+        ...settings.aimbot_global,
+        ...value,
+      });
+    }
+  }
+
+  function addSectionSettings() {
+    updateValue(`aimbot_${activeWeapon.sectionName}` as keyof TSettings, {
+      ...DEFAULT_AIMBOT_SETTINGS,
+      ...(settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings),
+      enable: true,
+    });
+  }
+
+  function addWeaponSettings() {
+    updateValue("aimbot_weapons", {
+      ...settings.aimbot_weapons,
+      [activeWeapon.itemDI]: {
+        ...DEFAULT_AIMBOT_SETTINGS,
+        ...settings.aimbot_weapons[activeWeapon.itemDI],
+        enable: true,
+      },
+    });
+  }
 
   return (
     <div>
@@ -113,40 +151,70 @@ export const AimbotContent: React.FC = () => {
         </div>
         {settings.aimbot_enable ? (
           <div>
-            <Group marginLeft={35} label="Weapon legitbot">
-              <WeaponSelect
-                value={activeWeapon.itemDI.toString()}
-                onChnage={(itemDI) => setActiveWeapon(new Weapon({ itemDI: +itemDI }))}
-              />
-              {activeWeapon.itemDI > 0 ? (
+            <Group
+              marginLeft={35}
+              label={
                 <React.Fragment>
-                  <CheckboxField
-                    label="Enable"
-                    checked={settings[legitbotFields.enable] as boolean}
-                    onChange={(v) => updateValue(legitbotFields.enable, v)}
+                  {settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable
+                    ? "Weapon settings"
+                    : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable
+                    ? `${capitalizeFirstLetter(activeWeapon.sectionName)} settings`
+                    : "Global settings"}
+                </React.Fragment>
+              }
+            >
+              <CheckboxField
+                label="Enable"
+                checked={weaponSettings.enable}
+                onChange={(v) => changeSettings({ ...weaponSettings, enable: v })}
+              />
+              {weaponSettings.enable ? (
+                <React.Fragment>
+                  <RangeField
+                    label={`Fov: ${weaponSettings.fov}`}
+                    min={0}
+                    max={180}
+                    step={1}
+                    value={weaponSettings.fov}
+                    onChange={(v) => changeSettings({ ...weaponSettings, fov: v })}
                   />
-                  {(settings[legitbotFields.enable] as boolean) ? (
+                  <BoneSelect
+                    value={weaponSettings.bone.toString()}
+                    onChnage={(v) => changeSettings({ ...weaponSettings, bone: +v })}
+                  />
+                  <RangeField
+                    label={`Smooth: ${weaponSettings.smooth}`}
+                    helperText="Slowing down the movement of the aiming"
+                    min={0}
+                    max={100}
+                    step={1}
+                    value={weaponSettings.smooth}
+                    onChange={(v) => changeSettings({ ...weaponSettings, smooth: v })}
+                  />
+                  <CheckboxField
+                    label="RCS Enable"
+                    checked={weaponSettings.rcs_enable}
+                    onChange={(v) => changeSettings({ ...weaponSettings, rcs_enable: v })}
+                  />
+                  {weaponSettings.rcs_enable ? (
                     <React.Fragment>
                       <RangeField
-                        label={`Fov: ${settings[legitbotFields.fov] as number}`}
-                        min={0}
-                        max={180}
-                        step={1}
-                        value={settings[legitbotFields.fov] as number}
-                        onChange={(v) => updateValue(legitbotFields.fov, v)}
-                      />
-                      <BoneSelect
-                        value={settings[legitbotFields.bone].toString()}
-                        onChnage={(v) => updateValue(legitbotFields.fov, +v)}
-                      />
-                      <RangeField
-                        label={`Smooth: ${settings[legitbotFields.smooth] as number}`}
-                        helperText="Slowing down the movement of the aiming"
+                        label={`RCS X: ${weaponSettings.rcs_scale_x.toString()}%`}
+                        helperText="Horizontal recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={settings[legitbotFields.smooth] as number}
-                        onChange={(v) => updateValue(legitbotFields.smooth, v)}
+                        value={weaponSettings.rcs_scale_x}
+                        onChange={(v) => changeSettings({ ...weaponSettings, rcs_scale_x: v })}
+                      />
+                      <RangeField
+                        label={`RCS Y: ${weaponSettings.rcs_scale_y.toString()}%`}
+                        helperText="Vertical recoil"
+                        min={0}
+                        max={100}
+                        step={1}
+                        value={weaponSettings.rcs_scale_y}
+                        onChange={(v) => changeSettings({ ...weaponSettings, rcs_scale_y: v })}
                       />
                     </React.Fragment>
                   ) : (
@@ -156,46 +224,22 @@ export const AimbotContent: React.FC = () => {
               ) : (
                 ""
               )}
+              {settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable ? (
+                ""
+              ) : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable &&
+                !activeWeapon.isKnife() ? (
+                <Button onClick={addWeaponSettings}>Add {activeWeapon.name} settings</Button>
+              ) : !activeWeapon.isKnife() ? (
+                <React.Fragment>
+                  <Button onClick={addSectionSettings}>
+                    Add {capitalizeFirstLetter(activeWeapon.sectionName)} settings
+                  </Button>
+                  <Button onClick={addWeaponSettings}>Add {activeWeapon.name} settings</Button>
+                </React.Fragment>
+              ) : (
+                ""
+              )}
             </Group>
-            {settings.aimbot_enable ? (
-              <Group marginTop={35} marginLeft={35} label="Weapon RCS">
-                <WeaponSelect
-                  value={activeWeapon.itemDI.toString()}
-                  onChnage={(itemDI) => setActiveWeapon(new Weapon({ itemDI: +itemDI }))}
-                />
-                <CheckboxField
-                  label="Enable"
-                  checked={settings[legitbotFields.rcs_enable] as boolean}
-                  onChange={(v) => updateValue(legitbotFields.rcs_enable, v)}
-                />
-                {(settings[legitbotFields.rcs_enable] as boolean) ? (
-                  <React.Fragment>
-                    <RangeField
-                      label={`RCS X: ${settings[legitbotFields.rcs_scale_x].toString()}%`}
-                      helperText="Horizontal recoil"
-                      min={0}
-                      max={100}
-                      step={1}
-                      value={settings[legitbotFields.rcs_scale_x] as number}
-                      onChange={(v) => updateValue(legitbotFields.rcs_scale_x, v)}
-                    />
-                    <RangeField
-                      label={`RCS Y: ${settings[legitbotFields.rcs_scale_y].toString()}%`}
-                      helperText="Vertical recoil"
-                      min={0}
-                      max={100}
-                      step={1}
-                      value={settings[legitbotFields.rcs_scale_y] as number}
-                      onChange={(v) => updateValue(legitbotFields.rcs_scale_y, v)}
-                    />
-                  </React.Fragment>
-                ) : (
-                  ""
-                )}
-              </Group>
-            ) : (
-              ""
-            )}
           </div>
         ) : (
           ""

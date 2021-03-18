@@ -35,6 +35,8 @@ private:
 	Vector3 calcAngle(Vector3, Vector3);
 	float getFov(Vector3, Vector2);
 	void setAngle(Vector2);
+	void applyWeaponSettings(IAimbotSettings);
+	bool applyWeaponsSettings(BaseCombatWeapon);
 
 public:
 	AimBot();

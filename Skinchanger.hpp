@@ -14,8 +14,8 @@
 
 class Skinchanger {
 private:
-  void applyWeaponSettings(BaseCombatWeapon, SkinchangerWeapon);
-  void applyKnifeSettings(BaseCombatWeapon, SkinchangerWeapon);
+  void applyWeaponSettings(BaseCombatWeapon, ISkinchangerWeapon);
+  void applyKnifeSettings(BaseCombatWeapon, ISkinchangerWeapon);
 
 public:
   Skinchanger();

@@ -8,7 +8,7 @@ import { useStyles } from "./styles";
 export type ButtonProps = {
   className?: string;
   onClick?: () => void;
-  children?: React.ReactChild;
+  children?: React.ReactNode;
   marginTop?: number;
   marginRight?: number;
   color?: string;
