@@ -112,6 +112,9 @@ IAimbotSettings Settings::getAimbotSettingsFromJsonXX(jsonxx::Value* v){
 
 	IAimbotSettings settings;
 
+	if (obj.has<jsonxx::Boolean>("use")) {
+		settings.use = obj.get<jsonxx::Boolean>("use");
+	}
 	if (obj.has<jsonxx::Boolean>("enable")) {
 		settings.enable = obj.get<jsonxx::Boolean>("enable");
 	}
@@ -141,6 +144,7 @@ jsonxx::Value Settings::aimbotSettingsToJsonXX(IAimbotSettings settings){
 	jsonxx::Object o;
 
 	o <<
+		"use" << settings.use <<
 		"enable" << settings.enable <<
 		"bone" << (int)settings.bone <<
 		"fov" << settings.fov <<
@@ -424,6 +428,7 @@ bool Settings::aimbot_friendly_fire = false;
 
 IAimbotSettings Settings::aimbot_global = {
 	true,
+	true,
 	1,
 	NEAREST,
 	0,
@@ -432,6 +437,7 @@ IAimbotSettings Settings::aimbot_global = {
 	100.0f
 };
 IAimbotSettings Settings::aimbot_pistols = {
+	true,
 	false,
 	5,
 	HEAD,
@@ -442,6 +448,7 @@ IAimbotSettings Settings::aimbot_pistols = {
 };
 IAimbotSettings Settings::aimbot_heavies = {
 	true,
+	true,
 	5,
 	NEAREST,
 	5,
@@ -450,6 +457,7 @@ IAimbotSettings Settings::aimbot_heavies = {
 	100.0f
 };
 IAimbotSettings Settings::aimbot_shoutguns = {
+	true,
 	true,
 	5,
 	NEAREST,
@@ -460,6 +468,7 @@ IAimbotSettings Settings::aimbot_shoutguns = {
 };
 IAimbotSettings Settings::aimbot_smgs = {
 	true,
+	true,
 	5,
 	NEAREST,
 	5,
@@ -469,6 +478,7 @@ IAimbotSettings Settings::aimbot_smgs = {
 };
 IAimbotSettings Settings::aimbot_rifles = {
 	true,
+	true,
 	5,
 	NEAREST,
 	5,
@@ -477,6 +487,7 @@ IAimbotSettings Settings::aimbot_rifles = {
 	100.0f
 };
 IAimbotSettings Settings::aimbot_snipers = {
+	true,
 	true,
 	5,
 	NEAREST,

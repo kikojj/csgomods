@@ -68,46 +68,81 @@ bool AimBot::applyWeaponsSettings(BaseCombatWeapon weapon){
 	auto itemDI = weapon.m_iItemDefinitionIndex();
 
 	//weapon settings
-	if (Settings::aimbot_weapons[itemDI].enable) {
-		applyWeaponSettings(Settings::aimbot_weapons[itemDI]);
-		return true;
+	if (Settings::aimbot_weapons[itemDI].use) {
+		if (Settings::aimbot_weapons[itemDI].enable) {
+			applyWeaponSettings(Settings::aimbot_weapons[itemDI]);
+			return true;
+		}
+		else {
+			return false;
+		}
 	}
 
 	//section settings
 	if (weapon.isPistol()) {
-		if (Settings::aimbot_pistols.enable) {
-			applyWeaponSettings(Settings::aimbot_pistols);
-			return true;
+		if (Settings::aimbot_pistols.use) {
+			if (Settings::aimbot_pistols.enable) {
+				applyWeaponSettings(Settings::aimbot_pistols);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else if (weapon.isHeavy()) {
-		if (Settings::aimbot_heavies.enable) {
-			applyWeaponSettings(Settings::aimbot_heavies);
-			return true;
+		if (Settings::aimbot_heavies.use) {
+			if (Settings::aimbot_heavies.enable) {
+				applyWeaponSettings(Settings::aimbot_heavies);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else if (weapon.isShotgun()) {
-		if (Settings::aimbot_shoutguns.enable) {
-			applyWeaponSettings(Settings::aimbot_shoutguns);
-			return true;
+		if (Settings::aimbot_shoutguns.use) {
+			if (Settings::aimbot_shoutguns.enable) {
+				applyWeaponSettings(Settings::aimbot_shoutguns);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else if (weapon.isSMG()) {
-		if (Settings::aimbot_smgs.enable) {
-			applyWeaponSettings(Settings::aimbot_smgs);
-			return true;
+		if (Settings::aimbot_smgs.use) {
+			if (Settings::aimbot_smgs.enable) {
+				applyWeaponSettings(Settings::aimbot_smgs);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else if (weapon.isRifle()) {
-		if (Settings::aimbot_rifles.enable) {
-			applyWeaponSettings(Settings::aimbot_rifles);
-			return true;
+		if (Settings::aimbot_rifles.use) {
+			if (Settings::aimbot_rifles.enable) {
+				applyWeaponSettings(Settings::aimbot_rifles);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else if (weapon.isSnipers()) {
-		if (Settings::aimbot_snipers.enable) {
-			applyWeaponSettings(Settings::aimbot_snipers);
-			return true;
+		if (Settings::aimbot_snipers.use) {
+			if (Settings::aimbot_snipers.enable) {
+				applyWeaponSettings(Settings::aimbot_snipers);
+				return true;
+			}
+			else {
+				return false;
+			}
 		}
 	}
 	else if (weapon.isKnife() || weapon.isZeusX27() || weapon.isBomb() || weapon.isGrenade()) {

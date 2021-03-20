@@ -45,6 +45,7 @@ export enum TeamNum {
 }
 
 export interface IAimbotSettings {
+  use: boolean;
   enable: boolean;
   fov: number;
   bone: number;
@@ -55,6 +56,7 @@ export interface IAimbotSettings {
 }
 
 export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
+  use: false,
   enable: false,
   fov: 0,
   bone: 0,

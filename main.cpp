@@ -81,6 +81,7 @@ int main() {
 			while (isWorking) {
 				if (
 					engine.clientState->state() != INGAME ||
+					engine.clientState->m_nDeltaTick() == -1 ||
 					client.localPlayer->m_iHealth() <= 0 ||
 					client.localPlayer->m_iTeamNum() < TERRORIST
 					) {
@@ -165,6 +166,9 @@ int main() {
 		thread thMap([]() {
 			auto lastClientState = 0;
 			while (isWorking) {
+				if (engine.clientState->m_nDeltaTick() == -1) {
+					continue;
+				}
 				auto state = engine.clientState->state();
 				if (state == INGAME && lastClientState != state) {
 					while (client.localPlayer->m_iTeamNum() != TERRORIST && client.localPlayer->m_iTeamNum() != COUNTER_TERRORIST) {
@@ -187,6 +191,9 @@ int main() {
 		thread thVisibleCheck([]() {
 			while (!visibleCheck.init()) {}
 			while (true) {
+				if (engine.clientState->m_nDeltaTick() == -1) {
+					continue;
+				}
 				visibleCheck.updateVisibleStruct();
 			}
 		});

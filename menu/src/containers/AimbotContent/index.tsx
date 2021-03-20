@@ -37,14 +37,14 @@ export const AimbotContent: React.FC = () => {
   }, [gameActiveWeapon]);
 
   const weaponSettings: IAimbotSettings =
-    settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable
+    settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.use
       ? (settings.aimbot_weapons[activeWeapon.itemDI] as IAimbotSettings)
-      : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable
+      : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).use
       ? (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings)
       : settings.aimbot_global;
 
   function changeSettings(value: IAimbotSettings) {
-    if (settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable) {
+    if (settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.use) {
       updateValue("aimbot_weapons", {
         ...settings.aimbot_weapons,
         [activeWeapon.itemDI]: {
@@ -52,7 +52,7 @@ export const AimbotContent: React.FC = () => {
           ...value,
         },
       });
-    } else if ((settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable) {
+    } else if ((settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).use) {
       updateValue(`aimbot_${activeWeapon.sectionName}` as keyof TSettings, {
         ...(settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings),
         ...value,
@@ -69,7 +69,15 @@ export const AimbotContent: React.FC = () => {
     updateValue(`aimbot_${activeWeapon.sectionName}` as keyof TSettings, {
       ...DEFAULT_AIMBOT_SETTINGS,
       ...(settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings),
-      enable: true,
+      use: true,
+    });
+  }
+
+  function removeSectionSettings() {
+    updateValue(`aimbot_${activeWeapon.sectionName}` as keyof TSettings, {
+      ...DEFAULT_AIMBOT_SETTINGS,
+      ...(settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings),
+      use: false,
     });
   }
 
@@ -79,7 +87,18 @@ export const AimbotContent: React.FC = () => {
       [activeWeapon.itemDI]: {
         ...DEFAULT_AIMBOT_SETTINGS,
         ...settings.aimbot_weapons[activeWeapon.itemDI],
-        enable: true,
+        use: true,
+      },
+    });
+  }
+
+  function removeWeaponSettings() {
+    updateValue("aimbot_weapons", {
+      ...settings.aimbot_weapons,
+      [activeWeapon.itemDI]: {
+        ...DEFAULT_AIMBOT_SETTINGS,
+        ...settings.aimbot_weapons[activeWeapon.itemDI],
+        use: false,
       },
     });
   }
@@ -155,9 +174,9 @@ export const AimbotContent: React.FC = () => {
               marginLeft={35}
               label={
                 <React.Fragment>
-                  {settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable
+                  {settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.use
                     ? "Weapon settings"
-                    : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable
+                    : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).use
                     ? `${capitalizeFirstLetter(activeWeapon.sectionName)} settings`
                     : "Global settings"}
                 </React.Fragment>
@@ -224,11 +243,18 @@ export const AimbotContent: React.FC = () => {
               ) : (
                 ""
               )}
-              {settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.enable ? (
-                ""
-              ) : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).enable &&
+              {settings.aimbot_weapons[activeWeapon.itemDI] && settings.aimbot_weapons[activeWeapon.itemDI]?.use ? (
+                <Button onClick={removeWeaponSettings} color="#FF0000">
+                  Remove {activeWeapon.name} settings
+                </Button>
+              ) : (settings[`aimbot_${activeWeapon.sectionName}` as keyof TSettings] as IAimbotSettings).use &&
                 !activeWeapon.isKnife() ? (
-                <Button onClick={addWeaponSettings}>Add {activeWeapon.name} settings</Button>
+                <React.Fragment>
+                  <Button onClick={removeSectionSettings} color="#FF0000">
+                    Remove {capitalizeFirstLetter(activeWeapon.sectionName)} settings
+                  </Button>
+                  <Button onClick={addWeaponSettings}>Add {activeWeapon.name} settings</Button>
+                </React.Fragment>
               ) : !activeWeapon.isKnife() ? (
                 <React.Fragment>
                   <Button onClick={addSectionSettings}>
