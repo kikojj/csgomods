@@ -22,6 +22,7 @@
 #include "Misc.hpp"
 #include "Helpers.hpp"
 #include "visibleCheck/VisibleCheck.h"
+#include "ClientCmdUD.hpp"
 
 using namespace std;
 
@@ -38,6 +39,7 @@ rn::bsp_parser bsp_parser;
 CVisibleCheck visibleCheck;
 
 map<ItemDefinitionIndex, int> modelIndexes;
+ClientCmdUD clientCmdUD;
 #pragma endregion
 
 bool isWorking = true;
@@ -74,6 +76,14 @@ int main() {
 		Offsets::init();
 
 		Settings::getFromFile("default.json");
+
+		clientCmdUD.init();
+
+		clientCmdUD.execute("clear");
+		clientCmdUD.execute("echo [CSGOMODS]: Started.");
+		clientCmdUD.execute("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:2223)");
+		//clientCmdUD.execute("sv_cheats 1");
+		//clientCmdUD.execute("r_drawothermodels 2");
 
 		thread thMenuData([]() {
 			int lastActiveWeaponIDI = -1;

@@ -158,6 +158,7 @@ int Offsets::signatures::hConfirmMatch;
 int Offsets::signatures::dwClientMode;
 int Offsets::signatures::dwTraceLine;
 int Offsets::signatures::dwLineThroughSmoke;
+int Offsets::signatures::dwClientCmdUD;
 #pragma endregion
 
 void Offsets::initNetvars(){
@@ -348,6 +349,7 @@ void Offsets::initSignatures(){
   Offsets::signatures::overlayActivated1                  = Scanner::getSignature(ENGINE_DLL_NAME, "50 51 8D 85 ? ? ? ? B9", { 9 });
   Offsets::signatures::overlayActivated2                  = Scanner::getSignature(ENGINE_DLL_NAME, "88 86 ? ? 00 00 5E 84", { 2 });
   Offsets::signatures::dwGameDir                          = Scanner::getSignature(ENGINE_DLL_NAME, "68 ? ? ? ? 8D 85 ? ? ? ? 50 68 ? ? ? ? 68", { 1 });
+  Offsets::signatures::dwClientCmdUD = Scanner::getSignature(ENGINE_DLL_NAME, "55 8B EC 8B 0D ? ? ? ? 81 F9 ? ? ? ? 75 0C A1 ? ? ? ? 35 ? ? ? ? EB 05 8B 01 FF 50 34 50", { 0 }, 0, false, false);
 
   //VSTDLIB_DLL_NAME
   Offsets::signatures::interface_engine_cvar  = Scanner::getSignature(VSTDLIB_DLL_NAME, "8B 0D ? ? ? ? C7 05", { 2 });

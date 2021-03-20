@@ -154,6 +154,7 @@
     <ClInclude Include="CBaseTrace.hpp" />
     <ClInclude Include="CGameTrace.hpp" />
     <ClInclude Include="ClassID.hpp" />
+    <ClInclude Include="ClientCmdUD.hpp" />
     <ClInclude Include="ClientState.hpp" />
     <ClInclude Include="ClientStates.hpp" />
     <ClInclude Include="ColorRGBA.hpp" />
@@ -217,6 +218,7 @@
     <ClCompile Include="AimBot.cpp" />
     <ClCompile Include="bsb-parser\bsp_parser.cpp" />
     <ClCompile Include="Client.cpp" />
+    <ClCompile Include="ClientCmdUD.cpp" />
     <ClCompile Include="ClientState.cpp" />
     <ClCompile Include="ItemDefinitionIndex.cpp" />
     <ClCompile Include="Settings.cpp" />

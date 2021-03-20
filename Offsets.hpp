@@ -173,6 +173,9 @@ namespace Offsets {
     //for lineThroughSmoke
     static int dwLineThroughSmoke;
 
+    //for ClientCmd_Unrestricted
+    static int dwClientCmdUD;
+
   } signatures;
   void initSignatures();
 

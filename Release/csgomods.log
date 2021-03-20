@@ -1,7 +1,7 @@
-﻿  main.cpp
+﻿  ClientCmdUD.cpp
   Generating code
-  70 of 9315 functions ( 0.8%) were compiled, the rest were copied from previous compilation.
-    69 functions were new in current compilation
-    14 functions had inline decision re-evaluated but remain unchanged
+  2 of 9320 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    7 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
   csgomods.vcxproj -> D:\Documents\VSProjects\csgomods\Release\csgomods.exe

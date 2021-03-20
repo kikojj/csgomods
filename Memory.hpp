@@ -62,7 +62,7 @@ public:
 	}
 
 	template<class T>
-	void Write(const DWORD dwAddress, const T value) {
+	void Write(const DWORD dwAddress, const T& value) {
 		WriteProcessMemory(_process, LPVOID(dwAddress), &value, sizeof(T), NULL);
 	}
 

@@ -94,6 +94,9 @@
     <Filter Include="Utils\VirtualFunction">
       <UniqueIdentifier>{855c9b3f-cb38-41cc-a80d-b3eb3b14db71}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\ClientCmdUD">
+      <UniqueIdentifier>{dd2e75ce-83fa-45c7-aeb9-a264c94ccbbc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Memory.hpp">
@@ -300,6 +303,9 @@
     <ClInclude Include="VirtualFunction.hpp">
       <Filter>Utils\VirtualFunction</Filter>
     </ClInclude>
+    <ClInclude Include="ClientCmdUD.hpp">
+      <Filter>Utils\ClientCmdUD</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Client.cpp">
@@ -407,6 +413,9 @@
     </ClCompile>
     <ClCompile Include="VirtualFunction.cpp">
       <Filter>Utils\VirtualFunction</Filter>
+    </ClCompile>
+    <ClCompile Include="ClientCmdUD.cpp">
+      <Filter>Utils\ClientCmdUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
