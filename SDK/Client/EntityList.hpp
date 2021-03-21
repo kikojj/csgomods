@@ -15,22 +15,8 @@ private:
 public:
 	EntityList();
 
-	/// <summary>
-	/// get address to entityList
-	/// </summary>
-	/// <returns>address to entityList</returns>
 	int get();
-
-	BaseEntity getByID(int);
-
-	/// <summary>
-	/// get max size of entities
-	/// </summary>
-	/// <returns>vector of Entity</returns>
 	int size();
-
-	/// <summary>
-	/// get vector of entities
-	/// </summary>
 	std::vector<BaseEntity> array();
+	BaseEntity getByID(int);
  };

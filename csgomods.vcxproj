@@ -178,6 +178,7 @@
     <ClInclude Include="SDK\Utils\SkinRarity.hpp" />
     <ClInclude Include="SDK\Utils\TeamNum.hpp" />
     <ClInclude Include="SDK\Utils\Vector.hpp" />
+    <ClInclude Include="SDK\Vars.hpp" />
     <ClInclude Include="Utils\BspParser\BspParser.hpp" />
     <ClInclude Include="Utils\BspParser\bsp_parser.hpp" />
     <ClInclude Include="Utils\BspParser\matrix.hpp" />

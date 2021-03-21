@@ -6,26 +6,13 @@ Client::Client() {
 	glowObjectManager = new GlowObjectManager();
 }
 
-void Client::dwForceJump(KeyEvent v) {
-	mem.write(clientDll.dwBase + Offsets::signatures::dwForceJump, v);
-}
-
-void Client::dwForceAttack(KeyEvent v) {
-	mem.write(clientDll.dwBase + Offsets::signatures::dwForceAttack, v);
-}
-
-Input Client::dwInput(){
-	return mem.read<Input>(clientDll.dwBase + Offsets::signatures::dwInput);
-}
-
-short Client::dwMouseEnable(){
-	return mem.read<short>(clientDll.dwBase + Offsets::signatures::dwMouseEnable);
-}
-
-int Client::hConfirmMatch(){
+VAR_R_DEF(Input, dwInput, Client, clientDll.dwBase, signatures)
+VAR_R_DEF(short, dwMouseEnable, Client, clientDll.dwBase, signatures)
+int Client::hConfirmMatch() {
 	return clientDll.dwBase + Offsets::signatures::hConfirmMatch;
 }
-
-int Client::confirmReservationCallback(){
+int Client::confirmReservationCallback() {
 	return mem.read<int>(mem.read<int>(clientDll.dwBase + Offsets::signatures::hConfirmMatch + 0x7));
 }
+VAR_W_DEF(KeyEvent, dwForceJump, Client, clientDll.dwBase, signatures)
+VAR_W_DEF(KeyEvent, dwForceAttack, Client, clientDll.dwBase, signatures)

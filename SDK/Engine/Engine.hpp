@@ -16,16 +16,7 @@ public:
 
 	Engine();
 
-	/// <summary>
-	/// get game directory
-	/// </summary>
-	/// <returns></returns>
 	std::array<char, 0x120> dwGameDir();
-
-	/// <summary>
-	/// check if steam overlay is open
-	/// </summary>
-	/// <returns>True if open</returns>
 	bool isOverlayActive();
 };
 

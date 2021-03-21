@@ -1,18 +1,9 @@
 #include "BaseEntity.hpp"
 
 BaseEntity::BaseEntity() {}
-
 BaseEntity::BaseEntity(int _dwBase): dwBase(_dwBase) {};
 
-void BaseEntity::operator=(BaseEntity BaseEntity) {
-	this->dwBase = BaseEntity.dwBase;
-}
-
-int BaseEntity::get(){
-	return this->dwBase;
-}
-
-ClassID BaseEntity::m_iClassID(){
+ClassID BaseEntity::m_iClassID() {
 	auto id = mem.read<int>(mem.read<int>(mem.read<int>(mem.read<int>(get() + 0x8) + 0x8) + 0x1) + 0x14);
 	if (id < 0) {
 		return INVALID_CLASS_ID;
@@ -20,13 +11,14 @@ ClassID BaseEntity::m_iClassID(){
 
 	return ClassID(id);
 }
+VAR_R_DEF(int, m_iGlowIndex, BaseEntity, get(), netvars)
 
-int BaseEntity::m_iGlowIndex(){
-	auto glowIndex = mem.read<int>(get() + Offsets::netvars::m_iGlowIndex);
-	//std::cout << "Player::m_iGlowIndex():" << glowIndex << std::endl;
-	return glowIndex;
+void BaseEntity::operator=(BaseEntity BaseEntity) {
+	this->dwBase = BaseEntity.dwBase;
 }
-
+int BaseEntity::get(){
+	return this->dwBase;
+}
 int BaseEntity::getEntityID(){
 	for (int i = 0; i <= 64; i++) {
 		int pEntity = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwEntityList + i * 0x10);

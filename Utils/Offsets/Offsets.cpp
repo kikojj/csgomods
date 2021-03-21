@@ -25,6 +25,7 @@ int Offsets::netvars::m_fFlags;
 int Offsets::netvars::m_flFallbackWear;
 int Offsets::netvars::m_flFlashDuration;
 int Offsets::netvars::m_flFlashMaxAlpha;
+int Offsets::netvars::m_flFlashAlpha;
 int Offsets::netvars::m_flNextPrimaryAttack;
 int Offsets::netvars::m_hActiveWeapon;
 int Offsets::netvars::m_hMyWeapons;
@@ -179,6 +180,7 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_bIsScoped                   = Scanner::getNetvar("m_bIsScoped",                    "m_bIsScoped",            "DT_CSPlayer");
   Offsets::netvars::m_fFlags                      = Scanner::getNetvar("m_fFlags",                       "m_fFlags",               "DT_CSPlayer");
   Offsets::netvars::m_flFlashDuration             = Scanner::getNetvar("m_flFlashDuration",              "m_flFlashDuration",      "DT_CSPlayer");
+  Offsets::netvars::m_flFlashAlpha                = Scanner::getNetvar("m_flFlashAlpha",                 "m_flFlashAlpha",         "DT_CSPlayer");
   Offsets::netvars::m_flFlashMaxAlpha             = Scanner::getNetvar("m_flFlashMaxAlpha",              "m_flFlashMaxAlpha",      "DT_CSPlayer");
   Offsets::netvars::m_hOwnerEntity                = Scanner::getNetvar("m_hOwnerEntity",                 "m_hOwnerEntity",         "DT_CSPlayer");
   Offsets::netvars::m_iCrosshairId                = Scanner::getNetvar("m_iCrosshairId",                 "m_bHasDefuser",          "DT_CSPlayer", 92);

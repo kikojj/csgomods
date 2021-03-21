@@ -4,7 +4,7 @@
 typedef int(__fastcall* UTIL_TraceLine_t)(const Vec3&, const Vec3&, unsigned int fMask, const DWORD basePlayer, int, CGameTrace* trace);
 bool WINAPI hkCreateMove(float flInputSampleTime, CUserCmd* pCmd) {
 	// hkCreateMove + 0x9 = pointer to Vars; 
-	CVisibleCheck::ICreateMoveVars* Vars = (CVisibleCheck::ICreateMoveVars*)0x00123456; // Initialize in InitCreateMoveHook()
+	CVisibleCheck::ICreateMoveVars* Vars = (CVisibleCheck::ICreateMoveVars*)dwCreateMoveVars; // Initialize in InitCreateMoveHook()
 	DWORD localPlayer = *(DWORD*)(Vars->dwLocalPlayer);
 	bool isInGame = *(int*)(Vars->dwClientState + 0x108) == 6;
 	bool deltaTick = *(int*)(Vars->dwClientState + Vars->m_nDeltaTick);

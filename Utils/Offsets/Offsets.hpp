@@ -28,6 +28,7 @@ namespace Offsets {
     static int m_flFallbackWear;
     static int m_flFlashDuration;
     static int m_flFlashMaxAlpha;
+    static int m_flFlashAlpha;
     static int m_flNextPrimaryAttack;
     static int m_hActiveWeapon;
     static int m_hMyWeapons;

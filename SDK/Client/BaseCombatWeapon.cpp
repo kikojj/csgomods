@@ -3,16 +3,31 @@
 BaseCombatWeapon::BaseCombatWeapon(int _dwBase) {
 	this->dwBase = _dwBase;
 }
-
 BaseCombatWeapon::BaseCombatWeapon(BaseEntity entity){
 	this->dwBase = entity.dwBase;
 }
 
-int BaseCombatWeapon::get(){
-	return this->dwBase;
+VAR_R_DEF(int, m_iClip1, BaseCombatWeapon, get(), netvars)
+VAR_R_DEF(float, m_flNextPrimaryAttack, BaseCombatWeapon, get(), netvars)
+VAR_R_DEF(bool, m_bInReload, BaseCombatWeapon, get(), netvars)
+VAR_R_DEF(int, m_OriginalOwnerXuidLow, BaseCombatWeapon, get(), netvars)
+VAR_W_DEF(std::string, m_szCustomName, BaseCombatWeapon, get(), netvars)
+VAR_W_DEF(int, m_nFallbackSeed, BaseCombatWeapon, get(), netvars)
+VAR_W_DEF(int, m_nFallbackStatTrak, BaseCombatWeapon, get(), netvars)
+VAR_W_DEF(int, m_iAccountID, BaseCombatWeapon, get(), netvars)
+VAR_RW_DEF(int, m_iItemIDHigh, BaseCombatWeapon, get(), netvars)
+VAR_RW_DEF(unsigned long, m_iViewModelIndex, BaseCombatWeapon, get(), netvars)
+VAR_RW_DEF(unsigned long, m_nModelIndex, BaseCombatWeapon, get(), netvars)
+VAR_W_DEF(EntityQuality, m_iEntityQuality, BaseCombatWeapon, get(), netvars)
+EntityQuality BaseCombatWeapon::m_iEntityQuality() {
+	auto entityQuality = mem.read<int>(get() + Offsets::netvars::m_iEntityQuality);
+	if (entityQuality < 0 || entityQuality > 12) {
+		return INVALID_QUALITY;
+	}
+	return (EntityQuality)entityQuality;
 }
-;
-
+VAR_RW_DEF(float, m_flFallbackWear, BaseCombatWeapon, get(), netvars)
+VAR_RW_DEF(int, m_hWeaponWorldModel, BaseCombatWeapon, get(), netvars)
 ItemDefinitionIndex BaseCombatWeapon::m_iItemDefinitionIndex() {
 	auto itemDI = mem.read<short>(get() + Offsets::netvars::m_iItemDefinitionIndex);
 	//std::cout << "BaseCombatWeapon::m_iItemDefinitionIndex(): " << itemDI << std::endl;
@@ -21,66 +36,41 @@ ItemDefinitionIndex BaseCombatWeapon::m_iItemDefinitionIndex() {
 	}
 	return (ItemDefinitionIndex)itemDI;
 }
+VAR_W_DEF(ItemDefinitionIndex, m_iItemDefinitionIndex, BaseCombatWeapon, get(), netvars)
+VAR_RW_DEF(unsigned long, m_nFallbackPaintKit, BaseCombatWeapon, get(), netvars)
 
-void BaseCombatWeapon::m_iItemDefinitionIndex(ItemDefinitionIndex v){
-	mem.write(get() + Offsets::netvars::m_iItemDefinitionIndex, v);
+int BaseCombatWeapon::get() {
+	return this->dwBase;
 }
-
-int BaseCombatWeapon::m_iClip1(){
-	auto clip = mem.read<int>(get() + Offsets::netvars::m_iClip1);
-	//std::cout << "BaseCombatWeapon::m_iClip1(): " << clip << std::endl;
-	return clip;
-}
-
-float BaseCombatWeapon::m_flNextPrimaryAttack(){
-	auto nextPrimaryAttack = mem.read<float>(get() + Offsets::netvars::m_flNextPrimaryAttack);
-	//std::cout << "BaseCombatWeapon::m_flNextPrimaryAttack(): " << nextPrimaryAttack << std::endl;
-	return nextPrimaryAttack;
-}
-
-bool BaseCombatWeapon::m_bInReload(){
-	auto inReload = mem.read<bool>(get() + Offsets::netvars::m_bInReload);
-	//std::cout << "BaseCombatWeapon::m_bInReload(): " << inReload << std::endl;
-	return inReload;
-}
-
 bool BaseCombatWeapon::isPistol() {
 	return ItemDefinition::isPistol(m_iItemDefinitionIndex());
 }
-
 bool BaseCombatWeapon::isSMG() {
 	return ItemDefinition::isSMG(m_iItemDefinitionIndex());
 }
-
 bool BaseCombatWeapon::isHeavy() {
 	return ItemDefinition::isHeavy(m_iItemDefinitionIndex());
 }
-
 bool BaseCombatWeapon::isShotgun() {
 	return ItemDefinition::isShotgun(m_iItemDefinitionIndex());
 }
-
 bool BaseCombatWeapon::isRifle() {
 	return ItemDefinition::isRifle(m_iItemDefinitionIndex());
 }
-
 bool BaseCombatWeapon::isSnipers() {
 	return ItemDefinition::isSnipers(m_iItemDefinitionIndex());
 }
-
-bool BaseCombatWeapon::isKnife(){
+bool BaseCombatWeapon::isKnife() {
 	return ItemDefinition::isKnife(m_iItemDefinitionIndex());
 }
-
-bool BaseCombatWeapon::isBomb(){
+bool BaseCombatWeapon::isBomb() {
 	auto itemDI = m_iItemDefinitionIndex();
 	if (itemDI == ITEM_C4Explosive) {
 		return true;
 	}
 	return false;
 }
-
-bool BaseCombatWeapon::isGrenade(){
+bool BaseCombatWeapon::isGrenade() {
 	auto itemDI = m_iItemDefinitionIndex();
 	if (
 		itemDI == WEAPON_HEGrenade ||
@@ -94,97 +84,10 @@ bool BaseCombatWeapon::isGrenade(){
 	}
 	return false;
 }
-
-bool BaseCombatWeapon::isZeusX27(){
+bool BaseCombatWeapon::isZeusX27() {
 	auto itemDI = m_iItemDefinitionIndex();
 	if (itemDI == WEAPON_Zeusx27) {
 		return true;
 	}
 	return false;
-}
-
-unsigned long BaseCombatWeapon::m_nFallbackPaintKit(){
-	return mem.read<unsigned long>(get() + Offsets::netvars::m_nFallbackPaintKit);
-}
-
-void BaseCombatWeapon::m_nFallbackPaintKit(unsigned long v){
-	mem.write(get() + Offsets::netvars::m_nFallbackPaintKit, v);
-}
-
-int BaseCombatWeapon::m_iItemIDHigh(){
-	return mem.read<int>(get() + Offsets::netvars::m_iItemIDHigh);
-}
-
-void BaseCombatWeapon::m_iItemIDHigh(int v){
-	mem.write(get() + Offsets::netvars::m_iItemIDHigh, v);
-}
-
-unsigned long BaseCombatWeapon::m_iViewModelIndex(){
-	return mem.read<unsigned long>(get() + Offsets::netvars::m_iViewModelIndex);
-}
-
-void BaseCombatWeapon::m_iViewModelIndex(unsigned long v){
-	mem.write(get() + Offsets::netvars::m_iViewModelIndex, v);
-}
-
-unsigned long BaseCombatWeapon::m_nModelIndex(){
-	return mem.read<unsigned long>(get() + Offsets::netvars::m_nModelIndex);
-}
-
-void BaseCombatWeapon::m_nModelIndex(unsigned long v){
-	mem.write(get() + Offsets::netvars::m_nModelIndex, v);
-}
-
-EntityQuality BaseCombatWeapon::m_iEntityQuality(){
-	auto entityQuality = mem.read<int>(get() + Offsets::netvars::m_iEntityQuality);
-	if (entityQuality < 0 || entityQuality > 12) {
-		return INVALID_QUALITY;
-	}
-	return (EntityQuality)entityQuality;
-}
-
-void BaseCombatWeapon::m_iEntityQuality(EntityQuality v){
-	mem.write(get() + Offsets::netvars::m_iEntityQuality, (int)v);
-}
-
-float BaseCombatWeapon::m_flFallbackWear(){
-	return mem.read<float>(get() + Offsets::netvars::m_flFallbackWear);
-}
-
-void BaseCombatWeapon::m_flFallbackWear(float v){
-	mem.write(get() + Offsets::netvars::m_flFallbackWear, v);
-}
-
-void BaseCombatWeapon::m_nModelIndex(int v){
-	mem.write(get() + Offsets::netvars::m_nModelIndex, v);
-}
-
-int BaseCombatWeapon::m_hWeaponWorldModel(){
-	return mem.read<int>(get() + Offsets::netvars::m_hWeaponWorldModel);
-}
-
-void BaseCombatWeapon::m_hWeaponWorldModel(int v){
-	mem.write(get() + Offsets::netvars::m_hWeaponWorldModel, v);
-}
-
-void BaseCombatWeapon::m_szCustomName(std::string name){
-	std::array<char, 32> str = {'\0'};
-	std::copy(name.begin(), name.end(), str.data());
-	mem.write(get() + Offsets::netvars::m_szCustomName, str);
-}
-
-void BaseCombatWeapon::m_nFallbackSeed(int v){
-	mem.write(get() + Offsets::netvars::m_nFallbackSeed, v);
-}
-
-void BaseCombatWeapon::m_nFallbackStatTrak(int v){
-	mem.write(get() + Offsets::netvars::m_nFallbackStatTrak, v);
-}
-
-int BaseCombatWeapon::m_OriginalOwnerXuidLow(){
-	return mem.read<int>(get() + Offsets::netvars::m_OriginalOwnerXuidLow);
-}
-
-void BaseCombatWeapon::m_iAccountID(int v){
-	mem.write(get() + Offsets::netvars::m_iAccountID, v);
 }

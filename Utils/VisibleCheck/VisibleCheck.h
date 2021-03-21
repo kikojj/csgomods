@@ -13,6 +13,8 @@
 #include "../../SDK/Utils/CGameTrace.hpp"
 #include "../../SDK/Utils/CUserCmd.hpp"
 
+#define dwCreateMoveVars 0x00123456
+
 class CVisibleCheck {
 public:
 	struct IVisible {

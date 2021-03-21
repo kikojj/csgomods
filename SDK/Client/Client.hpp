@@ -6,6 +6,8 @@
 #include "EntityList.hpp"
 #include "GlowObjectManager.hpp"
 
+#include "../Vars.hpp"
+
 #include "../Utils/Defines.hpp"
 #include "../Utils/IGlowObjectDefinition.hpp"
 #include "../Utils/CInput.hpp"
@@ -23,28 +25,12 @@ public:
 
 	Client();
 
-	/// <summary>
-	/// set dwForceJump value
-	/// </summary>
-	/// <param name="value">KeyEvent</param>
-	void dwForceJump(KeyEvent);
-
-	/// <summary>
-	/// set dwForceAttack value
-	/// </summary>
-	/// <param name="value">KeyEvent</param>
-	void dwForceAttack(KeyEvent);
-
-	/// <summary>
-	/// get Input
-	/// </summary>
-	Input dwInput();
-
-	short dwMouseEnable();
-
-	int hConfirmMatch();
-
-	int confirmReservationCallback();
+	VAR_R_DEC(Input, dwInput)
+	VAR_R_DEC(short, dwMouseEnable)
+	VAR_R_DEC(int, hConfirmMatch)
+	VAR_R_DEC(int, confirmReservationCallback)
+	VAR_W_DEC(KeyEvent, dwForceJump)
+	VAR_W_DEC(KeyEvent, dwForceAttack)
 };
 
 extern Client client;

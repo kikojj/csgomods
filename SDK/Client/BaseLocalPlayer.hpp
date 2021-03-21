@@ -4,6 +4,8 @@
 
 #include "BasePlayer.hpp"
 
+#include "../Vars.hpp"
+
 #include "../Utils/Vector.hpp"
 #include "../Utils/Skeleton.hpp"
 
@@ -17,19 +19,11 @@ private:
 public:
 	BaseLocalPlayer();
 
+	/// <summary>get direction of movement of the player</summary>
+	VAR_R_DEC(Vector3, m_vecVelocity)
+	/// <summary>check if entity in crosshair</summary>
+	VAR_R_DEC(int, m_iCrosshairId)
+
 	int get();
-
-	/// <summary>
-	/// get direction of movement of the player
-	/// </summary>
-	/// <returns>vec3(x,y,z) direction</returns>
-	Vector3 m_vecVelocity();
-
-	/// <summary>
-	/// check if entity in crosshair
-	/// </summary>
-	/// <returns></returns>
-	int m_iCrosshairId();
-
 	bool canSeePlayer(BasePlayer, int = -1);
 };
