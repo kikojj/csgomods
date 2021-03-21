@@ -16,7 +16,7 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
 
   let weaponSettings: ISkinchangerWeapon | undefined = undefined;
   if (activeTeam) {
-    weaponSettings = settings.skinchanger_knifes[activeTeam];
+    weaponSettings = settings.skinchanger_knives[activeTeam];
   }
   if (activeWeapon) {
     if (!activeWeapon.isKnife()) {
@@ -33,8 +33,8 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
   function applyHandler() {
     if (activeWeapon) {
       if (activeWeapon.isKnife() && activeTeam) {
-        updateValue("skinchanger_knifes", {
-          ...settings.skinchanger_knifes,
+        updateValue("skinchanger_knives", {
+          ...settings.skinchanger_knives,
           [activeTeam]: {
             ...weaponSettings,
             ...props,

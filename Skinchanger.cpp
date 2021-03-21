@@ -64,9 +64,9 @@ void Skinchanger::loop() {
 		}
 
 		auto weaponDI = weapon.m_iItemDefinitionIndex();
-		auto weaponModel =  modelIndexes[Settings::skinchanger_knifes[localPlayerTeam].itemDI];
-		if (weapon.isKnife() && weaponModel > 0 && Settings::skinchanger_knifes[localPlayerTeam].enable) {
-			applyKnifeSettings(weapon, Settings::skinchanger_knifes[localPlayerTeam]);
+		auto weaponModel =  modelIndexes[Settings::skinchanger_knives[localPlayerTeam].itemDI];
+		if (weapon.isKnife() && weaponModel > 0 && Settings::skinchanger_knives[localPlayerTeam].enable) {
+			applyKnifeSettings(weapon, Settings::skinchanger_knives[localPlayerTeam]);
 		}
 		else if (Settings::skinchanger_weapons[weaponDI].enable) {
 			applyWeaponSettings(weapon, Settings::skinchanger_weapons[weaponDI]);
@@ -81,11 +81,11 @@ void Skinchanger::loop() {
 
 	int knifeViewModelID = client.localPlayer->m_hViewModel() & 0xfff;
 	auto knife = BaseCombatWeapon(client.entityList->getByID((knifeViewModelID - 1)));
-	if (!knife.get() || !Settings::skinchanger_knifes[localPlayerTeam].enable) {
+	if (!knife.get() || !Settings::skinchanger_knives[localPlayerTeam].enable) {
 		return;
 	}
 
-	auto knifeModel = modelIndexes[Settings::skinchanger_knifes[localPlayerTeam].itemDI];
+	auto knifeModel = modelIndexes[Settings::skinchanger_knives[localPlayerTeam].itemDI];
 	if (knifeModel <= 0) {
 		return;
 	}

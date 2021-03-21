@@ -79,7 +79,7 @@ int main() {
 
 		clientCmdUD.execute("clear");
 		clientCmdUD.execute("echo [CSGOMODS]: Started.");
-		clientCmdUD.execute("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:2223)");
+		clientCmdUD.execute(string(string("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:") + to_string(HTTP_SERVER_PORT) + string(")")).c_str());
 
 		#pragma region Threads
 		thread thMenuData([]() {

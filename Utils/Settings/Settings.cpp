@@ -138,7 +138,7 @@ jsonxx::Value Settings::weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, ISkinc
 	return v;
 }
 
-std::map<TeamNum, ISkinchangerWeapon> Settings::getKnifesSkinsFromJsonXX(jsonxx::Value* v){
+std::map<TeamNum, ISkinchangerWeapon> Settings::getKnivesSkinsFromJsonXX(jsonxx::Value* v){
 	std::map<TeamNum, ISkinchangerWeapon> data;
 
 	for (auto skinObjC : v->get<jsonxx::Object>().kv_map()) {
@@ -148,7 +148,7 @@ std::map<TeamNum, ISkinchangerWeapon> Settings::getKnifesSkinsFromJsonXX(jsonxx:
 	return data;
 }
 
-jsonxx::Value Settings::knifesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon> data){
+jsonxx::Value Settings::knivesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon> data){
 	jsonxx::Object v;
 
 	for (auto d : data) {
@@ -292,7 +292,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	ElifReadSettingAim(aimbot_smgs)
 	ElifReadSettingAim(aimbot_rifles)
 	ElifReadSettingAim(aimbot_snipers)
-	ElifReadSettingAimWeapon(aimbot_weapons)
+	ElifReadSettingAimWeapons(aimbot_weapons)
 
 	//TRIGGERBOT
 	ElifReadSettingBool(triggerbot_enable)
@@ -324,6 +324,10 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	ElifReadSettingBool(visuals_glowEsp_show_c4)
 	ElifReadSettingColor(visuals_glowEsp_c4_color)
 	ElifReadSettingColor(visuals_glowEsp_c4_planted_color)
+	ElifReadSettingBool(visuals_glowEsp_show_defusing)
+	ElifReadSettingColor(visuals_glowEsp_defusing_color)
+		ElifReadSettingBool(visuals_glowEsp_show_grenades)
+		ElifReadSettingColor(visuals_glowEsp_grenades_color)
 
 	ElifReadSettingBool(visuals_chams_enable)
 	ElifReadSettingBool(visuals_chams_show_enemies)
@@ -334,7 +338,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	//SKINCHANGER
 	ElifReadSettingBool(skinchanger_enable)
 	ElifReadSettingSkinchangerWeapon(skinchanger_weapons)
-	ElifReadSettingSkinchangerKnife(skinchanger_knifes)
+	ElifReadSettingSkinchangerKnives(skinchanger_knives)
 
 	//MISC
 	ElifReadSettingBool(misc_ingameRadar_enable)
@@ -349,74 +353,78 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 jsonxx::Object Settings::toJsonxxObject() {
 	jsonxx::Object settings;
 	settings
-		<< "aimbot_enable" << Settings::aimbot_enable
-		<< "aimbot_key" << Settings::aimbot_key
-		<< "aimbot_use_key" << Settings::aimbot_use_key
-		<< "aimbot_delay_enemy" << Settings::aimbot_delay_enemy
-		<< "aimbot_visible_check" << Settings::aimbot_visible_check
-		<< "aimbot_flash_check" << Settings::aimbot_flash_check
-		<< "aimbot_jump_check" << Settings::aimbot_jump_check
-		<< "aimbot_friendly_fire" << Settings::aimbot_friendly_fire
+		SetSetting(aimbot_enable)
+		SetSetting(aimbot_key)
+		SetSetting(aimbot_use_key)
+		SetSetting(aimbot_delay_enemy)
+		SetSetting(aimbot_visible_check)
+		SetSetting(aimbot_flash_check)
+		SetSetting(aimbot_jump_check)
+		SetSetting(aimbot_friendly_fire)
 
-		<< "aimbot_global" << aimbotSettingsToJsonXX(Settings::aimbot_global)
-		<< "aimbot_pistols" << aimbotSettingsToJsonXX(Settings::aimbot_pistols)
-		<< "aimbot_heavies" << aimbotSettingsToJsonXX(Settings::aimbot_heavies)
-		<< "aimbot_shoutguns" << aimbotSettingsToJsonXX(Settings::aimbot_shoutguns)
-		<< "aimbot_smgs" << aimbotSettingsToJsonXX(Settings::aimbot_smgs)
-		<< "aimbot_rifles" << aimbotSettingsToJsonXX(Settings::aimbot_rifles)
-		<< "aimbot_snipers" << aimbotSettingsToJsonXX(Settings::aimbot_snipers)
-		<< "aimbot_weapons" << aimbotWeaponsSettingsToJsonXX(Settings::aimbot_weapons)
+		SetSettingAim(aimbot_global)
+		SetSettingAim(aimbot_pistols)
+		SetSettingAim(aimbot_heavies)
+		SetSettingAim(aimbot_shoutguns)
+		SetSettingAim(aimbot_smgs)
+		SetSettingAim(aimbot_rifles)
+		SetSettingAim(aimbot_snipers)
+		SetSettingAimWeapons(aimbot_weapons)
 
 		//TRIGGERBOT
-		<< "triggerbot_enable" << Settings::triggerbot_enable
-		<< "triggerbot_use_key" << Settings::triggerbot_use_key
-		<< "triggerbot_key" << Settings::triggerbot_key
-		<< "triggerbot_friendly_fire" << Settings::triggerbot_friendly_fire
-		<< "triggerbot_flash_check" << Settings::triggerbot_flash_check
-		<< "triggerbot_jump_check" << Settings::triggerbot_jump_check
-		<< "triggerbot_delay_before_shoot" << Settings::triggerbot_delay_before_shoot
-		<< "triggerbot_delay_after_shoot" << Settings::triggerbot_delay_after_shoot
-		<< "triggerbot_pistols_enable" << Settings::triggerbot_pistols_enable
-		<< "triggerbot_heavies_enable" << Settings::triggerbot_heavies_enable
-		<< "triggerbot_shoutguns_enable" << Settings::triggerbot_shoutguns_enable
-		<< "triggerbot_smgs_enable" << Settings::triggerbot_smgs_enable
-		<< "triggerbot_rifles_enable" << Settings::triggerbot_rifles_enable
-		<< "triggerbot_snipers_enable" << Settings::triggerbot_snipers_enable
+		SetSetting(triggerbot_enable)
+		SetSetting(triggerbot_use_key)
+		SetSetting(triggerbot_key)
+		SetSetting(triggerbot_friendly_fire)
+		SetSetting(triggerbot_flash_check)
+		SetSetting(triggerbot_jump_check)
+		SetSetting(triggerbot_delay_before_shoot)
+		SetSetting(triggerbot_delay_after_shoot)
+		SetSetting(triggerbot_pistols_enable)
+		SetSetting(triggerbot_heavies_enable)
+		SetSetting(triggerbot_shoutguns_enable)
+		SetSetting(triggerbot_smgs_enable)
+		SetSetting(triggerbot_rifles_enable)
+		SetSetting(triggerbot_snipers_enable)
 
 		//VISUALS
-		<< "visuals_glowEsp_enable" << Settings::visuals_glowEsp_enable
-		<< "visuals_glowEsp_show_enemies" << Settings::visuals_glowEsp_show_enemies
-		<< "visuals_glowEsp_mode" << (int)Settings::visuals_glowEsp_mode
-		<< "visuals_glowEsp_style" << (int)Settings::visuals_glowEsp_style
-		<< "visuals_glowEsp_enemy_visible_color" << rgbaToJsonXX(Settings::visuals_glowEsp_enemy_visible_color)
-		<< "visuals_glowEsp_enemy_invisible_color" << rgbaToJsonXX(Settings::visuals_glowEsp_enemy_invisible_color)
-		<< "visuals_glowEsp_show_friends" << Settings::visuals_glowEsp_show_friends
-		<< "visuals_glowEsp_friends_color" << rgbaToJsonXX(Settings::visuals_glowEsp_friends_color)
-		<< "visuals_glowEsp_hpBased_0hp_color" << rgbaToJsonXX(Settings::visuals_glowEsp_hpBased_0hp_color)
-		<< "visuals_glowEsp_hpBased_100hp_color" << rgbaToJsonXX(Settings::visuals_glowEsp_hpBased_100hp_color)
-		<< "visuals_glowEsp_show_c4" << Settings::visuals_glowEsp_show_c4
-		<< "visuals_glowEsp_c4_color" << rgbaToJsonXX(Settings::visuals_glowEsp_c4_color)
-		<< "visuals_glowEsp_c4_planted_color" << rgbaToJsonXX(Settings::visuals_glowEsp_c4_planted_color)
+		SetSetting(visuals_glowEsp_enable)
+		SetSetting(visuals_glowEsp_show_enemies)
+		SetSettingInt(visuals_glowEsp_mode)
+		SetSettingInt(visuals_glowEsp_style)
+		SetSettingColor(visuals_glowEsp_enemy_visible_color)
+		SetSettingColor(visuals_glowEsp_enemy_invisible_color)
+		SetSetting(visuals_glowEsp_show_friends)
+		SetSettingColor(visuals_glowEsp_friends_color)
+		SetSettingColor(visuals_glowEsp_hpBased_0hp_color)
+		SetSettingColor(visuals_glowEsp_hpBased_100hp_color)
+		SetSetting(visuals_glowEsp_show_c4)
+		SetSettingColor(visuals_glowEsp_c4_color)
+		SetSettingColor(visuals_glowEsp_c4_planted_color)
+		SetSetting(visuals_glowEsp_show_defusing)
+		SetSettingColor(visuals_glowEsp_defusing_color)
+		SetSetting(visuals_glowEsp_show_grenades)
+		SetSettingColor(visuals_glowEsp_grenades_color)
 
-		<< "visuals_chams_enable" << Settings::visuals_chams_enable
-		<< "visuals_chams_show_enemies" << Settings::visuals_chams_show_enemies
-		<< "visuals_chams_enemy_color" << rgbaToJsonXX(Settings::visuals_chams_enemy_color)
-		<< "visuals_chams_show_friends" << Settings::visuals_chams_show_friends
-		<< "visuals_chams_friends_color" << rgbaToJsonXX(Settings::visuals_chams_friends_color)
+		SetSetting(visuals_chams_enable)
+		SetSetting(visuals_chams_show_enemies)
+		SetSettingColor(visuals_chams_enemy_color)
+		SetSetting(visuals_chams_show_friends)
+		SetSettingColor(visuals_chams_friends_color)
 
 		//SKINCHANGER
-		<< "skinchanger_weapons" << weaponSkinsToJsonXX(Settings::skinchanger_weapons)
-		<< "skinchanger_knifes" << knifesSkinsToJsonXX(Settings::skinchanger_knifes)
+		SetSettingSkinchangerWeapons(skinchanger_weapons)
+		SetSettingSkinchangerKnives(skinchanger_knives)
 
 		//MISC
-		<< "misc_ingameRadar_enable" << Settings::misc_ingameRadar_enable
-		<< "misc_bhop_enable" << Settings::misc_bhop_enable
-		<< "misc_autoPistols_enable" << Settings::misc_autoPistols_enable
-		<< "misc_autoPistols_delay" << Settings::misc_autoPistols_delay
-		<< "misc_autoAccept_enable" << Settings::misc_autoAccept_enable
-		<< "skinchanger_enable" << Settings::skinchanger_enable
-		<< "misc_antiFlash_enable" << Settings::misc_antiFlash_enable
-		<< "misc_antiFlash_maxAlpha" << Settings::misc_antiFlash_maxAlpha;
+		SetSetting(misc_ingameRadar_enable)
+		SetSetting(misc_bhop_enable)
+		SetSetting(misc_autoPistols_enable)
+		SetSetting(misc_autoPistols_delay)
+		SetSetting(misc_autoAccept_enable)
+		SetSetting(skinchanger_enable)
+		SetSetting(misc_antiFlash_enable)
+		SetSetting(misc_antiFlash_maxAlpha);
 	
 	return settings;
 }
@@ -534,6 +542,10 @@ colorRGBA Settings::visuals_glowEsp_hpBased_100hp_color = { 0.0f, 0.0f, 0.0f, 0.
 bool Settings::visuals_glowEsp_show_c4 = false;
 colorRGBA Settings::visuals_glowEsp_c4_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 colorRGBA Settings::visuals_glowEsp_c4_planted_color = { 0.0f, 0.0f, 0.0f, 0.0f };
+bool Settings::visuals_glowEsp_show_defusing = false;
+colorRGBA Settings::visuals_glowEsp_defusing_color = { 0.0f, 0.0f, 0.0f, 0.0f };
+bool Settings::visuals_glowEsp_show_grenades = false;
+colorRGBA Settings::visuals_glowEsp_grenades_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 
 bool Settings::visuals_chams_enable = false;
 bool Settings::visuals_chams_show_enemies = false;
@@ -544,7 +556,7 @@ colorRGBA Settings::visuals_chams_friends_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 //SKINCHAGER
 bool Settings::skinchanger_enable = false;
 std::map<ItemDefinitionIndex, ISkinchangerWeapon> Settings::skinchanger_weapons = {};
-std::map<TeamNum, ISkinchangerWeapon> Settings::skinchanger_knifes = {};
+std::map<TeamNum, ISkinchangerWeapon> Settings::skinchanger_knives = {};
 
 //MISC
 bool Settings::misc_ingameRadar_enable = false;
@@ -553,5 +565,5 @@ bool Settings::misc_autoPistols_enable = false;
 int Settings::misc_autoPistols_delay = 0;
 bool Settings::misc_autoAccept_enable = false;
 bool Settings::misc_antiFlash_enable = false;
-int Settings::misc_antiFlash_maxAlpha = 0;
+int Settings::misc_antiFlash_maxAlpha = 255;
 #pragma endregion

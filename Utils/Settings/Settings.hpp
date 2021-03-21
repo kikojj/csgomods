@@ -25,10 +25,18 @@
 #define ElifReadSettingGlowMode(settingName) else if (name == #settingName) settingName = (EVisualsGlowEspMode)value->get<jsonxx::Number>();
 #define ElifReadSettingGlowStyle(settingName) else if (name == #settingName) settingName = (GlowStyle)value->get<jsonxx::Number>();
 #define ElifReadSettingAim(settingName) else if (name == #settingName) settingName = getAimbotSettingsFromJsonXX(value);
-#define ElifReadSettingAimWeapon(settingName) else if (name == #settingName) settingName = getAimbotWeaponsSettingsFromJsonXX(value);
+#define ElifReadSettingAimWeapons(settingName) else if (name == #settingName) settingName = getAimbotWeaponsSettingsFromJsonXX(value);
 #define ElifReadSettingSkinchangerWeapon(settingName) else if (name == #settingName) settingName = getWeaponSkinsFromJsonXX(value);
-#define ElifReadSettingSkinchangerKnife(settingName) else if (name == #settingName) settingName = getKnifesSkinsFromJsonXX(value);
+#define ElifReadSettingSkinchangerKnives(settingName) else if (name == #settingName) settingName = getKnivesSkinsFromJsonXX(value);
 #define ElifReadSettingColor(settingName) else if (name == #settingName) settingName = getColorFromJsonXX(value);
+
+#define SetSetting(settingName) << #settingName << Settings::settingName
+#define SetSettingInt(settingName) << #settingName << (int)Settings::settingName
+#define SetSettingColor(settingName) << #settingName << rgbaToJsonXX(Settings::settingName)
+#define SetSettingAim(settingName) << #settingName << aimbotSettingsToJsonXX(Settings::settingName)
+#define SetSettingAimWeapons(settingName) << #settingName << aimbotWeaponsSettingsToJsonXX(Settings::settingName)
+#define SetSettingSkinchangerWeapons(settingName) << #settingName << weaponSkinsToJsonXX(Settings::settingName)
+#define SetSettingSkinchangerKnives(settingName) << #settingName << knivesSkinsToJsonXX(Settings::settingName)
 #pragma endregion
 
 enum EVisualsGlowEspMode {
@@ -66,8 +74,8 @@ public:
 
   static std::map<ItemDefinitionIndex, ISkinchangerWeapon> getWeaponSkinsFromJsonXX(jsonxx::Value*);
   static jsonxx::Value weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, ISkinchangerWeapon>);
-  static std::map<TeamNum, ISkinchangerWeapon> getKnifesSkinsFromJsonXX(jsonxx::Value*);
-  static jsonxx::Value knifesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon>);
+  static std::map<TeamNum, ISkinchangerWeapon> getKnivesSkinsFromJsonXX(jsonxx::Value*);
+  static jsonxx::Value knivesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon>);
   static std::map<ItemDefinitionIndex, IAimbotSettings> getAimbotWeaponsSettingsFromJsonXX(jsonxx::Value*);
   static jsonxx::Value aimbotWeaponsSettingsToJsonXX(std::map<ItemDefinitionIndex, IAimbotSettings>);
 
@@ -135,6 +143,10 @@ public:
   static bool visuals_glowEsp_show_c4;
   static colorRGBA visuals_glowEsp_c4_color;
   static colorRGBA visuals_glowEsp_c4_planted_color;
+  static bool visuals_glowEsp_show_defusing;
+  static colorRGBA visuals_glowEsp_defusing_color;
+  static bool visuals_glowEsp_show_grenades;
+  static colorRGBA visuals_glowEsp_grenades_color;
 
   static bool visuals_chams_enable;
   static bool visuals_chams_show_enemies;
@@ -145,7 +157,7 @@ public:
   //SKINCHANGER
   static bool skinchanger_enable;
   static std::map<ItemDefinitionIndex, ISkinchangerWeapon> skinchanger_weapons;
-  static std::map<TeamNum, ISkinchangerWeapon> skinchanger_knifes;
+  static std::map<TeamNum, ISkinchangerWeapon> skinchanger_knives;
 
   //MISC
   static bool misc_ingameRadar_enable;

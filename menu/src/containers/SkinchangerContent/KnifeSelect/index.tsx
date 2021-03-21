@@ -42,10 +42,10 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
     if (activeTeam && (activeTeam === TeamNum.TERRORIST || activeTeam === TeamNum.COUNTER_TERRORIST)) {
       setSettings({
         ...settings,
-        skinchanger_knifes: {
-          ...settings.skinchanger_knifes,
+        skinchanger_knives: {
+          ...settings.skinchanger_knives,
           [activeTeam]: {
-            ...settings.skinchanger_knifes[activeTeam],
+            ...settings.skinchanger_knives[activeTeam],
             itemDI,
           },
         },
@@ -79,7 +79,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
                 let image = defaultSkins[itemDI] as string;
 
                 const knifeSettings: ISkinchangerWeapon | undefined =
-                  settings.skinchanger_knifes[
+                  settings.skinchanger_knives[
                     itemDI === ItemDefinitionIndex.WEAPON_KnifeT ? TeamNum.TERRORIST : TeamNum.COUNTER_TERRORIST
                   ];
 

@@ -20,6 +20,12 @@ export const VisualsContent: React.FC = () => {
   if (settings.visuals_glowEsp_show_c4) {
     glowFilters.push("C4");
   }
+  if (settings.visuals_glowEsp_show_defusing) {
+    glowFilters.push("Defusing");
+  }
+  if (settings.visuals_glowEsp_show_grenades) {
+    glowFilters.push("Grenades");
+  }
 
   function changeGlowFiltersHandler(v: string[]) {
     if (!glowFilters.includes("Teammates") && v.includes("Teammates")) {
@@ -36,6 +42,16 @@ export const VisualsContent: React.FC = () => {
       updateValue("visuals_glowEsp_show_c4", true);
     } else if (glowFilters.includes("C4") && !v.includes("C4")) {
       updateValue("visuals_glowEsp_show_c4", false);
+    }
+    if (!glowFilters.includes("Defusing") && v.includes("Defusing")) {
+      updateValue("visuals_glowEsp_show_defusing", true);
+    } else if (glowFilters.includes("Defusing") && !v.includes("Defusing")) {
+      updateValue("visuals_glowEsp_show_defusing", false);
+    }
+    if (!glowFilters.includes("Grenades") && v.includes("Grenades")) {
+      updateValue("visuals_glowEsp_show_grenades", true);
+    } else if (glowFilters.includes("Grenades") && !v.includes("Grenades")) {
+      updateValue("visuals_glowEsp_show_grenades", false);
     }
   }
 
@@ -74,7 +90,7 @@ export const VisualsContent: React.FC = () => {
               <FiltersField
                 label="Filters:"
                 helperText="Filter entities for display"
-                filters={["Teammates", "Enemies", "C4"]}
+                filters={["Teammates", "Enemies", "C4", "Defusing", "Grenades"]}
                 values={glowFilters}
                 onChange={changeGlowFiltersHandler}
               />
@@ -114,7 +130,9 @@ export const VisualsContent: React.FC = () => {
         {settings.visuals_glowEsp_enable &&
         (settings.visuals_glowEsp_show_enemies ||
           settings.visuals_glowEsp_show_friends ||
-          settings.visuals_glowEsp_show_c4) ? (
+          settings.visuals_glowEsp_show_c4 ||
+          settings.visuals_glowEsp_show_defusing ||
+          settings.visuals_glowEsp_show_grenades) ? (
           <React.Fragment>
             <Group marginTop={35} label="Glow colors">
               {settings.visuals_glowEsp_mode === 0 ? (
@@ -164,6 +182,24 @@ export const VisualsContent: React.FC = () => {
                   label="C4"
                   color={settings.visuals_glowEsp_c4_color}
                   onChnage={(c) => updateValue("visuals_glowEsp_c4_color", c)}
+                />
+              ) : (
+                ""
+              )}
+              {settings.visuals_glowEsp_show_defusing ? (
+                <ColorPickerField
+                  label="Defusing"
+                  color={settings.visuals_glowEsp_defusing_color}
+                  onChnage={(c) => updateValue("visuals_glowEsp_defusing_color", c)}
+                />
+              ) : (
+                ""
+              )}
+              {settings.visuals_glowEsp_show_grenades ? (
+                <ColorPickerField
+                  label="Grenades"
+                  color={settings.visuals_glowEsp_grenades_color}
+                  onChnage={(c) => updateValue("visuals_glowEsp_grenades_color", c)}
                 />
               ) : (
                 ""

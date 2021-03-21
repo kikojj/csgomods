@@ -112,6 +112,8 @@ export type TSettings = {
   visuals_glowEsp_show_enemies: boolean;
   visuals_glowEsp_show_friends: boolean;
   visuals_glowEsp_show_c4: boolean;
+  visuals_glowEsp_show_defusing: boolean;
+  visuals_glowEsp_show_grenades: boolean;
 
   visuals_glowEsp_style: number;
   visuals_glowEsp_mode: number;
@@ -120,6 +122,8 @@ export type TSettings = {
   visuals_glowEsp_enemy_invisible_color: ColorRGBA;
   visuals_glowEsp_friends_color: ColorRGBA;
   visuals_glowEsp_c4_color: ColorRGBA;
+  visuals_glowEsp_defusing_color: ColorRGBA;
+  visuals_glowEsp_grenades_color: ColorRGBA;
 
   visuals_glowEsp_hpBased_0hp_color: ColorRGBA;
   visuals_glowEsp_hpBased_100hp_color: ColorRGBA;
@@ -137,7 +141,7 @@ export type TSettings = {
   //SKINCHANGER
   skinchanger_enable: boolean;
   skinchanger_weapons: { [T in ItemDefinitionIndex]?: ISkinchangerWeapon };
-  skinchanger_knifes: { [T in TeamNum]?: ISkinchangerWeapon };
+  skinchanger_knives: { [T in TeamNum]?: ISkinchangerWeapon };
   //
 
   ///MISC
@@ -154,13 +158,13 @@ export type TSettings = {
 export const DEFAULT_SETTINGS: TSettings = {
   ///AIMBOT
   ///GLOBALS
-  aimbot_enable: true,
-  aimbot_use_key: true,
-  aimbot_key: 1,
-  aimbot_delay_enemy: 100,
-  aimbot_visible_check: true,
-  aimbot_flash_check: true,
-  aimbot_jump_check: true,
+  aimbot_enable: false,
+  aimbot_use_key: false,
+  aimbot_key: 0,
+  aimbot_delay_enemy: 0,
+  aimbot_visible_check: false,
+  aimbot_flash_check: false,
+  aimbot_jump_check: false,
   aimbot_friendly_fire: false,
   ///
 
@@ -177,65 +181,69 @@ export const DEFAULT_SETTINGS: TSettings = {
   ///
 
   ///TRIGGER
-  triggerbot_enable: true,
-  triggerbot_use_key: true,
-  triggerbot_key: 17,
+  triggerbot_enable: false,
+  triggerbot_use_key: false,
+  triggerbot_key: 0,
   triggerbot_friendly_fire: false,
   triggerbot_flash_check: false,
   triggerbot_jump_check: false,
-  triggerbot_delay_before_shoot: 50,
-  triggerbot_delay_after_shoot: 50,
+  triggerbot_delay_before_shoot: 0,
+  triggerbot_delay_after_shoot: 0,
   triggerbot_pistols_enable: false,
   triggerbot_heavies_enable: false,
   triggerbot_shoutguns_enable: false,
   triggerbot_smgs_enable: false,
   triggerbot_rifles_enable: false,
-  triggerbot_snipers_enable: true,
+  triggerbot_snipers_enable: false,
   ///
 
   //VISUALS
   //GLOW ESP
-  visuals_glowEsp_enable: true,
+  visuals_glowEsp_enable: false,
 
-  visuals_glowEsp_show_enemies: true,
+  visuals_glowEsp_show_enemies: false,
   visuals_glowEsp_show_friends: false,
-  visuals_glowEsp_show_c4: true,
+  visuals_glowEsp_show_c4: false,
+  visuals_glowEsp_show_defusing: false,
+  visuals_glowEsp_show_grenades: false,
 
   visuals_glowEsp_style: 0,
   visuals_glowEsp_mode: 0,
 
-  visuals_glowEsp_enemy_visible_color: { r: 0, g: 255, b: 0, a: 255 },
-  visuals_glowEsp_enemy_invisible_color: { r: 255, g: 0, b: 0, a: 255 },
-  visuals_glowEsp_friends_color: { r: 0, g: 255, b: 0, a: 255 },
-  visuals_glowEsp_c4_color: { r: 0, g: 0, b: 255, a: 255 },
+  visuals_glowEsp_enemy_visible_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glowEsp_enemy_invisible_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glowEsp_friends_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glowEsp_c4_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glowEsp_defusing_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glowEsp_grenades_color: { r: 0, g: 0, b: 0, a: 0 },
 
-  visuals_glowEsp_hpBased_0hp_color: { r: 255, g: 0, b: 0, a: 255 },
-  visuals_glowEsp_hpBased_100hp_color: { r: 0, g: 255, b: 0, a: 255 },
+  visuals_glowEsp_hpBased_0hp_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glowEsp_hpBased_100hp_color: { r: 0, g: 0, b: 0, a: 0 },
   ///
 
   //CHAMS
-  visuals_chams_enable: true,
+  visuals_chams_enable: false,
 
-  visuals_chams_show_enemies: true,
+  visuals_chams_show_enemies: false,
   visuals_chams_show_friends: false,
 
-  visuals_chams_enemy_color: { r: 0, g: 255, b: 0, a: 255 },
-  visuals_chams_friends_color: { r: 0, g: 255, b: 0, a: 255 },
+  visuals_chams_enemy_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_chams_friends_color: { r: 0, g: 0, b: 0, a: 0 },
   ///
   ///
 
   //SKINCHANGER
-  skinchanger_enable: true,
+  skinchanger_enable: false,
   skinchanger_weapons: {},
-  skinchanger_knifes: {},
+  skinchanger_knives: {},
   //
 
   ///MISC
-  misc_ingameRadar_enable: true,
-  misc_bhop_enable: true,
-  misc_autoPistols_enable: true,
-  misc_autoPistols_delay: 50,
-  misc_autoAccept_enable: true,
+  misc_ingameRadar_enable: false,
+  misc_bhop_enable: false,
+  misc_autoPistols_enable: false,
+  misc_autoPistols_delay: 0,
+  misc_autoAccept_enable: false,
   misc_antiFlash_enable: false,
   misc_antiFlash_maxAlpha: 255,
   ///
