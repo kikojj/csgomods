@@ -1,16 +1,15 @@
 #pragma once
+
 #include <map>
 
-#include "Offsets.hpp"
-#include "Settings.hpp"
+#include "SDK/Engine/Engine.hpp"
+#include "SDK/Client/Client.hpp"
+#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Utils/ItemDefinitionIndex.hpp"
 
-#include "Engine.hpp"
-#include "Client.hpp"
-#include "Helpers.hpp"
-
-#include "BaseCombatWeapon.hpp"
-
-#include "ItemDefinitionIndex.hpp"
+#include "Utils/Helpers/Helpers.hpp"
+#include "Utils/Offsets/Offsets.hpp"
+#include "Utils/Settings/Settings.hpp"
 
 class Skinchanger {
 private:

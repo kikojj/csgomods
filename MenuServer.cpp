@@ -89,7 +89,7 @@ void MenuServer::gameFullForceUpdate(websocketpp::connection_hdl){
 }
 
 void MenuServer::getAllSkins(websocketpp::connection_hdl hdl){
-  std::fstream skinsJson("skins.json");
+  std::fstream skinsJson("Utils/skins.json");
   std::string skinsBuffer((std::istreambuf_iterator<char>(skinsJson)), std::istreambuf_iterator<char>());
   jsonxx::Object skins;
   skins.parse(skinsBuffer);

@@ -2,16 +2,15 @@
 
 #include <algorithm>
 
-#include "Client.hpp"
-#include "Engine.hpp"
-#include "Settings.hpp"
+#include "SDK/Client/Client.hpp"
+#include "SDK/Client/BaseEntity.hpp"
+#include "SDK/Client/BasePlayer.hpp"
+#include "SDK/Engine/Engine.hpp"
+#include "SDK/Utils/ColorRGBA.hpp"
+#include "SDK/Utils/IGlowObjectDefinition.hpp"
 
-#include "BaseEntity.hpp"
-#include "BasePlayer.hpp"
-
-#include "ColorRGBA.hpp"
-#include "IGlowObjectDefinition.hpp"
-#include "visibleCheck/VisibleCheck.h"
+#include "Utils/VisibleCheck/VisibleCheck.h"
+#include "Utils/Settings/Settings.hpp"
 
 class Visuals {
 private:

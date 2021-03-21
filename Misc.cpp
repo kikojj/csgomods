@@ -136,7 +136,7 @@ void Misc::autoAccept(){
 		}
 		else if (!accepted){
 			accepted = true;
-			mem.CreateThread(client.hConfirmMatch());
+			mem.createThread(client.hConfirmMatch());
 			std::cout << "[AUTO ACCEPT]: Math was found. Tried to accept the match." << std::endl;
 		}
 	}

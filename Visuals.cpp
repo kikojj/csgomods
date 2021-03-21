@@ -6,7 +6,7 @@ void Visuals::drawEntity(std::pair<int, IGlowObjectDefinition> glowObject, color
 	glowObject.second.color(color);
 	glowObject.second.glowStyle = style;
 	glowObject.second.renderWhenOccluded = true;
-	mem.Write<IGlowObjectDefinition>(glowObject.first, glowObject.second);
+	mem.write<IGlowObjectDefinition>(glowObject.first, glowObject.second);
 }
 
 colorRGBA Visuals::getHpBasedColor(BasePlayer& player){

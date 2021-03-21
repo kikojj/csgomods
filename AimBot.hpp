@@ -4,20 +4,18 @@
 #include <vector>
 #include <algorithm>
 
-#include "Client.hpp"
-#include "Engine.hpp"
-#include "Offsets.hpp"
-#include "Settings.hpp"
+#include "SDK/Client/Client.hpp"
+#include "SDK/Client/BasePlayer.hpp"
+#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Engine/Engine.hpp"
+#include "SDK/Utils/Skeleton.hpp"
+#include "SDK/Utils/BoneVector.hpp"
+#include "SDK/Utils/FlagsState.hpp"
 
-#include "BasePlayer.hpp"
-#include "BaseCombatWeapon.hpp"
-
-#include "Math.hpp"
-#include "Skeleton.hpp"
-#include "BoneVector.hpp"
-#include "FlagsState.hpp"
-
-#include "Helpers.hpp"
+#include "Utils/Math.hpp"
+#include "Utils/Offsets/Offsets.hpp"
+#include "Utils/Settings/Settings.hpp"
+#include "Utils/Helpers/Helpers.hpp"
 
 class AimBot {
 private:

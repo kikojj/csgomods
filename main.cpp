@@ -2,27 +2,28 @@
 #include <thread>
 #include <map>
 
-#include "GlobalVars.hpp"
 #include "MenuServer.hpp"
-#include "Defines.hpp"
-#include "Memory.hpp"
-#include "Modules.hpp"
-#include "Client.hpp"
-#include "Engine.hpp"
-
-#include "bsb-parser/bsp_parser.hpp"
-
-#include "Settings.hpp"
-#include "Offsets.hpp"
-
 #include "Visuals.hpp"
 #include "AimBot.hpp"
 #include "TriggerBot.hpp"
 #include "Skinchanger.hpp"
 #include "Misc.hpp"
-#include "Helpers.hpp"
-#include "visibleCheck/VisibleCheck.h"
-#include "ClientCmdUD.hpp"
+
+#include "SDK/Utils/Defines.hpp"
+#include "SDK/Client/Client.hpp"
+#include "SDK/Engine/Engine.hpp"
+#include "SDK/Utils/TeamNum.hpp"
+#include "SDK/Utils/ItemDefinitionIndex.hpp"
+
+#include "Utils/GlobalVars.hpp"
+#include "Utils/Helpers/Helpers.hpp"
+#include "Utils/Memory/Memory.hpp"
+#include "Utils/Memory/Modules.hpp"
+#include "Utils/BspParser/BspParser.hpp"
+#include "Utils/Settings/Settings.hpp"
+#include "Utils/Offsets/Offsets.hpp"
+#include "Utils/VisibleCheck/VisibleCheck.h"
+#include "Utils/ClientCmdUD/ClientCmdUD.hpp"
 
 using namespace std;
 
@@ -51,40 +52,36 @@ Skinchanger skinchanger;
 Misc misc;
 
 int main() {
-	try
-	{
+	try {
 		cout << "[Main]: Waiting for process '" << GAME_NAME << "'." << endl;
-		while (!mem.Attach(GAME_NAME, PROCESS_ALL_ACCESS)) {
+		while (!mem.attach(GAME_NAME, PROCESS_ALL_ACCESS)) {
 			Sleep(100);
 		}
 		cout << "[Main]: Attached in process '" << GAME_NAME << "'." << endl;
 
-		clientDll = mem.GetModule(CLIENT_DLL_NAME);
+		clientDll = mem.getModule(CLIENT_DLL_NAME);
 		while (!clientDll.dwBase || !clientDll.dwSize) {
 			Sleep(100);
-			clientDll = mem.GetModule(CLIENT_DLL_NAME);
+			clientDll = mem.getModule(CLIENT_DLL_NAME);
 		}
 		cout << "[Main]: Module '" << CLIENT_DLL_NAME << "' loaded. DwBase: " << clientDll.dwBase << endl;
 
-		engineDll = mem.GetModule(ENGINE_DLL_NAME);
+		engineDll = mem.getModule(ENGINE_DLL_NAME);
 		while (!engineDll.dwBase || !engineDll.dwSize) {
 			Sleep(100);
-			engineDll = mem.GetModule(ENGINE_DLL_NAME);
+			engineDll = mem.getModule(ENGINE_DLL_NAME);
 		}
 		cout << "[Main]: Module '" << ENGINE_DLL_NAME << "' loaded. DwBase: " << engineDll.dwBase << endl;
 
 		Offsets::init();
-
 		Settings::getFromFile("default.json");
-
 		clientCmdUD.init();
 
 		clientCmdUD.execute("clear");
 		clientCmdUD.execute("echo [CSGOMODS]: Started.");
 		clientCmdUD.execute("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:2223)");
-		//clientCmdUD.execute("sv_cheats 1");
-		//clientCmdUD.execute("r_drawothermodels 2");
 
+		#pragma region Threads
 		thread thMenuData([]() {
 			int lastActiveWeaponIDI = -1;
 			TeamNum lastTeam = NO_TEAM;
@@ -221,6 +218,7 @@ int main() {
 		thMiscAntiFlash.join();
 		thMap.join();
 		thVisibleCheck.join();
+		#pragma endregion
 	}
 	catch (const exception& err){
 		cout << "[Main]: Catch. Error: '" << err.what() << endl;

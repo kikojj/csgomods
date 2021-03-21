@@ -8,19 +8,19 @@
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <websocketpp/server.hpp>
 
-#include "jsonxx/jsonxx.h"
+#include "SDK/Client/Client.hpp"
+#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Engine/Engine.hpp"
+#include "SDK/Utils/TeamNum.hpp"
 
-#include "GlobalVars.hpp"
-#include "Settings.hpp"
-#include "Client.hpp"
-#include "Engine.hpp"
-#include "BaseCombatWeapon.hpp"
-#include "Helpers.hpp"
-#include "TeamNum.hpp"
+#include "Utils/GlobalVars.hpp"
+#include "Utils/JsonXX/jsonxx.h"
+#include "Utils/Settings/Settings.hpp"
+#include "Utils/Helpers/Helpers.hpp"
 
 #define WEBSOCKET_PORT 2222
 #define HTTP_SERVER_PORT 2223
-#define HTTP_SERVER_DIRECTORY "./menu/dist"
+#define HTTP_SERVER_DIRECTORY "./Menu/dist"
 
 #define WEBSOCKET_STOP_LISTENING "stop_listening"
 #define WEBSOCKET_CLOSE_MENU "close_menu"
@@ -35,7 +35,6 @@
 #define WEBSOCKET_LOAD_CONFIG "load_config"
 #define WEBSOCKET_SAVE_CONFIG "save_config"
 #define WEBSOCKET_DELETE_CONFIG "delete_config"
-
 
 using websocketpp::lib::bind;
 using websocketpp::lib::placeholders::_1;

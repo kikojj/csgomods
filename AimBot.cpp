@@ -3,7 +3,7 @@
 AimBot::AimBot() {}
 
 Vector3 AimBot::getBonePos(BasePlayer& player, Skeleton bone) {
-	return Vector3(mem.Read<BoneVector>(player.m_dwBoneMatrix() + 0x30 * bone + 0x0C));
+	return Vector3(mem.read<BoneVector>(player.m_dwBoneMatrix() + 0x30 * bone + 0x0C));
 }
 
 Vector3 AimBot::calcAngle(Vector3 src, Vector3 dst) {
