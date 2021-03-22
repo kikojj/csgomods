@@ -2,9 +2,7 @@
 
 #include <Windows.h>
 
-/// <summary>
-/// all colors as [0, 255]
-/// </summary>
+/// <summary>all colors as [0, 255]</summary>
 struct colorRGBA {
 	float r = 0;
 	float g = 0;

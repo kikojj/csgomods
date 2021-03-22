@@ -8,10 +8,10 @@ void TriggerBot::loop() {
 	}
 
 	if (
-		engine.clientState->state() != INGAME ||
+		engine.clientState->state() != ClientStates::INGAME ||
 		engine.clientState->m_nDeltaTick() == -1 ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST ||
 		client.localPlayer->m_bDormant() ||
 		!Helpers::isMouseActive()
 		) {
@@ -76,12 +76,12 @@ void TriggerBot::loop() {
 		return;
 	}
 	else {
-		std::cout << "[Trigger]: Undefined weapon ID = " << activeWeapon.m_iItemDefinitionIndex() << std::endl;
+		std::cout << "[Trigger]: Undefined weapon ID = " << (int)activeWeapon.m_iItemDefinitionIndex() << std::endl;
 		return;
 	}
 
 	BaseEntity entity(client.entityList->getByID(client.localPlayer->m_iCrosshairId() - 1));
-	if (entity.m_iClassID() != CCSPlayer) {
+	if (entity.m_iClassID() != ClassID::CCSPlayer) {
 		Sleep(Settings::triggerbot_delay_before_shoot);
 		return;
 	}

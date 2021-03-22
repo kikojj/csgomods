@@ -4,8 +4,8 @@
 #include <algorithm>
 #include <iterator>
 
-enum ItemDefinitionIndex {
-  INVALID_ITEM_DI = 0,
+enum struct ItemDefinitionIndex : int {
+  Invalid = 0,
   WEAPON_DesertEagle = 1,
   WEAPON_DualBerettas = 2,
   WEAPON_FiveSeven = 3,

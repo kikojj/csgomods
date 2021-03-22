@@ -22,7 +22,7 @@ VAR_W_DEF(EntityQuality, m_iEntityQuality, BaseCombatWeapon, get(), netvars)
 EntityQuality BaseCombatWeapon::m_iEntityQuality() {
 	auto entityQuality = mem.read<int>(get() + Offsets::netvars::m_iEntityQuality);
 	if (entityQuality < 0 || entityQuality > 12) {
-		return INVALID_QUALITY;
+		return EntityQuality::Invalid;
 	}
 	return (EntityQuality)entityQuality;
 }
@@ -32,7 +32,7 @@ ItemDefinitionIndex BaseCombatWeapon::m_iItemDefinitionIndex() {
 	auto itemDI = mem.read<short>(get() + Offsets::netvars::m_iItemDefinitionIndex);
 	//std::cout << "BaseCombatWeapon::m_iItemDefinitionIndex(): " << itemDI << std::endl;
 	if (itemDI <= 0) {
-		return INVALID_ITEM_DI;
+		return ItemDefinitionIndex::Invalid;
 	}
 	return (ItemDefinitionIndex)itemDI;
 }
@@ -65,7 +65,7 @@ bool BaseCombatWeapon::isKnife() {
 }
 bool BaseCombatWeapon::isBomb() {
 	auto itemDI = m_iItemDefinitionIndex();
-	if (itemDI == ITEM_C4Explosive) {
+	if (itemDI == ItemDefinitionIndex::ITEM_C4Explosive) {
 		return true;
 	}
 	return false;
@@ -73,12 +73,12 @@ bool BaseCombatWeapon::isBomb() {
 bool BaseCombatWeapon::isGrenade() {
 	auto itemDI = m_iItemDefinitionIndex();
 	if (
-		itemDI == WEAPON_HEGrenade ||
-		itemDI == WEAPON_Flashbang ||
-		itemDI == WEAPON_Molotov ||
-		itemDI == WEAPON_SmokeGrenade ||
-		itemDI == WEAPON_IncendiaryGrenade ||
-		itemDI == WEAPON_DecoyGrenade
+		itemDI == ItemDefinitionIndex::WEAPON_HEGrenade ||
+		itemDI == ItemDefinitionIndex::WEAPON_Flashbang ||
+		itemDI == ItemDefinitionIndex::WEAPON_Molotov ||
+		itemDI == ItemDefinitionIndex::WEAPON_SmokeGrenade ||
+		itemDI == ItemDefinitionIndex::WEAPON_IncendiaryGrenade ||
+		itemDI == ItemDefinitionIndex::WEAPON_DecoyGrenade
 		) {
 		return true;
 	}
@@ -86,7 +86,7 @@ bool BaseCombatWeapon::isGrenade() {
 }
 bool BaseCombatWeapon::isZeusX27() {
 	auto itemDI = m_iItemDefinitionIndex();
-	if (itemDI == WEAPON_Zeusx27) {
+	if (itemDI == ItemDefinitionIndex::WEAPON_Zeusx27) {
 		return true;
 	}
 	return false;

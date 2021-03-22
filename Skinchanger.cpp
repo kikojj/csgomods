@@ -8,19 +8,19 @@ void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, ISkinchangerWeapo
 
 	weapon.m_flFallbackWear(settings.wear);
 
-	if (settings.quality != INVALID_QUALITY) {
+	if (settings.quality != EntityQuality::Invalid) {
 		weapon.m_iEntityQuality(settings.quality);
 	}
 	else if (weapon.isKnife()) {
-		weapon.m_iEntityQuality(QUALITY_UNUSUAL);		
+		weapon.m_iEntityQuality(EntityQuality::QUALITY_UNUSUAL);
 	}
 
 	if (settings.customName != "") {
 		weapon.m_szCustomName(settings.customName);
 	}
 	if (settings.statTrack >= 0) {
-		if (settings.quality == INVALID_QUALITY || settings.quality == QUALITY_NORMAL) {
-			weapon.m_iEntityQuality(QUALITY_STRANGE);
+		if (settings.quality == EntityQuality::Invalid || settings.quality == EntityQuality::QUALITY_NORMAL) {
+			weapon.m_iEntityQuality(EntityQuality::QUALITY_STRANGE);
 		}
 		weapon.m_nFallbackStatTrak(settings.statTrack);
 	}
@@ -43,9 +43,9 @@ Skinchanger::Skinchanger(){}
 
 void Skinchanger::loop() {
 	if (
-		engine.clientState->state() != INGAME ||
+		engine.clientState->state() != ClientStates::INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST
+		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
 		) {
 		return;
 	}

@@ -45,7 +45,7 @@ enum EVisualsGlowEspMode {
 struct ISkinchangerWeapon {
   bool enable = false;
   int paintKit = 0;
-  EntityQuality quality = INVALID_QUALITY;
+  EntityQuality quality = EntityQuality::Invalid;
   float wear = 0.0001f;
   std::string customName = "";
   int statTrack = -1;
@@ -56,7 +56,7 @@ struct IAimbotSettings {
   bool use = false;
   bool enable = false;
   float fov = 0.0f;
-  Skeleton bone = NEAREST;
+  Skeleton bone = Skeleton::NEAREST;
   float smooth = 0.0f;
   bool rcs_enable = false;
   float rcs_scale_x = 0.0f;

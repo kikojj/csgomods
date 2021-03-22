@@ -2,7 +2,7 @@
 
 #include <vector>
 
-enum Skeleton {
+enum struct Skeleton : int {
   NEAREST = 0,
 
   NAVEL = 3,
@@ -29,29 +29,29 @@ enum Skeleton {
 };
 
 static std::vector<Skeleton> ALL_BONES = {
-    NAVEL,
-    STOMACH,
-    CHEST,
-    NECK,
-    HEAD,
-    LEFT_SHOULDER,
-    LEFT_EBLOW,
-    LEFT_HAND,
-    RIGHT_SHOULDER,
-    RIGHT_EBLOW,
-    RIGHT_HAND,
-    LEFT_THIGH,
-    LEFT_KNEE,
-    LEFT_FOOT,
-    RIGHT_THIGH,
-    RIGHT_KNEE,
-    RIGHT_FOOT
+    Skeleton::NAVEL,
+    Skeleton::STOMACH,
+    Skeleton::CHEST,
+    Skeleton::NECK,
+    Skeleton::HEAD,
+    Skeleton::LEFT_SHOULDER,
+    Skeleton::LEFT_EBLOW,
+    Skeleton::LEFT_HAND,
+    Skeleton::RIGHT_SHOULDER,
+    Skeleton::RIGHT_EBLOW,
+    Skeleton::RIGHT_HAND,
+    Skeleton::LEFT_THIGH,
+    Skeleton::LEFT_KNEE,
+    Skeleton::LEFT_FOOT,
+    Skeleton::RIGHT_THIGH,
+    Skeleton::RIGHT_KNEE,
+    Skeleton::RIGHT_FOOT
 };
 
 static std::vector<Skeleton> MAIN_BONES = {
-    NAVEL,
-    STOMACH,
-    CHEST,
-    NECK,
-    HEAD,
+    Skeleton::NAVEL,
+    Skeleton::STOMACH,
+    Skeleton::CHEST,
+    Skeleton::NECK,
+    Skeleton::HEAD,
 };

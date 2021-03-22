@@ -27,12 +27,8 @@ struct Input {
 	float               flLastForwardMove;
 	int                 clearInputState;
 	char                pad_0xE4[0x8];
-	/// <summary>
-	/// 0xF4
-	/// </summary>
+	/// <summary>0xF4</summary>
 	CUserCmd*						commands;
-	/// <summary>
-	/// 0xF8
-	/// </summary>
+	/// <summary>0xF8</summary>
 	VerifiedUserCmd*		verifiedCommands;
 };

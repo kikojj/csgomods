@@ -19,13 +19,13 @@ std::vector<BaseEntity> EntityList::array() {
 			continue;
 		}
 
-		BaseEntity entity((int)pEntity);
+		BaseEntity entity(pEntity);
 		entityList.push_back(entity);
 	}
 	GlowObjectManager gom;
 	for (auto glowObject : gom.array()) {
 		BaseEntity entity(glowObject.second.dwBaseEntity);
-		if (entity.m_iClassID() > 0) {
+		if (int(entity.m_iClassID()) > 0) {
 			entityList.push_back(entity);
 		}
 	}

@@ -7,12 +7,12 @@ void Misc::radarHack(){
 		return;
 	}
 
-	if (engine.clientState->state() != INGAME || engine.clientState->m_nDeltaTick() == -1) {
+	if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
 		return;
 	}
 
 	for (auto entity : client.entityList->array()) {
-		if (entity.m_iClassID() != CCSPlayer) {
+		if (entity.m_iClassID() != ClassID::CCSPlayer) {
 			continue;
 		}
 
@@ -38,9 +38,9 @@ void Misc::bhop() {
 	}
 
 	if (
-		engine.clientState->state() != INGAME ||
+		engine.clientState->state() != ClientStates::INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST ||
 		engine.clientState->m_nDeltaTick() == -1 ||
 		!Helpers::isMouseActive()
 		) {
@@ -56,10 +56,10 @@ void Misc::bhop() {
 	}
 
 	if (FlagsState::isOnGround(client.localPlayer->m_fFlags())) {
-		client.dwForceJump(KEY_DOWN);
+		client.dwForceJump(KeyEvent::KEY_DOWN);
 	}
 	else {
-		client.dwForceJump(KEY_UP);
+		client.dwForceJump(KeyEvent::KEY_UP);
 	}
 }
 
@@ -69,9 +69,9 @@ void Misc::autoPistols(){
 	}
 
 	if (
-		engine.clientState->state() != INGAME ||
+		engine.clientState->state() != ClientStates::INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST ||
 		engine.clientState->m_nDeltaTick() == -1 ||
 		!Helpers::isMouseActive()
 		) {
@@ -85,9 +85,9 @@ void Misc::autoPistols(){
 	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
 	BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
 
-	if (activeWeapon.isPistol() && activeWeapon.m_iItemDefinitionIndex() != WEAPON_R8Revolver && activeWeapon.m_iItemDefinitionIndex() != WEAPON_CZ75Auto) {
+	if (activeWeapon.isPistol() && activeWeapon.m_iItemDefinitionIndex() != ItemDefinitionIndex::WEAPON_R8Revolver && activeWeapon.m_iItemDefinitionIndex() != ItemDefinitionIndex::WEAPON_CZ75Auto) {
 		while (GetAsyncKeyState(VK_LBUTTON)) {
-			client.dwForceAttack(KEY_PRESS);
+			client.dwForceAttack(KeyEvent::KEY_PRESS);
 			Sleep(Settings::misc_autoPistols_delay);
 		}
 	}
@@ -99,9 +99,9 @@ void Misc::antiFlash(){
 	}
 
 	if (
-		engine.clientState->state() != INGAME ||
+		engine.clientState->state() != ClientStates::INGAME ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST ||
 		engine.clientState->m_nDeltaTick() == -1
 		) {
 		return;
@@ -117,7 +117,7 @@ void Misc::autoAccept(){
 		return;
 	}
 
-	if (engine.clientState->state() != LOBBY) {
+	if (engine.clientState->state() != ClientStates::LOBBY) {
 		return;
 	}
 

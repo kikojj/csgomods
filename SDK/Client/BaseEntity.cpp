@@ -6,12 +6,13 @@ BaseEntity::BaseEntity(int _dwBase): dwBase(_dwBase) {};
 ClassID BaseEntity::m_iClassID() {
 	auto id = mem.read<int>(mem.read<int>(mem.read<int>(mem.read<int>(get() + 0x8) + 0x8) + 0x1) + 0x14);
 	if (id < 0) {
-		return INVALID_CLASS_ID;
+		return ClassID::Invalid;
 	}
 
 	return ClassID(id);
 }
 VAR_R_DEF(int, m_iGlowIndex, BaseEntity, get(), netvars)
+VAR_R_DEF(float, m_flC4Blow, BaseEntity, get(), netvars)
 
 void BaseEntity::operator=(BaseEntity BaseEntity) {
 	this->dwBase = BaseEntity.dwBase;

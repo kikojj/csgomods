@@ -20,7 +20,7 @@
 class AimBot {
 private:
 	//aim
-	Skeleton bone = NEAREST;
+	Skeleton bone = Skeleton::NEAREST;
 	float fov = 0;
 	float smooth = 0;
 

@@ -84,13 +84,13 @@ int main() {
 		#pragma region Threads
 		thread thMenuData([]() {
 			int lastActiveWeaponIDI = -1;
-			TeamNum lastTeam = NO_TEAM;
+			TeamNum lastTeam = TeamNum::Invalid;
 			while (isWorking) {
 				if (
-					engine.clientState->state() != INGAME ||
+					engine.clientState->state() != ClientStates::INGAME ||
 					engine.clientState->m_nDeltaTick() == -1 ||
 					client.localPlayer->m_iHealth() <= 0 ||
-					client.localPlayer->m_iTeamNum() < TERRORIST
+					client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
 					) {
 					continue;
 				}
@@ -99,7 +99,7 @@ int main() {
 				BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
 				auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
 
-				if (activeWeaponIDI != INVALID_ITEM_DI && activeWeaponIDI != lastActiveWeaponIDI) {
+				if (activeWeaponIDI != (int)ItemDefinitionIndex::Invalid && activeWeaponIDI != lastActiveWeaponIDI) {
 					lastActiveWeaponIDI = activeWeaponIDI;
 					menuServer.getActiveWeapon(activeWeaponIDI);
 				}
@@ -177,8 +177,8 @@ int main() {
 					continue;
 				}
 				auto state = engine.clientState->state();
-				if (state == INGAME && lastClientState != state) {
-					while (client.localPlayer->m_iTeamNum() != TERRORIST && client.localPlayer->m_iTeamNum() != COUNTER_TERRORIST) {
+				if (state == ClientStates::INGAME && lastClientState != (int)state) {
+					while (client.localPlayer->m_iTeamNum() != TeamNum::TERRORIST && client.localPlayer->m_iTeamNum() != TeamNum::COUNTER_TERRORIST) {
 						Sleep(100);
 					}
 
@@ -191,7 +191,7 @@ int main() {
 					//for skinchanger
 					Helpers::updateModelIndexes();
 				}
-				lastClientState = state;
+				lastClientState = (int)state;
 			}
 		});
 

@@ -22,9 +22,9 @@ void MenuServer::getConfigsList(websocketpp::connection_hdl hdl){
 
 void MenuServer::getActiveWeapon(websocketpp::connection_hdl hdl){
   if (
-    engine.clientState->state() != INGAME ||
+    engine.clientState->state() != ClientStates::INGAME ||
     client.localPlayer->m_iHealth() <= 0 ||
-    client.localPlayer->m_iTeamNum() < TERRORIST
+    client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
     ) {
     return;
   }
@@ -32,7 +32,7 @@ void MenuServer::getActiveWeapon(websocketpp::connection_hdl hdl){
   int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
   BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
   auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
-  if (activeWeaponIDI == INVALID_ITEM_DI) {
+  if (activeWeaponIDI == (int)ItemDefinitionIndex::Invalid) {
     return;
   }
 
@@ -47,9 +47,9 @@ void MenuServer::getActiveWeapon(int activeWeapon){
 
 void MenuServer::getTeam(websocketpp::connection_hdl hdl) {
   if (
-    engine.clientState->state() != INGAME ||
+    engine.clientState->state() != ClientStates::INGAME ||
     client.localPlayer->m_iHealth() <= 0 ||
-    client.localPlayer->m_iTeamNum() < TERRORIST
+    client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
     ) {
     return;
   }

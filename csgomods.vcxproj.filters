@@ -183,9 +183,6 @@
     <ClInclude Include="Utils\Helpers\Helpers.hpp">
       <Filter>Utils\Helpers</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\BasePlayer.hpp">
-      <Filter>SDK\Utils</Filter>
-    </ClInclude>
     <ClInclude Include="SDK\Utils\BoneVector.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
@@ -210,7 +207,7 @@
     <ClInclude Include="SDK\Utils\CPlane.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\CSurface.hpp">
+    <ClInclude Include="SDK\Utils\ISurface.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Utils\CUserCmd.hpp">

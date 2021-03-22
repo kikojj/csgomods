@@ -4,7 +4,7 @@ Visuals::Visuals() {}
 
 void Visuals::drawEntity(std::pair<int, IGlowObjectDefinition> glowObject, colorRGBA color, GlowStyle style) {
 	glowObject.second.color(color);
-	glowObject.second.glowStyle = style;
+	glowObject.second.glowStyle = (int)style;
 	glowObject.second.renderWhenOccluded = true;
 	mem.write<IGlowObjectDefinition>(glowObject.first, glowObject.second);
 }
@@ -26,7 +26,7 @@ void Visuals::loop() {
 		return;
 	}
 
-	if (engine.clientState->state() != INGAME || engine.clientState->m_nDeltaTick() == -1) {
+	if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
 		return;
 	}
 
@@ -35,17 +35,17 @@ void Visuals::loop() {
 		auto entityClassID = entity.m_iClassID();
 
 		if (Settings::visuals_glowEsp_enable) {
-			if (entityClassID == CC4) {
+			if (entityClassID == ClassID::CC4) {
 				if (Settings::visuals_glowEsp_show_c4) {
-					drawEntity(glowObject, Settings::visuals_glowEsp_c4_color, GLOW_STYLE_FULL_BODY);
+					drawEntity(glowObject, Settings::visuals_glowEsp_c4_color, GlowStyle::GLOW_STYLE_FULL_BODY);
 				}
 			}
-			else if (entityClassID == CPlantedC4) {
+			else if (entityClassID == ClassID::CPlantedC4) {
 				if (Settings::visuals_glowEsp_show_c4) {
-					drawEntity(glowObject, Settings::visuals_glowEsp_c4_planted_color, GLOW_STYLE_FULL_BODY);
+					drawEntity(glowObject, Settings::visuals_glowEsp_c4_planted_color, GlowStyle::GLOW_STYLE_FULL_BODY);
 				}
 			}
-			else if (entityClassID == CCSPlayer) {
+			else if (entityClassID == ClassID::CCSPlayer) {
 				BasePlayer player(entity);
 
 				if (!player.dwBase || player.m_iHealth() <= 0 || player.m_bDormant()) {
@@ -89,21 +89,21 @@ void Visuals::loop() {
 				}
 			}
 			else if (
-				entityClassID == CDecoyGrenade ||
-				entityClassID == CHEGrenade ||
-				entityClassID == CIncendiaryGrenade ||
-				entityClassID == CMolotovGrenade ||
-				entityClassID == CSmokeGrenade ||
-				entityClassID == CFlashbang
+				entityClassID == ClassID::CDecoyGrenade ||
+				entityClassID == ClassID::CHEGrenade ||
+				entityClassID == ClassID::CIncendiaryGrenade ||
+				entityClassID == ClassID::CMolotovGrenade ||
+				entityClassID == ClassID::CSmokeGrenade ||
+				entityClassID == ClassID::CFlashbang
 				) {
 				if (Settings::visuals_glowEsp_show_grenades) {
-					drawEntity(glowObject, Settings::visuals_glowEsp_grenades_color, GLOW_STYLE_FULL_BODY);
+					drawEntity(glowObject, Settings::visuals_glowEsp_grenades_color, GlowStyle::GLOW_STYLE_FULL_BODY);
 				}
 			}
 		}
 
 		if (Settings::visuals_chams_enable) {
-			if (entityClassID == CCSPlayer) {
+			if (entityClassID == ClassID::CCSPlayer) {
 				BasePlayer player(entity);
 
 				if (!player.dwBase || player.m_iHealth() <= 0 || player.m_bDormant()) {

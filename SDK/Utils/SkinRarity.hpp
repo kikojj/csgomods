@@ -1,6 +1,6 @@
 #pragma once
 
-enum SkinRarity {
+enum struct SkinRarity : int {
   RARITY_COMMON = 1,
   RARITY_UNCOMMON,
   RARITY_RARE,

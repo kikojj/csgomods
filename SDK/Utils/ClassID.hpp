@@ -1,8 +1,7 @@
 #pragma once
 
-enum ClassID
-{
-	INVALID_CLASS_ID = -1,
+enum struct ClassID : int {
+	Invalid = -1,
 	CAI_BaseNPC = 0,
 	CAK47,
 	CBaseAnimating,

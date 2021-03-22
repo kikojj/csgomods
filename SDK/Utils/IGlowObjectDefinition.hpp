@@ -3,7 +3,7 @@
 
 #include "ColorRGBA.hpp"
 
-enum GlowStyle {
+enum struct GlowStyle: int {
 	GLOW_STYLE_FULL_BODY,
 	GLOW_STYLE_INLINE_FLICKER,
 	GLOW_STYLE_INLINE,
@@ -15,8 +15,8 @@ public:
 	uintptr_t		dwBaseEntity;								//0x0000
 	float				glowColor[4];								//0x0004
 private:
-	DWORD				somehandle;									//0x0014 
-	float				somefloat;									//0x0018 
+	DWORD				pad_0x0014;									//0x0014 
+	float				pad_0x0018;									//0x0018 
 public:
 	float				bloomAmount;								//0x001C
 	float				noise;											//0x0020

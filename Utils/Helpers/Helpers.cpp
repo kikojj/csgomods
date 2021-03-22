@@ -7,9 +7,9 @@ void Helpers::shoot() {
 }
 
 void Helpers::jump(){
-	client.dwForceJump(KEY_DOWN);
+	client.dwForceJump(KeyEvent::KEY_DOWN);
 	Sleep(10);
-	client.dwForceJump(KEY_UP);
+	client.dwForceJump(KeyEvent::KEY_UP);
 }
 
 void Helpers::keyboardPressKey(int key){
@@ -58,67 +58,67 @@ int Helpers::getModelIndex(std::string name) {
 int Helpers::getModelIndex(ItemDefinitionIndex itemDI) {
 	switch (itemDI)
 	{
-	case WEAPON_Knife:
+	case ItemDefinitionIndex::WEAPON_Knife:
 		return Helpers::getModelIndex("models/weapons/v_knife_default_ct.mdl");
 		break;
-	case WEAPON_KnifeT:
+	case ItemDefinitionIndex::WEAPON_KnifeT:
 		return Helpers::getModelIndex("models/weapons/v_knife_default_t.mdl");
 		break;
-	case WEAPON_Bayonet:
+	case ItemDefinitionIndex::WEAPON_Bayonet:
 		return Helpers::getModelIndex("models/weapons/v_knife_bayonet.mdl");
 		break;
-	case WEAPON_FlipKnife:
+	case ItemDefinitionIndex::WEAPON_FlipKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_flip.mdl");
 		break;
-	case WEAPON_GutKnife:
+	case ItemDefinitionIndex::WEAPON_GutKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_gut.mdl");
 		break;
-	case WEAPON_Karambit:
+	case ItemDefinitionIndex::WEAPON_Karambit:
 		return Helpers::getModelIndex("models/weapons/v_knife_karam.mdl");
 		break;
-	case WEAPON_M9Bayonet:
+	case ItemDefinitionIndex::WEAPON_M9Bayonet:
 		return Helpers::getModelIndex("models/weapons/v_knife_m9_bay.mdl");
 		break;
-	case WEAPON_HuntsmanKnife:
+	case ItemDefinitionIndex::WEAPON_HuntsmanKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_tactical.mdl");
 		break;
-	case WEAPON_FlachionKnife:
+	case ItemDefinitionIndex::WEAPON_FlachionKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_falchion_advanced.mdl");
 		break;
-	case WEAPON_BowieKnife:
+	case ItemDefinitionIndex::WEAPON_BowieKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_survival_bowie.mdl");
 		break;
-	case WEAPON_ButterflyKnife:
+	case ItemDefinitionIndex::WEAPON_ButterflyKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_butterfly.mdl");
 		break;
-	case WEAPON_ShadowDaggers:
+	case ItemDefinitionIndex::WEAPON_ShadowDaggers:
 		return Helpers::getModelIndex("models/weapons/v_knife_push.mdl");
 		break;
-	case WEAPON_UrsusKnife:
+	case ItemDefinitionIndex::WEAPON_UrsusKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_ursus.mdl");
 		break;
-	case WEAPON_NavajaKnife:
+	case ItemDefinitionIndex::WEAPON_NavajaKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_gypsy_jackknife.mdl");
 		break;
-	case WEAPON_StilettoKnife:
+	case ItemDefinitionIndex::WEAPON_StilettoKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_stiletto.mdl");
 		break;
-	case  WEAPON_TalonKnife:
+	case  ItemDefinitionIndex::WEAPON_TalonKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_widowmaker.mdl");
 		break;
-	case WEAPON_ClassicKnife:
+	case ItemDefinitionIndex::WEAPON_ClassicKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_css.mdl");
 		break;
-	case WEAPON_ParacordKnife:
+	case ItemDefinitionIndex::WEAPON_ParacordKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_cord.mdl");
 		break;
-	case WEAPON_SurvivalKnife:
+	case ItemDefinitionIndex::WEAPON_SurvivalKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_canis.mdl");
 		break;
-	case WEAPON_NomadKnife:
+	case ItemDefinitionIndex::WEAPON_NomadKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_outdoor.mdl");
 		break;
-	case WEAPON_SkeletonKnife:
+	case ItemDefinitionIndex::WEAPON_SkeletonKnife:
 		return Helpers::getModelIndex("models/weapons/v_knife_skeleton.mdl");
 		break;
 	default:
@@ -128,7 +128,7 @@ int Helpers::getModelIndex(ItemDefinitionIndex itemDI) {
 }
 
 void Helpers::updateModelIndexes(){
-	if (engine.clientState->state() != INGAME) {
+	if (engine.clientState->state() != ClientStates::INGAME) {
 		return;
 	}
 

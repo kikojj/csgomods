@@ -155,7 +155,6 @@
     <ClInclude Include="SDK\Client\GlowObjectManager.hpp" />
     <ClInclude Include="SDK\Engine\ClientState.hpp" />
     <ClInclude Include="SDK\Engine\Engine.hpp" />
-    <ClInclude Include="SDK\Utils\BasePlayer.hpp" />
     <ClInclude Include="SDK\Utils\BoneVector.hpp" />
     <ClInclude Include="SDK\Utils\CBaseTrace.hpp" />
     <ClInclude Include="SDK\Utils\CGameTrace.hpp" />
@@ -164,7 +163,7 @@
     <ClInclude Include="SDK\Utils\ClientStates.hpp" />
     <ClInclude Include="SDK\Utils\ColorRGBA.hpp" />
     <ClInclude Include="SDK\Utils\CPlane.hpp" />
-    <ClInclude Include="SDK\Utils\CSurface.hpp" />
+    <ClInclude Include="SDK\Utils\ISurface.hpp" />
     <ClInclude Include="SDK\Utils\CUserCmd.hpp" />
     <ClInclude Include="SDK\Utils\Defines.hpp" />
     <ClInclude Include="SDK\Utils\EntityQuality.hpp" />

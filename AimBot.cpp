@@ -3,7 +3,7 @@
 AimBot::AimBot() {}
 
 Vector3 AimBot::getBonePos(BasePlayer& player, Skeleton bone) {
-	return Vector3(mem.read<BoneVector>(player.m_dwBoneMatrix() + 0x30 * bone + 0x0C));
+	return Vector3(mem.read<BoneVector>(player.m_dwBoneMatrix() + 0x30 * (int)bone + 0x0C));
 }
 
 Vector3 AimBot::calcAngle(Vector3 src, Vector3 dst) {
@@ -167,10 +167,10 @@ void AimBot::loop() {
 	}
 
 	if (
-		engine.clientState->state() != INGAME ||
+		engine.clientState->state() != ClientStates::INGAME ||
 		engine.clientState->m_nDeltaTick() == -1 ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TERRORIST ||
+		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST ||
 		client.localPlayer->m_bDormant() ||
 		!Helpers::isMouseActive()
 		) {
@@ -198,14 +198,14 @@ void AimBot::loop() {
 
 	BasePlayer closestEnemy;
 	float closestAngle = 360.0f;
-	Skeleton closestBone = HEAD;
+	Skeleton closestBone = Skeleton::HEAD;
 
 	for (auto entity : client.entityList->array()) {
 		if (!entity.dwBase || entity.dwBase == client.localPlayer->get()) {
 			continue;
 		}
 
-		if (entity.m_iClassID() != CCSPlayer) {
+		if (entity.m_iClassID() != ClassID::CCSPlayer) {
 			continue;
 		}
 
@@ -224,7 +224,7 @@ void AimBot::loop() {
 		}
 
 		std::vector<Skeleton> aimBones;
-		if (this->bone == NEAREST) {
+		if (this->bone == Skeleton::NEAREST) {
 			aimBones = ALL_BONES;
 		}
 		else {
@@ -234,7 +234,7 @@ void AimBot::loop() {
 		for (auto bone : aimBones) {
 			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
 			auto bonePos = getBonePos(player, bone);
-			if (!client.localPlayer->canSeePlayer(player, bone)) {
+			if (!client.localPlayer->canSeePlayer(player, (int)bone)) {
 				continue;
 			}
 			auto enemyAngle = calcAngle(localPlayerPos, bonePos);
@@ -265,11 +265,11 @@ void AimBot::loop() {
 			setAngle(enemyAngle.toVector2());
 
 			//If nearest go to the main bone after closest bone
-			if (bone == NEAREST && getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 && std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()) {
+			if (bone == Skeleton::NEAREST && getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 && std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()) {
 				closestAngle = 360.f;
 				for (auto bone : MAIN_BONES) {
 					auto bonePos = getBonePos(closestEnemy, bone);
-					if (!client.localPlayer->canSeePlayer(closestEnemy, bone)) {
+					if (!client.localPlayer->canSeePlayer(closestEnemy, (int)bone)) {
 						continue;
 					}
 					auto _enemyAngle = calcAngle(localPlayerPos, bonePos);

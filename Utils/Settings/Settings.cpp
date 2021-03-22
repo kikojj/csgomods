@@ -132,7 +132,7 @@ jsonxx::Value Settings::weaponSkinsToJsonXX(std::map<ItemDefinitionIndex, ISkinc
 	jsonxx::Object v;
 
 	for (auto d: data) {
-		v << std::to_string(d.first) << weaponSkinToJsonXX(d.second);
+		v << std::to_string((int)d.first) << weaponSkinToJsonXX(d.second);
 	}
 
 	return v;
@@ -152,7 +152,7 @@ jsonxx::Value Settings::knivesSkinsToJsonXX(std::map<TeamNum, ISkinchangerWeapon
 	jsonxx::Object v;
 
 	for (auto d : data) {
-		v << std::to_string(d.first) << weaponSkinToJsonXX(d.second);
+		v << std::to_string((int)d.first) << weaponSkinToJsonXX(d.second);
 	}
 
 	return v;
@@ -172,7 +172,7 @@ jsonxx::Value Settings::aimbotWeaponsSettingsToJsonXX(std::map<ItemDefinitionInd
 	jsonxx::Object v;
 
 	for (auto d : data) {
-		v << std::to_string(d.first) << aimbotSettingsToJsonXX(d.second);
+		v << std::to_string((int)d.first) << aimbotSettingsToJsonXX(d.second);
 	}
 
 	return v;
@@ -444,7 +444,7 @@ IAimbotSettings Settings::aimbot_global = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -454,7 +454,7 @@ IAimbotSettings Settings::aimbot_pistols = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -464,7 +464,7 @@ IAimbotSettings Settings::aimbot_heavies = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -474,7 +474,7 @@ IAimbotSettings Settings::aimbot_shoutguns = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -484,7 +484,7 @@ IAimbotSettings Settings::aimbot_smgs = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -494,7 +494,7 @@ IAimbotSettings Settings::aimbot_rifles = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -504,7 +504,7 @@ IAimbotSettings Settings::aimbot_snipers = {
 	false,
 	false,
 	0,
-	NEAREST,
+	Skeleton::NEAREST,
 	0,
 	false,
 	0.0f,
@@ -532,7 +532,7 @@ bool Settings::triggerbot_snipers_enable = false;
 bool Settings::visuals_glowEsp_enable = false;
 bool Settings::visuals_glowEsp_show_enemies = false;
 EVisualsGlowEspMode Settings::visuals_glowEsp_mode = VISUALS_GLOWESP_MODE_COLOR;
-GlowStyle Settings::visuals_glowEsp_style = GLOW_STYLE_FULL_BODY;
+GlowStyle Settings::visuals_glowEsp_style = GlowStyle::GLOW_STYLE_FULL_BODY;
 colorRGBA Settings::visuals_glowEsp_enemy_visible_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 colorRGBA Settings::visuals_glowEsp_enemy_invisible_color = { 0.0f, 0.0f, 0.0f, 0.0f };
 bool Settings::visuals_glowEsp_show_friends = false;

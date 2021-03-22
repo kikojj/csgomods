@@ -14,12 +14,12 @@ TeamNum BasePlayer::m_iTeamNum() {
 	if (team == 1 || team == 2 || team == 3) {
 		return TeamNum(team);
 	};
-	return NO_TEAM;
+	return TeamNum::Invalid;
 }
 VAR_R_DEF(int, m_iHealth, BasePlayer, get(), netvars)
 VAR_R_DEF(int, m_dwBoneMatrix, BasePlayer, get(), netvars)
 Vector3 BasePlayer::getBonePos(Skeleton bone) {
-	auto bonePos = Vector3(mem.read<BoneVector>(m_dwBoneMatrix() + 0x30 * bone + 0x0C));
+	auto bonePos = Vector3(mem.read<BoneVector>(m_dwBoneMatrix() + 0x30 * (int)bone + 0x0C));
 	return bonePos;
 }
 VAR_R_DEF(Vector3, m_vecOrigin, BasePlayer, get(), netvars)
@@ -53,7 +53,7 @@ LifeState BasePlayer::m_lifeState() {
 	if (lifeState >= 0 && lifeState <= 2) {
 		return LifeState(lifeState);
 	}
-	return INVALID_LIFESTATE;
+	return LifeState::Invalid;
 }
 VAR_R_DEF(float, m_flFlashDuration, BasePlayer, get(), netvars)
 VAR_R_DEF(float, m_flFlashAlpha, BasePlayer, get(), netvars)

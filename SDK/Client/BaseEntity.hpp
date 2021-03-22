@@ -20,6 +20,7 @@ public:
 
 	VAR_R_DEC(ClassID, m_iClassID)
 	VAR_R_DEC(int, m_iGlowIndex)
+	VAR_R_DEC(float, m_flC4Blow)
 
 	void operator=(BaseEntity);
 	virtual int get();

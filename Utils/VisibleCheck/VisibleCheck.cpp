@@ -10,7 +10,7 @@ bool WINAPI hkCreateMove(float flInputSampleTime, CUserCmd* pCmd) {
 	bool deltaTick = *(int*)(Vars->dwClientState + Vars->m_nDeltaTick);
 	UTIL_TraceLine_t TraceLine = (UTIL_TraceLine_t)Vars->dwTraceLine;
 
-	if (!pCmd->command_number || !isInGame || !localPlayer || deltaTick == -1) {
+	if (!pCmd->commandNumber || !isInGame || !localPlayer || deltaTick == -1) {
 		return false;
 	}
 
@@ -59,7 +59,7 @@ bool WINAPI hkCreateMove(float flInputSampleTime, CUserCmd* pCmd) {
 			// Visible check
 			TraceLine(Vars->localEyePosition, Vars->enemyBonePosition, MASK_SHOT | CONTENTS_GRATE, localPlayer, 0, Vars->traceOutput);
 
-			if (Vars->traceOutput->fraction > Vars->min_fraction || Vars->traceOutput->hit_entity == pEntity) {
+			if (Vars->traceOutput->fraction > Vars->min_fraction || Vars->traceOutput->hitEntity == pEntity) {
 				isVisible = true;
 				Vars->visibleStruct->playerBones[i][bone] = true;
 			}

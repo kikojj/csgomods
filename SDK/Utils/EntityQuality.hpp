@@ -1,7 +1,7 @@
 #pragma once
 
-enum EntityQuality {
-  INVALID_QUALITY = -1,
+enum struct EntityQuality : int {
+  Invalid = -1,
   QUALITY_NORMAL,
   QUALITY_GENUINE,
   QUALITY_VINTAGE,
