@@ -9,7 +9,7 @@ import { useStyles } from "./styles";
 export const ConfigsContent: React.FC = () => {
   const classes = useStyles();
 
-  const { connected } = React.useContext(SocketContext);
+  const { connected, send } = React.useContext(SocketContext);
   const { configsList, getConfigsList, saveConfig, loadConfig, deleteConfig } = React.useContext(ConfigContext);
 
   const [selectedConfig, setSelectedConfig] = React.useState<string>("");

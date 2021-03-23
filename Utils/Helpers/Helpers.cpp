@@ -35,6 +35,7 @@ bool Helpers::isFlashed(float flash){
 }
 
 void Helpers::exit(){
+	mem.free();
 	mem.exit();
 	std::exit(0);
 }

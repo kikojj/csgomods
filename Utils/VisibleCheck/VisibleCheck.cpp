@@ -7,7 +7,7 @@ bool WINAPI hkCreateMove(float flInputSampleTime, CUserCmd* pCmd) {
 	CVisibleCheck::ICreateMoveVars* Vars = (CVisibleCheck::ICreateMoveVars*)dwCreateMoveVars; // Initialize in InitCreateMoveHook()
 	DWORD localPlayer = *(DWORD*)(Vars->dwLocalPlayer);
 	bool isInGame = *(int*)(Vars->dwClientState + 0x108) == 6;
-	bool deltaTick = *(int*)(Vars->dwClientState + Vars->m_nDeltaTick);
+	int deltaTick = *(int*)(Vars->dwClientState + Vars->m_nDeltaTick);
 	UTIL_TraceLine_t TraceLine = (UTIL_TraceLine_t)Vars->dwTraceLine;
 
 	if (!pCmd->commandNumber || !isInGame || !localPlayer || deltaTick == -1) {

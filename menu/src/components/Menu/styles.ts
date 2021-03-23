@@ -64,4 +64,7 @@ export const useStyles = makeStyles({
     color: "rgba(255,255,255,0.6)",
   },
   tab_content_icon: {},
+  exit: {
+    margin: "0 30px",
+  },
 });

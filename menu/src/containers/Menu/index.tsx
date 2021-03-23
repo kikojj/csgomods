@@ -1,6 +1,10 @@
 import React from "react";
+
+import { SocketContext } from "@contexts";
 import { Menu as CMenu } from "@components";
+
 import { ActiveTab } from "@utils";
+import { SERVER_PORT } from "@utils/constants";
 import { AimbotIcon, ConfigsIcon, MiscellaneousIcon, SkinchangerIcon, VisualsIcon } from "./images";
 
 export type MenuProps = {
@@ -8,6 +12,8 @@ export type MenuProps = {
   setActiveTab: React.Dispatch<React.SetStateAction<ActiveTab>>;
 };
 export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
+  const { send } = React.useContext(SocketContext);
+
   return (
     <CMenu
       tabs={[
@@ -47,6 +53,10 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
           onClick: () => setActiveTab(ActiveTab.TAB_CONFIG),
         },
       ]}
+      onExit={() => {
+        send("stop_listening");
+        fetch(`http://localhost:${SERVER_PORT}/exit`, { method: "GET" });
+      }}
     />
   );
 };

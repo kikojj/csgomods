@@ -80,6 +80,9 @@ int main() {
 		clientCmdUD.execute("clear");
 		clientCmdUD.execute("echo [CSGOMODS]: Started.");
 		clientCmdUD.execute(string(string("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:") + to_string(HTTP_SERVER_PORT) + string(")")).c_str());
+		clientCmdUD.execute("unbind mouse1");
+		clientCmdUD.execute("echo [CSGOMODS]: Sorry, I have unbinded your mouse1 button. I need it to do my aimbot works better.");
+		clientCmdUD.execute("echo [CSGOMODS]: You still can fire, whenever you want, but you should do safe exit from cheat(press exit in menu) to restore your bind automatically or exit as you want and restore bind yourself! Thanks:)");
 
 		#pragma region Threads
 		thread thMenuData([]() {
@@ -90,13 +93,13 @@ int main() {
 					engine.clientState->state() != ClientStates::INGAME ||
 					engine.clientState->m_nDeltaTick() == -1 ||
 					client.localPlayer->m_iHealth() <= 0 ||
-					client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
+					client.localPlayer->teamNum() < TeamNum::TERRORIST
 					) {
 					continue;
 				}
 
 				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-				BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
+				BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 				auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
 
 				if (activeWeaponIDI != (int)ItemDefinitionIndex::Invalid && activeWeaponIDI != lastActiveWeaponIDI) {
@@ -104,7 +107,7 @@ int main() {
 					menuServer.getActiveWeapon(activeWeaponIDI);
 				}
 
-				auto team = client.localPlayer->m_iTeamNum();
+				auto team = client.localPlayer->teamNum();
 				if (lastTeam != team) {
 					lastTeam = team;
 					menuServer.getTeam(team);
@@ -131,13 +134,13 @@ int main() {
 		}});
 
 		thread thAimBot([]() { while (isWorking) {
-			aimBot.loop();
-			Sleep(1);
+			//aimBot.loop();
+			//Sleep(1);
 		}});
 
 		thread thTriggerBot([]() { while (isWorking) {
-			triggetBot.loop();
-			Sleep(1);
+			//triggetBot.loop();
+			//Sleep(1);
 		}});
 
 		thread thSkinchanger([]() { while (isWorking) {
@@ -156,8 +159,8 @@ int main() {
 		}});
 
 		thread thMiscAutoPistols([]() { while (isWorking) {
-			misc.autoPistols();
-			Sleep(1);
+			//misc.autoPistols();
+			//Sleep(1);
 		}});
 
 		thread thMiscAutoAccept([]() { while (isWorking) {
@@ -178,7 +181,7 @@ int main() {
 				}
 				auto state = engine.clientState->state();
 				if (state == ClientStates::INGAME && lastClientState != (int)state) {
-					while (client.localPlayer->m_iTeamNum() != TeamNum::TERRORIST && client.localPlayer->m_iTeamNum() != TeamNum::COUNTER_TERRORIST) {
+					while (client.localPlayer->teamNum() != TeamNum::TERRORIST && client.localPlayer->teamNum() != TeamNum::COUNTER_TERRORIST) {
 						Sleep(100);
 					}
 
@@ -196,8 +199,8 @@ int main() {
 		});
 
 		thread thVisibleCheck([]() {
-			while (!visibleCheck.init()) {}
-			while (true) {
+			while (isWorking) {
+				while (!visibleCheck.init()) {}
 				if (engine.clientState->m_nDeltaTick() == -1) {
 					continue;
 				}
@@ -205,7 +208,40 @@ int main() {
 			}
 		});
 
-		thMenuServer.detach();
+		thread thShoot([]() {
+			while (isWorking) {
+				bool shouldShoot = GetAsyncKeyState(VK_LBUTTON) && Helpers::isMouseActive();
+
+				aimBot.loop();
+				triggetBot.loop();
+				misc.autoPistols();
+
+				if (shouldShoot) {
+					if (aimBot.shouldWait && aimBot.shouldShoot || aimBot.shouldWait && !aimBot.shouldShoot) {
+						client.dwForceAttack(KeyEvent::KEY_UP);
+					}
+					else if (
+						!aimBot.shouldWait && aimBot.shouldShoot ||
+						!aimBot.shouldWait && !aimBot.shouldShoot ||
+						!misc.shouldWait && misc.shouldShoot
+						) {
+						client.dwForceAttack(KeyEvent::KEY_DOWN);
+					}
+				}
+				else {
+					if (!triggetBot.shouldWait && triggetBot.shouldShoot) {
+						client.dwForceAttack(KeyEvent::KEY_DOWN);
+					}
+					else {
+						client.dwForceAttack(KeyEvent::KEY_UP);
+					}
+				}
+
+				Sleep(1);
+			}
+		});
+
+		thMenuServer.join();
 		thMenuData.join();
 		thMenuOpen.join();
 		thVisuals.join();
@@ -219,6 +255,10 @@ int main() {
 		thMap.join();
 		thVisibleCheck.join();
 		#pragma endregion
+
+		clientCmdUD.execute("bind mouse1 +attack");
+		clientCmdUD.execute("echo [CSGOMODS]: Mouse1 bind was restored.");
+		Helpers::exit();
 	}
 	catch (const exception& err){
 		cout << "[Main]: Catch. Error: '" << err.what() << endl;

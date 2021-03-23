@@ -38,9 +38,8 @@ float AimBot::getFov(Vector3 currentAngle, Vector2 dstAngle) {
 }
 
 void AimBot::setAngle(Vector2 dstAngle) {
-	if (this->smooth > 0)
-	{
-		auto viewAngle = engine.clientState->dwViewAngles();
+	if (this->smooth > 0)	{
+		Vector2 viewAngle = Vector2(engine.clientState->dwViewAngles());
 
 		auto delta = viewAngle - dstAngle;
 		delta.clamp();
@@ -52,7 +51,7 @@ void AimBot::setAngle(Vector2 dstAngle) {
 		}
 	}
 
-	engine.clientState->dwViewAngles(dstAngle);
+	engine.clientState->dwViewAngles(dstAngle.toVec2());
 }
 
 void AimBot::applyWeaponSettings(IAimbotSettings settings){
@@ -65,7 +64,7 @@ void AimBot::applyWeaponSettings(IAimbotSettings settings){
 }
 
 bool AimBot::applyWeaponsSettings(BaseCombatWeapon weapon){
-	auto itemDI = weapon.m_iItemDefinitionIndex();
+	auto itemDI = weapon.itemDI();
 
 	//weapon settings
 	if (Settings::aimbot_weapons[itemDI].use) {
@@ -163,6 +162,8 @@ bool AimBot::applyWeaponsSettings(BaseCombatWeapon weapon){
 
 void AimBot::loop() {
 	if (!Settings::aimbot_enable) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
@@ -170,29 +171,39 @@ void AimBot::loop() {
 		engine.clientState->state() != ClientStates::INGAME ||
 		engine.clientState->m_nDeltaTick() == -1 ||
 		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST ||
+		client.localPlayer->teamNum() < TeamNum::TERRORIST ||
 		client.localPlayer->m_bDormant() ||
 		!Helpers::isMouseActive()
 		) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
 	if (Settings::aimbot_flash_check && Helpers::isFlashed(client.localPlayer->m_flFlashAlpha())) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
 	if (Settings::aimbot_jump_check && !FlagsState::isOnGround(client.localPlayer->m_fFlags())) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
 	if (Settings::aimbot_use_key && !GetAsyncKeyState(Settings::aimbot_key)) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
 	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
+	BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 
-	if (!activeWeapon.dwBase || !applyWeaponsSettings(activeWeapon)) {
+	if (!activeWeapon.get() || !applyWeaponsSettings(activeWeapon)) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
@@ -201,25 +212,35 @@ void AimBot::loop() {
 	Skeleton closestBone = Skeleton::HEAD;
 
 	for (auto entity : client.entityList->array()) {
-		if (!entity.dwBase || entity.dwBase == client.localPlayer->get()) {
+		if (!entity.get() || entity.get() == client.localPlayer->get()) {
+			shouldShoot = false;
+			shouldWait = false;
 			continue;
 		}
 
-		if (entity.m_iClassID() != ClassID::CCSPlayer) {
+		if (entity.classID() != ClassID::CCSPlayer) {
+			shouldShoot = false;
+			shouldWait = false;
 			continue;
 		}
 
 		BasePlayer player(entity);
 
 		if (player.m_iHealth() <= 0) {
+			shouldShoot = false;
+			shouldWait = false;
 			continue;
 		}
 
 		if (!Settings::aimbot_friendly_fire && player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
+			shouldShoot = false;
+			shouldWait = false;
 			continue;
 		}
 
 		if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(player)) {
+			shouldShoot = false;
+			shouldWait = false;
 			continue;
 		}
 
@@ -232,9 +253,11 @@ void AimBot::loop() {
 		}
 
 		for (auto bone : aimBones) {
-			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
+			Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
 			auto bonePos = getBonePos(player, bone);
 			if (!client.localPlayer->canSeePlayer(player, (int)bone)) {
+				shouldShoot = false;
+				shouldWait = false;
 				continue;
 			}
 			auto enemyAngle = calcAngle(localPlayerPos, bonePos);
@@ -249,7 +272,9 @@ void AimBot::loop() {
 
 	}
 
-	if (closestEnemy.dwBase <= 0) {
+	if (closestEnemy.get() <= 0) {
+		shouldShoot = false;
+		shouldWait = false;
 		return;
 	}
 
@@ -259,10 +284,20 @@ void AimBot::loop() {
 			closestEnemy.m_iHealth() > 0 &&
 			(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy))
 			) {
-			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
+			Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
 			auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
 
 			setAngle(enemyAngle.toVector2());
+
+			//TRY TO DO GOOD SMOOTH(NEED UNBIND MOUSE1 IN GAME)
+			if (getFov(enemyAngle, Vector2(engine.clientState->dwViewAngles())) != 0 && client.localPlayer->m_iShotsFired() == 0) {
+				shouldWait = true;
+				shouldShoot = false;
+			}
+			else {
+				shouldShoot = true;
+				shouldWait = false;
+			}
 
 			//If nearest go to the main bone after closest bone
 			if (bone == Skeleton::NEAREST && getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 && std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()) {
@@ -270,6 +305,8 @@ void AimBot::loop() {
 				for (auto bone : MAIN_BONES) {
 					auto bonePos = getBonePos(closestEnemy, bone);
 					if (!client.localPlayer->canSeePlayer(closestEnemy, (int)bone)) {
+						shouldShoot = false;
+						shouldWait = false;
 						continue;
 					}
 					auto _enemyAngle = calcAngle(localPlayerPos, bonePos);
@@ -281,42 +318,32 @@ void AimBot::loop() {
 					}
 				}
 			}
-			/*
-			// CHANGE BONE TO MAIN BONE AFTER GETTING CURRENT BONE IF BONE IS NOT MAIN
-
-			if (std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end() && getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0) {
-				closestAngle = 360.0f;
-				for (auto bone : MAIN_BONES) {
-					auto enemyAngle = calcAngle(client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset(), getBonePos(closestEnemy, bone));
-					float fov = getFov(enemyAngle, engine.clientState->dwViewAngles());
-
-					if (fov < this->_fov && fov < closestAngle) {
-						closestAngle = fov;
-						closestBone = bone;
-					}
-				}
-			}
-			*/
-
-			//TRY TO DO GOOD SMOOTH(NEED UNBIND MOUSE1 IN GAME)
-			//if (getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 && client.localPlayer->m_iShotsFired() == 0){
-			//	client.dwForceAttack(KEY_PRESS);
-			//}
 		}
+		shouldShoot = false;
+		shouldWait = false;
 	}
 	else {
 		if (
 			closestEnemy.m_iHealth() > 0 &&
 			(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy))
 			) {
-			auto localPlayerPos = client.localPlayer->m_vecOrigin() + client.localPlayer->m_vecViewOffset();
+			Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
 			auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
 
 			setAngle(enemyAngle.toVector2());
 		}
 	}
 
-	if (closestEnemy.m_iHealth() <= 0) {
-		Sleep(Settings::aimbot_delay_enemy);
+	if (closestEnemy.m_iHealth() <= 0 && GetAsyncKeyState(VK_LBUTTON)) {
+		using namespace std::chrono;
+
+		high_resolution_clock::time_point killTime = high_resolution_clock::now();
+
+		shouldWait = true;
+		while (
+			GetAsyncKeyState(VK_LBUTTON) &&
+			duration_cast<std::chrono::duration<double>>(high_resolution_clock::now() - killTime).count() <= (double)((double)Settings::aimbot_delay_enemy / (double)1000)
+			) { }
+		shouldWait = false;
 	}
 }

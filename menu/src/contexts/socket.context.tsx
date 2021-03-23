@@ -17,8 +17,9 @@ import {
   TGetTeamInput,
   TGetTeamResponse,
 } from "@ts/requests/";
+import { WEBSOCKET_PORT } from "@utils/constants";
 
-const SOCKET_URL = "ws://localhost:2222";
+const SOCKET_URL = `ws://localhost:${WEBSOCKET_PORT}`;
 
 const socket = new WebSocket(SOCKET_URL);
 

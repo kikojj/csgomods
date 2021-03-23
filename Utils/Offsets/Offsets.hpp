@@ -73,6 +73,8 @@ namespace Offsets {
     static int m_flTimerLength;
     static int m_flDefuseLength;
     static int m_flDefuseCountDown;
+    static int m_hBombDefuser;
+    static int m_nBombSite;
     static int cs_gamerules_data;
     static int m_SurvivalRules;
     static int m_SurvivalGameRuleDecisionTypes;
@@ -125,7 +127,6 @@ namespace Offsets {
     static int dwGameDir;
     static int dwGameRulesProxy;
     static int dwGetAllClasses;
-    static int dwGlobalVars;
     static int dwGlowObjectManager;
     static int dwInput;
     static int dwInterfaceLinkList;
@@ -176,6 +177,9 @@ namespace Offsets {
 
     //for ClientCmd_Unrestricted
     static int dwClientCmdUD;
+
+    //global vars
+    static int dwGlobalVars;
 
   } signatures;
   void initSignatures();

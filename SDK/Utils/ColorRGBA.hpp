@@ -9,3 +9,9 @@ struct colorRGBA {
 	float b = 0;
 	float a = 0;
 };
+struct RenderColor {
+	BYTE r;
+	BYTE g;
+	BYTE b;
+	BYTE a;
+};

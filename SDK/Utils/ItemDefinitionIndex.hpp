@@ -94,7 +94,8 @@ enum struct ItemDefinitionIndex : int {
   WEAPON_NomadKnife = 521,
   WEAPON_StilettoKnife = 522,
   WEAPON_TalonKnife = 523,
-  WEAPON_SkeletonKnife = 525
+  WEAPON_SkeletonKnife = 525,
+  InvalidLast
 };
 
 class ItemDefinition {
@@ -111,4 +112,5 @@ public:
   static bool isKnife(ItemDefinitionIndex);
   static bool isBomb(ItemDefinitionIndex);
   static bool isGrenade(ItemDefinitionIndex);
+  static bool isZeusX27(ItemDefinitionIndex);
 };

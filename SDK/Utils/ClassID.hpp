@@ -284,5 +284,6 @@ enum struct ClassID : int {
 	RocketTrail,
 	SmokeTrail,
 	SporeExplosion,
-	SporeTrail
+	SporeTrail,
+	InvalidLast
 };

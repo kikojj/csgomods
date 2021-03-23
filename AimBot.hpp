@@ -3,6 +3,7 @@
 #include <Windows.h>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 #include "SDK/Client/Client.hpp"
 #include "SDK/Client/BasePlayer.hpp"
@@ -37,6 +38,8 @@ private:
 	bool applyWeaponsSettings(BaseCombatWeapon);
 
 public:
+	bool shouldShoot = false;
+	bool shouldWait = false;
 	AimBot();
 	void loop();
 };

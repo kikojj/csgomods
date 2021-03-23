@@ -2,28 +2,48 @@
 
 #include <iostream>
 
-#include "BasePlayer.hpp"
-
-#include "../Vars.hpp"
-
-#include "../Utils/Vector.hpp"
-#include "../Utils/Skeleton.hpp"
-
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
 #include "../../Utils/VisibleCheck/VisibleCheck.h"
 
+#include "../Utils/Vector.hpp"
+#include "../Utils/Skeleton.hpp"
+
+#include "../Vars.hpp"
+
+#include "BasePlayer.hpp"
+#include "EntityList.hpp"
+
 class BaseLocalPlayer : public BasePlayer {
-private:
+//main methods
 public:
-	BaseLocalPlayer();
+	BaseLocalPlayer() {}
 
-	/// <summary>get direction of movement of the player</summary>
-	VAR_R_DEC(Vector3, m_vecVelocity)
-	/// <summary>check if entity in crosshair</summary>
-	VAR_R_DEC(int, m_iCrosshairId)
+	virtual int get(){
+		return mem.read<int>(clientDll.dwBase + Offsets::signatures::dwLocalPlayer);
+	}
 
-	int get();
-	bool canSeePlayer(BasePlayer, int = -1);
+//props
+public:
+	PROP(int,		m_iCrosshairId, get())	//entity in crosshair
+
+	PROP(Vec3,	m_vecVelocity,	get())	//direction of movement of the player
+
+//methods
+public:
+	bool canSeePlayer(BasePlayer player, int bone = -1) {
+		EntityList entityList;
+
+		auto playerID = entityList.getEntityID(player);
+		if (playerID == -1) {
+			return false;
+		}
+		if (bone == -1) {
+			return visibleCheck.isVisible(playerID);
+		}
+		else {
+			return visibleCheck.isVisible(playerID, bone);
+		}
+	}
 };

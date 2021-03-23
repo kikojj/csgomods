@@ -4,61 +4,102 @@
 #include <array>
 #include <string>
 
-#include "BaseEntity.hpp"
-
-#include "../Vars.hpp"
-
-#include "../Utils/ItemDefinitionIndex.hpp"
-#include "../Utils/EntityQuality.hpp"
-
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
 
+#include "../Utils/ItemDefinitionIndex.hpp"
+#include "../Utils/EntityQuality.hpp"
+
+#include "../Vars.hpp"
+
+#include "BaseEntity.hpp"
+
 class BaseCombatWeapon : public BaseEntity {
+//main methods
 public:
-	BaseCombatWeapon(int);
-	BaseCombatWeapon(BaseEntity);
+	BaseCombatWeapon(int _base) {
+		this->base = _base;
+	}
+	BaseCombatWeapon(BaseEntity entity) {
+		this->base = entity.get();
+	}
 
-	/// <summary>get current count of bullets in weapon</summary>
-	VAR_R_DEC(int, m_iClip1)
-	/// <summary>get next weapon attack in ticks</summary>
-	VAR_R_DEC(float, m_flNextPrimaryAttack)
-	/// <summary>check if weapon in reload</summary>
-	VAR_R_DEC(bool, m_bInReload)
-	VAR_R_DEC(int, m_OriginalOwnerXuidLow)
-	VAR_W_DEC(std::string, m_szCustomName)
-	VAR_W_DEC(int, m_nFallbackSeed)
-	VAR_W_DEC(int, m_nFallbackStatTrak)
-	VAR_W_DEC(int, m_iAccountID)
-	VAR_RW_DEC(int, m_iItemIDHigh)
-	VAR_RW_DEC(unsigned long, m_iViewModelIndex)
-	VAR_RW_DEC(unsigned long, m_nModelIndex)
-	VAR_RW_DEC(EntityQuality, m_iEntityQuality)
-	VAR_RW_DEC(float, m_flFallbackWear)
-	VAR_RW_DEC(int, m_hWeaponWorldModel)
-	VAR_RW_DEC(ItemDefinitionIndex, m_iItemDefinitionIndex)
-	VAR_RW_DEC(unsigned long, m_nFallbackPaintKit)
+//props
+public:
+	PROP(bool,					m_bInReload,						get())
 
-	int get();
-	/// <summary>check if weapon is pistol</summary>
-	bool isPistol();
-	/// <summary>check if weapon is SMG</summary>
-	bool isSMG();
-	/// <summary>check if weapon is heavy machine gun</summary>
-	bool isHeavy();
-	/// <summary>check if weapon is heavy shotgun</summary>
-	bool isShotgun();
-	/// <summary>check if weapon is rifle machine gun</summary>
-	bool isRifle();
-	/// <summary>check if weapon is rifle sniper</summary>
-	bool isSnipers();
-	/// <summary>check if weapon is knife</summary>
-	bool isKnife();
-	/// <summary>check if weapon is bomb</summary>
-	bool isBomb();
-	/// <summary>check if weapon is grenade</summary>
-	bool isGrenade();
-	/// <summary>check if weapon is zeusX27</summary>
-	bool isZeusX27();
+	PROP(short,					m_iItemDefinitionIndex, get())
+	PROP(int,						m_iClip1,								get())										//the number of remaining bullets in the clip
+	PROP(int,						m_OriginalOwnerXuidLow, get())
+	PROP(int,						m_nFallbackSeed,				get())
+	PROP(int,						m_nFallbackStatTrak,		get())
+	PROP(int,						m_iAccountID,						get())
+	PROP(int,						m_iItemIDHigh,					get())
+	PROP(int,						m_hWeaponWorldModel,		get())
+	PROP(int,						m_iEntityQuality,				get())
+	PROP(unsigned long, m_iViewModelIndex,			get())
+	PROP(unsigned long, m_nModelIndex,					get())
+	PROP(unsigned long, m_nFallbackPaintKit,		get())
+
+	PROP(float,					m_flFallbackWear,				get())
+	PROP(float,					m_flNextPrimaryAttack,	get())			//next weapon attack in ticks
+
+	PROP(std::string,		m_szCustomName,					get())
+
+//methods
+public:
+	EntityQuality entityQuality() {
+		auto entityQuality = m_iEntityQuality();
+		if (entityQuality <= int(EntityQuality::Invalid) || entityQuality >= int(EntityQuality::InvalidLast)) {
+			return EntityQuality::Invalid;
+		}
+
+		return (EntityQuality)entityQuality;
+	}
+	void entityQuality(EntityQuality value) {
+		m_iEntityQuality((int)value);
+	}
+	ItemDefinitionIndex itemDI() {
+		auto itemDI = m_iItemDefinitionIndex();
+		if (itemDI <= (int)ItemDefinitionIndex::Invalid || itemDI >= (int)ItemDefinitionIndex::InvalidLast) {
+			return ItemDefinitionIndex::Invalid;
+		}
+
+		return (ItemDefinitionIndex)itemDI;
+	}
+	void itemDI(ItemDefinitionIndex value) {
+		m_iItemDefinitionIndex((int)value);
+	}
+
+	bool isPistol() {
+		return ItemDefinition::isPistol(itemDI());
+	}
+	bool isSMG() {
+		return ItemDefinition::isSMG(itemDI());
+	}
+	bool isHeavy() {
+		return ItemDefinition::isHeavy(itemDI());
+	}
+	bool isShotgun() {
+		return ItemDefinition::isShotgun(itemDI());
+	}
+	bool isRifle() {
+		return ItemDefinition::isRifle(itemDI());
+	}
+	bool isSnipers() {
+		return ItemDefinition::isSnipers(itemDI());
+	}
+	bool isKnife() {
+		return ItemDefinition::isKnife(itemDI());
+	}
+	bool isBomb() {
+		return ItemDefinition::isBomb(itemDI());
+	}
+	bool isGrenade() {
+		return ItemDefinition::isGrenade(itemDI());
+	}
+	bool isZeusX27() {
+		return ItemDefinition::isZeusX27(itemDI());
+	}
 };

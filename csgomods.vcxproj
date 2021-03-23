@@ -149,9 +149,11 @@
     <ClInclude Include="SDK\Client\BaseCombatWeapon.hpp" />
     <ClInclude Include="SDK\Client\BaseEntity.hpp" />
     <ClInclude Include="SDK\Client\BaseLocalPlayer.hpp" />
+    <ClInclude Include="SDK\Client\BasePlantedC4.hpp" />
     <ClInclude Include="SDK\Client\BasePlayer.hpp" />
     <ClInclude Include="SDK\Client\Client.hpp" />
     <ClInclude Include="SDK\Client\EntityList.hpp" />
+    <ClInclude Include="SDK\Client\GlobalVars.hpp" />
     <ClInclude Include="SDK\Client\GlowObjectManager.hpp" />
     <ClInclude Include="SDK\Engine\ClientState.hpp" />
     <ClInclude Include="SDK\Engine\Engine.hpp" />
@@ -218,15 +220,6 @@
   <ItemGroup>
     <ClCompile Include="AimBot.cpp" />
     <ClCompile Include="MenuServer.cpp" />
-    <ClCompile Include="SDK\Client\BaseCombatWeapon.cpp" />
-    <ClCompile Include="SDK\Client\BaseEntity.cpp" />
-    <ClCompile Include="SDK\Client\BaseLocalPlayer.cpp" />
-    <ClCompile Include="SDK\Client\BasePlayer.cpp" />
-    <ClCompile Include="SDK\Client\Client.cpp" />
-    <ClCompile Include="SDK\Client\EntityList.cpp" />
-    <ClCompile Include="SDK\Client\GlowObjectManager.cpp" />
-    <ClCompile Include="SDK\Engine\ClientState.cpp" />
-    <ClCompile Include="SDK\Engine\Engine.cpp" />
     <ClCompile Include="SDK\Utils\ItemDefinitionIndex.cpp" />
     <ClCompile Include="Utils\BspParser\bsp_parser.cpp" />
     <ClCompile Include="Utils\ClientCmdUD\ClientCmdUD.cpp" />

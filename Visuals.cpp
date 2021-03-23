@@ -32,7 +32,7 @@ void Visuals::loop() {
 
 	for (auto glowObject : client.glowObjectManager->array()) {
 		auto entity = BaseEntity(glowObject.second.dwBaseEntity);
-		auto entityClassID = entity.m_iClassID();
+		auto entityClassID = entity.classID();
 
 		if (Settings::visuals_glowEsp_enable) {
 			if (entityClassID == ClassID::CC4) {
@@ -48,7 +48,7 @@ void Visuals::loop() {
 			else if (entityClassID == ClassID::CCSPlayer) {
 				BasePlayer player(entity);
 
-				if (!player.dwBase || player.m_iHealth() <= 0 || player.m_bDormant()) {
+				if (!player.get() || player.m_iHealth() <= 0 || player.m_bDormant()) {
 					continue;
 				}
 
@@ -106,18 +106,18 @@ void Visuals::loop() {
 			if (entityClassID == ClassID::CCSPlayer) {
 				BasePlayer player(entity);
 
-				if (!player.dwBase || player.m_iHealth() <= 0 || player.m_bDormant()) {
+				if (!player.get() || player.m_iHealth() <= 0 || player.m_bDormant()) {
 					continue;
 				}
 
 				if (player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
 					if (Settings::visuals_chams_show_friends) {
-						player.m_clrRender(Settings::visuals_chams_friends_color);
+						player.render(Settings::visuals_chams_friends_color);
 					}
 				}
 				else {
 					if (Settings::visuals_chams_show_enemies) {
-						player.m_clrRender(Settings::visuals_chams_enemy_color);
+						player.render(Settings::visuals_chams_enemy_color);
 					}
 				}
 			}

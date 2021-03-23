@@ -2,6 +2,8 @@
 
 void MenuServer::stopListening(websocketpp::connection_hdl hdl){
   server.stop_listening();
+  server.stop();
+  isWorking = false;
 }
 
 void MenuServer::closeMenu(websocketpp::connection_hdl){
@@ -24,7 +26,7 @@ void MenuServer::getActiveWeapon(websocketpp::connection_hdl hdl){
   if (
     engine.clientState->state() != ClientStates::INGAME ||
     client.localPlayer->m_iHealth() <= 0 ||
-    client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
+    client.localPlayer->teamNum() < TeamNum::TERRORIST
     ) {
     return;
   }
@@ -49,12 +51,12 @@ void MenuServer::getTeam(websocketpp::connection_hdl hdl) {
   if (
     engine.clientState->state() != ClientStates::INGAME ||
     client.localPlayer->m_iHealth() <= 0 ||
-    client.localPlayer->m_iTeamNum() < TeamNum::TERRORIST
+    client.localPlayer->teamNum() < TeamNum::TERRORIST
     ) {
     return;
   }
 
-  getTeam(client.localPlayer->m_iTeamNum());
+  getTeam(client.localPlayer->teamNum());
 }
 
 void MenuServer::getTeam(TeamNum team){
@@ -213,7 +215,7 @@ void MenuServer::start() {
     });
 
     std::thread thHttpSrver([]() {
-      std::string command = "node ./menu/server.js port=" + std::to_string(HTTP_SERVER_PORT) + " dir=\"" + HTTP_SERVER_DIRECTORY+"\"";
+      std::string command = "node ./menu/server.js port=" + std::to_string(HTTP_SERVER_PORT) + " dir=\"" + HTTP_SERVER_DIRECTORY + "\"";
       system(command.c_str());
     });
 

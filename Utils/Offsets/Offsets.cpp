@@ -70,6 +70,8 @@ int Offsets::netvars::m_flC4Blow;
 int Offsets::netvars::m_flTimerLength;
 int Offsets::netvars::m_flDefuseLength;
 int Offsets::netvars::m_flDefuseCountDown;
+int Offsets::netvars::m_hBombDefuser;
+int Offsets::netvars::m_nBombSite;
 int Offsets::netvars::cs_gamerules_data;
 int Offsets::netvars::m_SurvivalRules;
 int Offsets::netvars::m_SurvivalGameRuleDecisionTypes;
@@ -121,7 +123,6 @@ int Offsets::signatures::dwForceRight;
 int Offsets::signatures::dwGameDir;
 int Offsets::signatures::dwGameRulesProxy;
 int Offsets::signatures::dwGetAllClasses;
-int Offsets::signatures::dwGlobalVars;
 int Offsets::signatures::dwGlowObjectManager;
 int Offsets::signatures::dwInput;
 int Offsets::signatures::dwInterfaceLinkList;
@@ -160,6 +161,7 @@ int Offsets::signatures::dwClientMode;
 int Offsets::signatures::dwTraceLine;
 int Offsets::signatures::dwLineThroughSmoke;
 int Offsets::signatures::dwClientCmdUD;
+int Offsets::signatures::dwGlobalVars;
 #pragma endregion
 
 void Offsets::initNetvars(){
@@ -235,6 +237,8 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_flTimerLength     = Scanner::getNetvar("m_flTimerLength",      "m_flTimerLength",      "DT_PlantedC4");
   Offsets::netvars::m_flDefuseLength    = Scanner::getNetvar("m_flDefuseLength",     "m_flDefuseLength",     "DT_PlantedC4");
   Offsets::netvars::m_flDefuseCountDown = Scanner::getNetvar("m_flDefuseCountDown",  "m_flDefuseCountDown",  "DT_PlantedC4");
+  Offsets::netvars::m_hBombDefuser      = Scanner::getNetvar("m_hBombDefuser",       "m_hBombDefuser",       "DT_PlantedC4");
+  Offsets::netvars::m_nBombSite         = Scanner::getNetvar("m_nBombSite",          "m_nBombSite",          "DT_PlantedC4");
 
   //DT_WeaponC4
   Offsets::netvars::m_bStartedArming = Scanner::getNetvar("m_bStartedArming", "m_bStartedArming", "DT_WeaponC4");
@@ -298,7 +302,6 @@ void Offsets::initSignatures(){
   Offsets::signatures::dwForceLeft                  = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 51 53 8A 5D 08", { 465 });
   Offsets::signatures::dwForceRight                 = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 51 53 8A 5D 08", { 512 });
   Offsets::signatures::dwGameRulesProxy             = Scanner::getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? 85 C0 0F 84 ? ? ? ? 80 B8 ? ? ? ? ? 74 7A", { 1 });
-  Offsets::signatures::dwGlobalVars                 = Scanner::getSignature(CLIENT_DLL_NAME, "68 ? ? ? ? 68 ? ? ? ? FF 50 08 85 C0", { 1 });
   Offsets::signatures::dwGlowObjectManager          = Scanner::getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? A8 01 75 4B", { 1 }, 4);
   Offsets::signatures::dwInput                      = Scanner::getSignature(CLIENT_DLL_NAME, "B9 ? ? ? ? F3 0F 11 04 24 FF 50 10", { 1 });
   Offsets::signatures::dwInterfaceLinkList          = Scanner::getSignature(CLIENT_DLL_NAME, "8B 35 ? ? ? ? 57 85 F6 74 ? 8B 7D 08 8B 4E 04 8B C7 8A 11 3A 10");
@@ -329,6 +332,7 @@ void Offsets::initSignatures(){
   Offsets::signatures::dwClientMode                 = Scanner::getSignature(CLIENT_DLL_NAME, "8B 0D ? ? ? ? FF 75 08 8B 01 FF 50 64", { 0 }, 2, false, false);
   Offsets::signatures::dwTraceLine                  = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 E4 F0 83 EC 7C 56 52", {0}, 0, false, false);
   Offsets::signatures::dwLineThroughSmoke           = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0", {0}, 0, false, false);
+  Offsets::signatures::dwGlobalVars                 = Scanner::getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? 8B 4D FC 8B 40 10", { 1 }, 0, true, false);
 
   //ENGINE_DLL_NAME
   Offsets::signatures::dwClientState                      = Scanner::getSignature(ENGINE_DLL_NAME, "A1 ? ? ? ? 33 D2 6A 00 6A 00 33 C9 89 B0", { 1 });

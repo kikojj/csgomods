@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include <chrono>
 
 #include "SDK/Client/BaseEntity.hpp"
 #include "SDK/Client/BaseCombatWeapon.hpp"
@@ -18,8 +19,12 @@ public:
 
 	void radarHack();
 	void bhop();
-	void autoPistols();
 	void antiFlash();
+
+public:
+	bool shouldShoot = false;
+	bool shouldWait = false;
+	void autoPistols();
 
 private:
 	bool found = false;

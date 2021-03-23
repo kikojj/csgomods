@@ -13,4 +13,5 @@ enum struct EntityQuality : int {
   QUALITY_STRANGE,
   QUALITY_COMPLETED,
   QUALITY_TOURNAMENT = 12,
+  InvalidLast
 };

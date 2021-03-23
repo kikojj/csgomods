@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton, Logo } from "@components";
+import { IconButton, Logo, Button } from "@components";
 
 import { join } from "../utils";
 import { useStyles } from "./styles";
@@ -13,8 +13,9 @@ export type TTab = {
 };
 export type MenuProps = {
   tabs?: TTab[];
+  onExit?: () => void;
 };
-export const Menu: React.FC<MenuProps> = ({ tabs = [] }) => {
+export const Menu: React.FC<MenuProps> = ({ tabs = [], onExit }) => {
   const classes = useStyles();
 
   return (
@@ -37,6 +38,13 @@ export const Menu: React.FC<MenuProps> = ({ tabs = [] }) => {
             <div className={classes.tab_bg} />
           </div>
         ))}
+        {onExit ? (
+          <Button className={classes.exit} marginTop={25} onClick={onExit}>
+            Exit
+          </Button>
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );

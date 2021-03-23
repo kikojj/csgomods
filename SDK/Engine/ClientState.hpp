@@ -10,20 +10,44 @@
 #include "../../Utils/Offsets/Offsets.hpp"
 
 class ClientState {
+//main methods
 public:
-	ClientState();
+	ClientState() {}
 
-	/// <summary>get the ID of localPlayer in entityList</summary>
-	VAR_R_DEC(int, getLocalPlayer)
-	/// <summary> get user state</summary>
-	/// <returns>LOBBY = 0, LOADING = 1, CONNECTIONG = 2, CONNECTED = 5, INGAME = 6</returns>
-	VAR_R_DEC(ClientStates, state)
-	/// <summary>get current map directory</summary>
-	std::array<char, 0x120> mapDirectory();
-	VAR_R_DEC(int, dwModelPrecache)
-	/// <summary> get/set variable that stores vec2(x, y) the screen's center in the plane of the screen</summary>
-	VAR_RW_DEC(Vector2, dwViewAngles)
-	VAR_RW_DEC(int, m_nDeltaTick)
+	int get() {
+		return mem.read<int>(engineDll.dwBase + Offsets::signatures::dwClientState);
+	}
 
-	int get();
+//props
+public:
+	int getLocalPlayer() {
+		return mem.read<int>(get() + Offsets::signatures::dwClientState_GetLocalPlayer);
+	}
+	Vec2 dwViewAngles() {
+		return mem.read<Vec2>(get() + Offsets::signatures::dwClientState_ViewAngles);
+	}
+	void dwViewAngles(Vec2 vec) {
+		auto _vec = Vector2(vec);
+		_vec.clamp();
+		_vec.normalize();
+		mem.write(get() + Offsets::signatures::dwClientState_ViewAngles, _vec);
+	}
+	int m_nDeltaTick() {
+		return mem.read<int>(get() + Offsets::signatures::clientstate_delta_ticks);
+	}
+	void m_nDeltaTick(int value) {
+		mem.write(get() + Offsets::signatures::clientstate_delta_ticks, value);
+	}
+	ClientStates state() {
+		auto state = (ClientStates)(mem.read<int>(get() + Offsets::signatures::dwClientState_State));
+		return state;
+	}
+	std::array<char, 0x120> mapDirectory() {
+		auto mapDirectory = mem.read<std::array<char, 0x120>>(get() + Offsets::signatures::dwClientState_MapDirectory);
+		return mapDirectory;
+	}
+	int dwModelPrecache() {
+		//SHOULD FIND SIGNATURE
+		return mem.read<int>(get() + 0x52A4);
+	}
 };

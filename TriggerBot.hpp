@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Windows.h>
+#include <chrono>
 
 #include "SDK/Engine/Engine.hpp"
 #include "SDK/Client/Client.hpp"
@@ -15,6 +16,8 @@
 
 class TriggerBot {
 public:
+	bool shouldShoot = false;
+	bool shouldWait = false;
 	TriggerBot();
 	void loop();
 };

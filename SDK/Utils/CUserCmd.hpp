@@ -16,7 +16,7 @@ public:
   char    impulse;            // 0x34
   int     selectedWeapon;     // 0x38 Current weapon id
   int     weaponSubType;      // 0x3C
-  int     randomSeed;        // 0x40 For shared random functions
+  int     randomSeed;         // 0x40 For shared random functions
   short   mouseDx;            // 0x44 mouse accum in x from create move
   short   mouseDy;            // 0x46 mouse accum in y from create move
   bool    hasBeenPredicted;   // 0x48 Client only, tracks whether we've predicted this command at least once

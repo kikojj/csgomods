@@ -2,84 +2,115 @@
 
 #include <vector>
 
-#include "BaseEntity.hpp"
-#include "BaseCombatWeapon.hpp"
-
-#include "../Vars.hpp"
-
-#include "../Utils/Vector.hpp"
-#include "../Utils/TeamNum.hpp"
-#include "../Utils/Skeleton.hpp"
-#include "../Utils/LifeState.hpp"
-
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
 #include "../../Utils/BspParser/BspParser.hpp"
 
+#include "../Utils/Vector.hpp"
+#include "../Utils/TeamNum.hpp"
+#include "../Utils/Skeleton.hpp"
+#include "../Utils/LifeState.hpp"
+#include "../Utils/ColorRGBA.hpp"
+
+#include "../Vars.hpp"
+
+#include "BaseEntity.hpp"
+#include "BaseCombatWeapon.hpp"
+
 class BasePlayer : public BaseEntity {
-private:
+//main methods
 public:
-	BasePlayer();
-	BasePlayer(int);
-	BasePlayer(BaseEntity);
+	BasePlayer() {}
+	BasePlayer(int _base) {
+		this->base = _base;
+	};
+	BasePlayer(BaseEntity entity) {
+		this->base = entity.get();
+	}
 
-	/// <summary>get entity team</summary>
-	/// <returns>SPECTATOR = 1, TERRORIST = 2, COUNTER_TERRORIST = 3</returns>
-	VAR_R_DEC(TeamNum, m_iTeamNum)
-	/// <summary> get entity health</summary>
-	VAR_R_DEC(int, m_iHealth)
-	/// <summary>get entity matrix of bones</summary>
-	/// <returns>The matrix like: [Bone] [x] [y] [z]</returns>
-	VAR_R_DEC(int, m_dwBoneMatrix)
-	/// <summary>get bone positon</summary>
-	VAR_R_P_DEC(Vector3, getBonePos, Skeleton)
-	/// <summary>get entity position</summary>
-	VAR_R_DEC(Vector3, m_vecOrigin)
-	/// <summary>get entity eyes pos(must add this to m_vecOrigin to get real eyes pos)</summary>
-	VAR_R_DEC(Vector3, m_vecViewOffset)
-	/// <summary>get spotted by mask, that has struct like this 10001, in binary. Where 4 and 0 pos is '1'.
-	/// It tells us which players with current ids(0 and 4) are spotted the enemy. And clientState->GetLocalPlayer() gets the id of localplayer</summary>
-	VAR_R_DEC(int, m_bSpottedByMask)
-	/// <summary>get if player is visible using a bsp parser</summary>
-	VAR_R_P_DEC(bool, isBspVisibleFrom, Vector3)
-	/// <summary>get spotted</summary>
-	VAR_R_DEC(bool, m_bSpotted)
-	/// <summary>m_bSpottedByMask by another entity ID</summary>
-	VAR_R_P_DEC(bool, m_bSpottedByMask, int)
-	/// <summary>get how many bullets did entity fired</summary>
-	VAR_R_DEC(int, m_iShotsFired)
-	/// <summary>get the shoting angle on screen's plane, only if shooting</summary>
-	VAR_R_DEC(Vector2, m_viewPunchAngle)
-	/// <summary>get active weapon</summary>
-	VAR_R_DEC(int, m_hActiveWeapon)
-	/// <summary>get flags state</summary>
-	VAR_R_DEC(int, m_fFlags)
-	VAR_R_DEC(bool, m_bIsDefusing)
-	VAR_R_DEC(int, m_ArmorValue)
-	VAR_R_DEC(int, m_iCompetitiveWins)
-	VAR_R_DEC(bool, m_bHasDefuser)
-	VAR_R_DEC(bool, m_bIsScoped)
-	VAR_R_DEC(bool, m_bHasHelmet)
-	VAR_R_DEC(int, m_nTickBase)
-	VAR_R_DEC(LifeState, m_lifeState)
-	VAR_R_DEC(float, m_flFlashDuration)
-	VAR_R_DEC(float, m_flFlashAlpha)
-	VAR_R_DEC(int, m_hViewModel)
-	VAR_R_DEC(std::vector<int>, myWeapons)
-	VAR_R_DEC(bool, m_bDormant)
-	VAR_R_P_DEC(int, myWeaponByID, int)
-	/// <summary>change rendering color of entity</summary>
-	VAR_W_DEC(colorRGBA, m_clrRender)
-	/// <summary>set entity spotted value</summary>
-	VAR_W_DEC(bool, m_bSpotted)
-	/// <summary>set new view ounch angle</summary>
-	VAR_W_DEC(Vector2&, m_viewPunchAngle)
-	/// <summary>get/set the shoting angle on screen's plane, only if shooting</summary>
-	VAR_RW_DEC(Vector2, m_aimPunchAngle)
-	VAR_RW_DEC(float, m_flFlashMaxAlpha)
-	VAR_RW_DEC(int, m_iObserverMode)
+	virtual int get() {
+		return this->base;
+	}
 
-	int get();
-	void operator=(BasePlayer);
+//props
+public:
+	PROP(bool,				m_bDormant,					get())
+	PROP(bool,				m_bSpotted,					get())
+	PROP(bool,				m_bHasDefuser,			get())
+	PROP(bool,				m_bIsDefusing,			get())
+	PROP(bool,				m_bIsScoped,				get())
+	PROP(bool,				m_bHasHelmet,				get())
+
+	PROP(int,					m_iHealth,					get())
+	PROP(int,					m_ArmorValue,				get())
+	PROP(int,					m_iTeamNum,					get())
+	PROP(int,					m_dwBoneMatrix,			get())	//player matrix of bones: [Bone] [x] [y] [z]
+	PROP(int,					m_hActiveWeapon,		get())
+	PROP(int,					m_iShotsFired,			get())	//how many bullets did player fired
+	PROP(int,					m_fFlags,						get())
+	PROP(int,					m_iCompetitiveWins, get())
+	PROP(int,					m_hViewModel,				get())
+	PROP(int,					m_iObserverMode,		get())
+	PROP(int,					m_lifeState,				get())
+	PROP(int,					m_bSpottedByMask,		get())
+	PROP(int,					m_nTickBase,				get())
+
+	PROP(float,				m_flFlashDuration,	get())
+	PROP(float,				m_flFlashAlpha,			get())
+	PROP(float,				m_flFlashMaxAlpha,	get())
+
+	PROP(Vec2,				m_viewPunchAngle,		get())
+	PROP(Vec2,				m_aimPunchAngle,		get())	//shoting angle on screen's plane, only if shooting
+	PROP(Vec3,				m_vecOrigin,				get())	//player position
+	PROP(Vec3,				m_vecViewOffset,		get())	//player eyes pos offset(must add this to m_vecOrigin to get real eyes pos)
+
+	PROP(RenderColor, m_clrRender,				get())
+
+//methods
+public:
+	TeamNum teamNum() {
+		auto team = m_iTeamNum();
+		if (team <= int(TeamNum::Invalid) || team >= int(TeamNum::InvalidLast)) {
+			return TeamNum::Invalid;
+		};
+		return TeamNum(team);
+	}
+	LifeState lifeState() {
+		auto lifeState = m_lifeState();
+		if (lifeState <= int(LifeState::Invalid)) {
+			return LifeState::Invalid;
+		}
+		return LifeState(lifeState);
+	}
+	bool spottedByMask(int id) {
+		return m_bSpottedByMask() & (1 << id);
+	}
+	Vector3 getBonePos(Skeleton bone) {
+		auto bonePos = Vector3(mem.read<BoneVector>(m_dwBoneMatrix() + 0x30 * (int)bone + 0x0C));
+		return bonePos;
+	}
+	void render(colorRGBA color) {
+		RenderColor renderColor{ (BYTE)color.r, (BYTE)color.g, (BYTE)color.b, (BYTE)color.a };
+		m_clrRender(renderColor);
+	}
+	int myWeaponByID(int id) {
+		return mem.read<int>(get() + Offsets::netvars::m_hMyWeapons + id * 0x4);
+	}
+	std::vector<int> myWeapons() {
+		std::vector<int> weapons;
+		for (int i = 0; i < 8; i++) {
+			int weaponID = myWeaponByID(i) & 0xfff;
+			weapons.push_back(weaponID);
+		}
+		return weapons;
+	}
+	bool isBspVisibleFrom(Vector3 origin) {
+		for (auto bone : ALL_BONES) {
+			if (bsp_parser.is_visible(origin.toMatrix(), getBonePos(bone).toMatrix())) {
+				return true;
+			}
+		}
+		return false;
+	}
 };

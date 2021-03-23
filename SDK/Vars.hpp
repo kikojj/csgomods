@@ -1,32 +1,18 @@
 #pragma once
 
-#define VAR_R_DEC(type, name) type name();
-#define VAR_R_P_DEC(type, name, paramType) type name(paramType);
-#define VAR_R_DEF(type, name, className, base, offsetType)  type className::name(){\
-                                                              auto name = mem.read<type>(base + Offsets::offsetType::name);\
-                                                              return name;\
-                                                            }
-#define VAR_R_DEF_OFFNAME(type, name, className, base, offsetType, offsetName)  type className::name(){\
-                                                              auto name = mem.read<type>(base + Offsets::offsetType::offsetName);\
-                                                              return name;\
-                                                            }
-#define VAR_R_DEF_DEBUG(type, name, className, base, offsetType)  type className::name(){\
-                                                                    auto name = mem.read<type>(base + Offsets::offsetType::name);\
-                                                                    std::cout << #name << name << std::endl;\
-                                                                    return name;\
-                                                                  }
+#define PROP_(type, name, base, offset, rType, wValue) \
+type name(){\
+  auto name = mem.read<rType>(base + offset);\
+  return name;\
+}\
+void name(type value) {\
+  mem.write(base + offset, wValue);\
+}
 
-#define VAR_W_DEC(type, name) void name(type);
-#define VAR_W_DEF(type, name, className, base, offsetType)  void className::name(type value){\
-                                                              mem.write(base + Offsets::offsetType::name, value);\
-                                                            }
-#define VAR_W_DEF_OFFNAME(type, name, className, base, offsetType, offsetName)  void className::name(type value){\
-                                                              mem.write(base + Offsets::offsetType::offsetName, value);\
-                                                            }
+#define PROP(type, name, base)      PROP_(type, name, base, Offsets::netvars::name, type, value)
+#define C_PROP(type, name)          PROP(type, name, clientDll.dwBase)
+#define E_PROP(type, name)          PROP(type, name, engineDll.dwBase)
 
-#define VAR_RW_DEC(type, name)  VAR_R_DEC(type, name)\
-                                VAR_W_DEC(type, name)
-#define VAR_RW_DEF(type, name, className, base, offsetType)   VAR_R_DEF(type, name, className, base, offsetType)\
-                                                              VAR_W_DEF(type, name, className, base, offsetType)
-#define VAR_RW_DEF_OFFNAME(type, name, className, base, offsetType, offsetName)   VAR_R_DEF_OFFNAME(type, name, className, base, offsetType, offsetName)\
-                                                                                  VAR_W_DEF_OFFNAME(type, name, className, base, offsetType, offsetName)
+#define PROP_PTR(type, name, base)  PROP_(type, name, base, Offsets::signatures::name, type, value)
+#define C_PROP_PTR(type, name)      PROP_PTR(type, name, clientDll.dwBase)
+#define E_PROP_PTR(type, name)      PROP_PTR(type, name, engineDll.dwBase)

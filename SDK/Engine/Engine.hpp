@@ -1,23 +1,35 @@
 #pragma once
 
 #include <iostream>
-
-#include "ClientState.hpp"
-
-#include "../Utils/Defines.hpp"
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
 
+#include "../Utils/Defines.hpp"
+
+#include "ClientState.hpp"
+
 class Engine {
-private:
+//main variables
 public:
 	ClientState* clientState = nullptr;
 
-	Engine();
+//main methods
+public:
+	Engine() {
+		clientState = new ClientState();
+	}
 
-	std::array<char, 0x120> dwGameDir();
-	bool isOverlayActive();
+//methods
+public:
+	std::array<char, 0x120> dwGameDir() {
+		auto gameDir = mem.read<std::array<char, 0x120>>(engineDll.dwBase + Offsets::signatures::dwGameDir);
+		return gameDir;
+	}
+	bool isOverlayActive() {
+		auto overlayIsActive = mem.read<bool>(engineDll.dwBase + Offsets::signatures::overlayActivated1 + engineDll.dwBase + Offsets::signatures::overlayActivated2);
+		return overlayIsActive;
+	}
 };
 
 extern Engine engine;

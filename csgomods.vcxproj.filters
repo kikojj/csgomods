@@ -282,6 +282,12 @@
     <ClInclude Include="SDK\Vars.hpp">
       <Filter>SDK</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Client\BasePlantedC4.hpp">
+      <Filter>SDK\Client</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Client\GlobalVars.hpp">
+      <Filter>SDK\Client</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Visuals.cpp">
@@ -362,33 +368,6 @@
     </ClCompile>
     <ClCompile Include="SDK\Utils\ItemDefinitionIndex.cpp">
       <Filter>SDK\Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Engine\ClientState.cpp">
-      <Filter>SDK\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Engine\Engine.cpp">
-      <Filter>SDK\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\BaseCombatWeapon.cpp">
-      <Filter>SDK\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\BaseEntity.cpp">
-      <Filter>SDK\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\BaseLocalPlayer.cpp">
-      <Filter>SDK\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\BasePlayer.cpp">
-      <Filter>SDK\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\Client.cpp">
-      <Filter>SDK\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\EntityList.cpp">
-      <Filter>SDK\Client</Filter>
-    </ClCompile>
-    <ClCompile Include="SDK\Client\GlowObjectManager.cpp">
-      <Filter>SDK\Client</Filter>
     </ClCompile>
     <ClCompile Include="MenuServer.cpp">
       <Filter>MenuServer</Filter>

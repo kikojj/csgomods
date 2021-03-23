@@ -234,3 +234,12 @@ bool ItemDefinition::isGrenade(ItemDefinitionIndex itemDI) {
 	}
 	return false;
 }
+
+bool ItemDefinition::isZeusX27(ItemDefinitionIndex itemDI){
+	if (
+		itemDI == ItemDefinitionIndex::WEAPON_Zeusx27
+		) {
+		return true;
+	}
+	return false;
+}

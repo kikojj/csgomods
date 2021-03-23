@@ -2,27 +2,52 @@
 
 #include <string>
 
-#include "../Vars.hpp"
-
-#include "../Utils/ColorRGBA.hpp"
-#include "../Utils/ClassID.hpp"
-
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
 
+#include "../Utils/ClassID.hpp"
+
+#include "../Vars.hpp"
+
 class BaseEntity {
+//main variable
 public:
-	int dwBase = 0;
+	int base = 0;
 
-	BaseEntity();
-	BaseEntity(int);
+//main methods
+public:
+	BaseEntity() {}
+	BaseEntity(int _base): base(_base) {};
 
-	VAR_R_DEC(ClassID, m_iClassID)
-	VAR_R_DEC(int, m_iGlowIndex)
-	VAR_R_DEC(float, m_flC4Blow)
+	virtual int get() {
+		return this->base;
+	}
+	void operator=(BaseEntity entity) {
+		this->base = entity.get();
+	}
 
-	void operator=(BaseEntity);
-	virtual int get();
-	int getEntityID();
+//props
+public:
+	PROP	(int,		m_iGlowIndex, get())
+	PROP_	(int,		m_iClassID,		mem.read<int>(
+																mem.read<int>(
+																	mem.read<int>(get() + 0x8)	//IClientNetworkable
+																	+ 0x8)											//GetClientClass
+															+ 0x1),													//ClientClass
+															0x14, int, value)
+
+//methods
+public:
+	ClassID classID() {
+		auto id = m_iClassID();
+		if (id <= (int)ClassID::Invalid || id >= (int)ClassID::InvalidLast) {
+			return ClassID::Invalid;
+		}
+
+		return ClassID(id);
+	}
+	void classID(ClassID value) {
+		m_iClassID((int)value);
+	}
 };
