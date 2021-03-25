@@ -7,14 +7,14 @@
 #include <filesystem>
 #include <map>
 
-#include "../JsonXX/jsonxx.h"
-
 #include "../../SDK/Utils/Skeleton.hpp"
 #include "../../SDK/Utils/ColorRGBA.hpp"
 #include "../../SDK/Utils/IGlowObjectDefinition.hpp"
 #include "../../SDK/Utils/EntityQuality.hpp"
 #include "../../SDK/Utils/ItemDefinitionIndex.hpp"
 #include "../../SDK/Utils/TeamNum.hpp"
+
+#include "../JsonXX/jsonxx.h"
 
 #pragma region HelperDefines
 #define IfReadSettingBool(settingName) if (name == #settingName) settingName = value->get<bool>();
@@ -57,6 +57,7 @@ struct IAimbotSettings {
   bool enable = false;
   float fov = 0.0f;
   Skeleton bone = Skeleton::NEAREST;
+  bool changeAfterNearest = false;
   float smooth = 0.0f;
   bool rcs_enable = false;
   float rcs_scale_x = 0.0f;
@@ -167,5 +168,6 @@ public:
   static bool misc_autoAccept_enable;
   static bool misc_antiFlash_enable;
   static int misc_antiFlash_maxAlpha;
+  static bool misc_rankReveal_enable;
   #pragma endregion
 };

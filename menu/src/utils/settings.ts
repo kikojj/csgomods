@@ -49,6 +49,7 @@ export interface IAimbotSettings {
   enable: boolean;
   fov: number;
   bone: number;
+  changeAfterNearest: boolean;
   smooth: number;
   rcs_enable: boolean;
   rcs_scale_x: number;
@@ -60,6 +61,7 @@ export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
   enable: false,
   fov: 0,
   bone: 0,
+  changeAfterNearest: false,
   smooth: 0,
   rcs_enable: false,
   rcs_scale_x: 0,
@@ -152,6 +154,7 @@ export type TSettings = {
   misc_autoAccept_enable: boolean;
   misc_antiFlash_enable: boolean;
   misc_antiFlash_maxAlpha: number;
+  misc_rankReveal_enable: boolean;
   ///
 };
 
@@ -246,5 +249,6 @@ export const DEFAULT_SETTINGS: TSettings = {
   misc_autoAccept_enable: false,
   misc_antiFlash_enable: false,
   misc_antiFlash_maxAlpha: 255,
+  misc_rankReveal_enable: false,
   ///
 };

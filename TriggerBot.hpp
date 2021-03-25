@@ -15,9 +15,13 @@
 #include "Utils/Settings/Settings.hpp"
 
 class TriggerBot {
+private:
+	std::chrono::high_resolution_clock::time_point lastPressTime = std::chrono::high_resolution_clock::now();
+
 public:
 	bool shouldShoot = false;
 	bool shouldWait = false;
+
 	TriggerBot();
 	void loop();
 };

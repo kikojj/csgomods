@@ -21,6 +21,8 @@ public:
 	void bhop();
 	void antiFlash();
 
+private:
+	std::chrono::high_resolution_clock::time_point lastPressTime = std::chrono::high_resolution_clock::now();
 public:
 	bool shouldShoot = false;
 	bool shouldWait = false;
@@ -34,4 +36,13 @@ private:
 
 public:
 	void autoAccept();
+
+private:
+	LPVOID rankRevealAddress = nullptr;
+	bool revealedGame = false;
+	bool holdingTab = false;
+	bool revealedWarmup = false;
+public:
+	void showRanks();
+	void rankReveal();
 };

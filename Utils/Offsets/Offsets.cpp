@@ -77,6 +77,7 @@ int Offsets::netvars::m_SurvivalRules;
 int Offsets::netvars::m_SurvivalGameRuleDecisionTypes;
 int Offsets::netvars::m_bIsValveDS;
 int Offsets::netvars::m_bFreezePeriod;
+int Offsets::netvars::m_bWarmupPeriod;
 int Offsets::netvars::m_bBombPlanted;
 int Offsets::netvars::m_bIsQueuedMatchmaking;
 int Offsets::netvars::m_flSimulationTime;
@@ -162,6 +163,7 @@ int Offsets::signatures::dwTraceLine;
 int Offsets::signatures::dwLineThroughSmoke;
 int Offsets::signatures::dwClientCmdUD;
 int Offsets::signatures::dwGlobalVars;
+int Offsets::signatures::dwRankReveal;
 #pragma endregion
 
 void Offsets::initNetvars(){
@@ -277,9 +279,10 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_SurvivalGameRuleDecisionTypes = Scanner::getNetvar("m_SurvivalGameRuleDecisionTypes",  "m_SurvivalGameRuleDecisionTypes",  "DT_CSGameRulesProxy");
   Offsets::netvars::m_bIsValveDS                    = Scanner::getNetvar("m_bIsValveDS",                     "m_bIsValveDS",                     "DT_CSGameRulesProxy");
   Offsets::netvars::m_bFreezePeriod                 = Scanner::getNetvar("m_bFreezePeriod",                  "m_bFreezePeriod",                  "DT_CSGameRulesProxy");
+  Offsets::netvars::m_bWarmupPeriod                 = Scanner::getNetvar("m_bWarmupPeriod",                  "m_bWarmupPeriod",                  "DT_CSGameRulesProxy");
   Offsets::netvars::m_bBombPlanted                  = Scanner::getNetvar("m_bBombPlanted",                   "m_bBombPlanted",                   "DT_CSGameRulesProxy");
   Offsets::netvars::m_bIsQueuedMatchmaking          = Scanner::getNetvar("m_bIsQueuedMatchmaking",           "m_bIsQueuedMatchmaking",           "DT_CSGameRulesProxy");
-
+  
   //DT_EnvTonemapController
   Offsets::netvars::m_bUseCustomBloomScale      = Scanner::getNetvar("m_bUseCustomBloomScale",       "m_bUseCustomBloomScale",       "DT_EnvTonemapController");
   Offsets::netvars::m_bUseCustomAutoExposureMin = Scanner::getNetvar("m_bUseCustomAutoExposureMin",  "m_bUseCustomAutoExposureMin",  "DT_EnvTonemapController");
@@ -333,6 +336,7 @@ void Offsets::initSignatures(){
   Offsets::signatures::dwTraceLine                  = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 E4 F0 83 EC 7C 56 52", {0}, 0, false, false);
   Offsets::signatures::dwLineThroughSmoke           = Scanner::getSignature(CLIENT_DLL_NAME, "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0", {0}, 0, false, false);
   Offsets::signatures::dwGlobalVars                 = Scanner::getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? 8B 4D FC 8B 40 10", { 1 }, 0, true, false);
+  Offsets::signatures::dwRankReveal                 = Scanner::getSignature(CLIENT_DLL_NAME, "8D 4E 74 8B C4 C7 40 04 ? ? ? ? C7 00", { 14 }, 0, false, true);
 
   //ENGINE_DLL_NAME
   Offsets::signatures::dwClientState                      = Scanner::getSignature(ENGINE_DLL_NAME, "A1 ? ? ? ? 33 D2 6A 00 6A 00 33 C9 89 B0", { 1 });

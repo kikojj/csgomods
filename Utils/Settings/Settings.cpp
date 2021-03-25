@@ -82,6 +82,9 @@ IAimbotSettings Settings::getAimbotSettingsFromJsonXX(jsonxx::Value* v) {
 	if (obj.has<jsonxx::Number>("bone")) {
 		settings.bone = (Skeleton)obj.get<jsonxx::Number>("bone");
 	}
+	if (obj.has<jsonxx::Boolean>("changeAfterNearest")) {
+		settings.changeAfterNearest = obj.get<jsonxx::Boolean>("changeAfterNearest");
+	}
 	if (obj.has<jsonxx::Number>("fov")) {
 		settings.fov = (float)obj.get<jsonxx::Number>("fov");
 	}
@@ -108,6 +111,7 @@ jsonxx::Value Settings::aimbotSettingsToJsonXX(IAimbotSettings settings) {
 		"use" << settings.use <<
 		"enable" << settings.enable <<
 		"bone" << (int)settings.bone <<
+		"changeAfterNearest" << settings.changeAfterNearest <<
 		"fov" << settings.fov <<
 		"smooth" << settings.smooth <<
 		"rcs_enable" << settings.rcs_enable <<
@@ -326,8 +330,8 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	ElifReadSettingColor(visuals_glowEsp_c4_planted_color)
 	ElifReadSettingBool(visuals_glowEsp_show_defusing)
 	ElifReadSettingColor(visuals_glowEsp_defusing_color)
-		ElifReadSettingBool(visuals_glowEsp_show_grenades)
-		ElifReadSettingColor(visuals_glowEsp_grenades_color)
+	ElifReadSettingBool(visuals_glowEsp_show_grenades)
+	ElifReadSettingColor(visuals_glowEsp_grenades_color)
 
 	ElifReadSettingBool(visuals_chams_enable)
 	ElifReadSettingBool(visuals_chams_show_enemies)
@@ -348,6 +352,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	ElifReadSettingBool(misc_autoAccept_enable)
 	ElifReadSettingBool(misc_antiFlash_enable)
 	ElifReadSettingInt(misc_antiFlash_maxAlpha)
+	ElifReadSettingBool(misc_rankReveal_enable)
 }
 
 jsonxx::Object Settings::toJsonxxObject() {
@@ -424,7 +429,8 @@ jsonxx::Object Settings::toJsonxxObject() {
 		SetSetting(misc_autoAccept_enable)
 		SetSetting(skinchanger_enable)
 		SetSetting(misc_antiFlash_enable)
-		SetSetting(misc_antiFlash_maxAlpha);
+		SetSetting(misc_antiFlash_maxAlpha)
+		SetSetting(misc_rankReveal_enable);
 	
 	return settings;
 }
@@ -445,6 +451,7 @@ IAimbotSettings Settings::aimbot_global = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -455,6 +462,7 @@ IAimbotSettings Settings::aimbot_pistols = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -465,6 +473,7 @@ IAimbotSettings Settings::aimbot_heavies = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -475,6 +484,7 @@ IAimbotSettings Settings::aimbot_shoutguns = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -485,6 +495,7 @@ IAimbotSettings Settings::aimbot_smgs = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -495,6 +506,7 @@ IAimbotSettings Settings::aimbot_rifles = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -505,6 +517,7 @@ IAimbotSettings Settings::aimbot_snipers = {
 	false,
 	0,
 	Skeleton::NEAREST,
+	false,
 	0,
 	false,
 	0.0f,
@@ -566,4 +579,5 @@ int Settings::misc_autoPistols_delay = 0;
 bool Settings::misc_autoAccept_enable = false;
 bool Settings::misc_antiFlash_enable = false;
 int Settings::misc_antiFlash_maxAlpha = 255;
+bool Settings::misc_rankReveal_enable = false;
 #pragma endregion

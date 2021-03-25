@@ -80,6 +80,7 @@ namespace Offsets {
     static int m_SurvivalGameRuleDecisionTypes;
     static int m_bIsValveDS;
     static int m_bFreezePeriod;
+    static int m_bWarmupPeriod;
     static int m_bBombPlanted;
     static int m_bIsQueuedMatchmaking;
     static int m_flSimulationTime;
@@ -180,6 +181,9 @@ namespace Offsets {
 
     //global vars
     static int dwGlobalVars;
+
+    //rank reveal
+    static int dwRankReveal;
 
   } signatures;
   void initSignatures();

@@ -75,6 +75,13 @@ export const MiscContent: React.FC = () => {
             onChange={(v) => updateValue("misc_ingameRadar_enable", v)}
           />
         </Group>
+        <Group marginTop={35} marginLeft={35} label="Rank reveal">
+          <CheckboxField
+            label="Enable"
+            checked={settings.misc_rankReveal_enable}
+            onChange={(v) => updateValue("misc_rankReveal_enable", v)}
+          />
+        </Group>
       </div>
     </div>
   );

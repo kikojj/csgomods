@@ -41,6 +41,7 @@ CVisibleCheck visibleCheck;
 
 map<ItemDefinitionIndex, int> modelIndexes;
 ClientCmdUD clientCmdUD;
+CMDToggle mouseBind("bind mouse1 +attack", "unbind mouse1");
 #pragma endregion
 
 bool isWorking = true;
@@ -80,9 +81,9 @@ int main() {
 		clientCmdUD.execute("clear");
 		clientCmdUD.execute("echo [CSGOMODS]: Started.");
 		clientCmdUD.execute(string(string("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:") + to_string(HTTP_SERVER_PORT) + string(")")).c_str());
-		clientCmdUD.execute("unbind mouse1");
-		clientCmdUD.execute("echo [CSGOMODS]: Sorry, I have unbinded your mouse1 button. I need it to do my aimbot works better.");
-		clientCmdUD.execute("echo [CSGOMODS]: You still can fire, whenever you want, but you should do safe exit from cheat(press exit in menu) to restore your bind automatically or exit as you want and restore bind yourself! Thanks:)");
+		(Settings::aimbot_enable ? mouseBind.off() : mouseBind.on());
+		clientCmdUD.execute("echo [CSGOMODS]: Sorry, I will unbind your mouse1 button when needed. I need it to make my aim bot work better.");
+		clientCmdUD.execute("echo [CSGOMODS]: You can still shoot whenever you want, but you must safely exit the cheat (press exit in the menu) to restore bind automatically, or exit at your own discretion and restore the bind yourself if necessary! Thank:)");
 
 		#pragma region Threads
 		thread thMenuData([]() {
@@ -133,16 +134,6 @@ int main() {
 			Sleep(1);
 		}});
 
-		thread thAimBot([]() { while (isWorking) {
-			//aimBot.loop();
-			//Sleep(1);
-		}});
-
-		thread thTriggerBot([]() { while (isWorking) {
-			//triggetBot.loop();
-			//Sleep(1);
-		}});
-
 		thread thSkinchanger([]() { while (isWorking) {
 			skinchanger.loop();
 			//Sleep(1);
@@ -158,11 +149,6 @@ int main() {
 			Sleep(1);
 		}});
 
-		thread thMiscAutoPistols([]() { while (isWorking) {
-			//misc.autoPistols();
-			//Sleep(1);
-		}});
-
 		thread thMiscAutoAccept([]() { while (isWorking) {
 			misc.autoAccept();
 			Sleep(1);
@@ -170,6 +156,11 @@ int main() {
 
 		thread thMiscAntiFlash([]() { while (isWorking) {
 			misc.antiFlash();
+			Sleep(1);
+		}});
+
+		thread thMiscRankReveal([]() { while (isWorking) {
+			misc.rankReveal();
 			Sleep(1);
 		}});
 
@@ -209,6 +200,7 @@ int main() {
 		});
 
 		thread thShoot([]() {
+			bool lastAimState = Settings::aimbot_enable;
 			while (isWorking) {
 				bool shouldShoot = GetAsyncKeyState(VK_LBUTTON) && Helpers::isMouseActive();
 
@@ -216,25 +208,34 @@ int main() {
 				triggetBot.loop();
 				misc.autoPistols();
 
+				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
+				BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+
 				if (shouldShoot) {
-					if (aimBot.shouldWait && aimBot.shouldShoot || aimBot.shouldWait && !aimBot.shouldShoot) {
-						client.dwForceAttack(KeyEvent::KEY_UP);
+					if (Settings::aimbot_enable && aimBot.shouldWait && !aimBot.shouldShoot) {
+							client.dwForceAttack(KeyEvent::KEY_UP);
 					}
-					else if (
-						!aimBot.shouldWait && aimBot.shouldShoot ||
-						!aimBot.shouldWait && !aimBot.shouldShoot ||
-						!misc.shouldWait && misc.shouldShoot
-						) {
-						client.dwForceAttack(KeyEvent::KEY_DOWN);
+					else {
+						if (Settings::misc_autoPistols_enable && (misc.shouldWait || !misc.shouldShoot) && activeWeapon.isPistol()) {
+							client.dwForceAttack(KeyEvent::KEY_UP);
+						}
+						else {
+							client.dwForceAttack(KeyEvent::KEY_DOWN);
+						}
 					}
 				}
 				else {
-					if (!triggetBot.shouldWait && triggetBot.shouldShoot) {
+					if (Settings::triggerbot_enable && !triggetBot.shouldWait && triggetBot.shouldShoot) {
 						client.dwForceAttack(KeyEvent::KEY_DOWN);
 					}
 					else {
 						client.dwForceAttack(KeyEvent::KEY_UP);
 					}
+				}
+
+				if (lastAimState != Settings::aimbot_enable) {
+					(Settings::aimbot_enable ? mouseBind.off() : mouseBind.on());
+					lastAimState = Settings::aimbot_enable;
 				}
 
 				Sleep(1);
@@ -245,18 +246,17 @@ int main() {
 		thMenuData.join();
 		thMenuOpen.join();
 		thVisuals.join();
-		thAimBot.join();
-		thTriggerBot.join();
 		thSkinchanger.join();
 		thMiscRadarHack.join();
 		thMiscBhop.join();
-		thMiscAutoPistols.join();
 		thMiscAntiFlash.join();
+		thMiscRankReveal.join();
 		thMap.join();
 		thVisibleCheck.join();
+		thShoot.join();
 		#pragma endregion
 
-		clientCmdUD.execute("bind mouse1 +attack");
+		mouseBind.on();
 		clientCmdUD.execute("echo [CSGOMODS]: Mouse1 bind was restored.");
 		Helpers::exit();
 	}

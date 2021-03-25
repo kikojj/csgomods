@@ -92,19 +92,21 @@ void Misc::autoPistols(){
 	BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 
 	if (activeWeapon.isPistol() && activeWeapon.itemDI() != ItemDefinitionIndex::WEAPON_R8Revolver && activeWeapon.itemDI() != ItemDefinitionIndex::WEAPON_CZ75Auto) {
-		while (GetAsyncKeyState(VK_LBUTTON)) {
+		if (!shouldShoot) {
+			lastPressTime = std::chrono::high_resolution_clock::now();
 			shouldShoot = true;
-
-			using namespace std::chrono;
-
-			high_resolution_clock::time_point killTime = high_resolution_clock::now();
-			shouldWait = true;
-			while (
-				GetAsyncKeyState(Settings::triggerbot_key) &&
-				duration_cast<std::chrono::duration<double>>(high_resolution_clock::now() - killTime).count() <= (double)((double)Settings::misc_autoPistols_delay / (double)1000)
+		}
+		else {
+			if (
+				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastPressTime).count() >
+				(double)((double)Settings::misc_autoPistols_delay / (double)1000)
 				) {
+				shouldShoot = false;
+				shouldWait = false;
 			}
-			shouldWait = false;
+			else {
+				shouldWait = true;
+			}
 		}
 	}
 }
@@ -125,6 +127,58 @@ void Misc::antiFlash(){
 
 	if (client.localPlayer->m_flFlashMaxAlpha() != Settings::misc_antiFlash_maxAlpha) {
 		client.localPlayer->m_flFlashMaxAlpha((float)Settings::misc_antiFlash_maxAlpha);
+	}
+}
+
+void Misc::showRanks(){
+	//if (rankRevealAddress == nullptr) {
+	//	rankRevealAddress = reinterpret_cast<char*>(mem.allocate(12));
+	//}
+	//mem.createThread(Offsets::signatures::dwRankReveal, rankRevealAddress);
+	//std::cout << "showRanks" << std::endl;
+}
+
+void Misc::rankReveal(){
+	if (
+		engine.clientState->state() != ClientStates::INGAME ||
+		client.localPlayer->teamNum() <= TeamNum::Invalid ||
+		engine.clientState->m_nDeltaTick() == -1
+		) {
+		return;
+	}
+
+	if (!Settings::misc_rankReveal_enable) {
+		return;
+	}
+
+	if (!revealedGame){
+		int GameRules = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwGameRulesProxy);
+		bool isQueuedMatchmaking = mem.read<bool>(GameRules + Offsets::netvars::m_bIsQueuedMatchmaking);
+
+		if (revealedWarmup || isQueuedMatchmaking){
+			if (GetAsyncKeyState(VK_TAB) & 0x8000){
+				holdingTab = true;
+			}
+			else if (holdingTab){
+				holdingTab = false;
+				bool warmupPeriod = mem.read<bool>(GameRules + Offsets::netvars::m_bWarmupPeriod);
+
+				if (warmupPeriod){
+					if (!revealedWarmup){
+						revealedWarmup = true;
+						showRanks();
+					}
+				}
+				else {
+					bool freezePeriod = mem.read<bool>(GameRules + Offsets::netvars::m_bFreezePeriod);
+
+					if (!revealedGame && !freezePeriod){
+						revealedGame = true;
+						showRanks();
+					}
+				}
+			}
+		}
 	}
 }
 

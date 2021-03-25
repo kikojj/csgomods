@@ -201,6 +201,16 @@ export const AimbotContent: React.FC = () => {
                     value={weaponSettings.bone.toString()}
                     onChnage={(v) => changeSettings({ ...weaponSettings, bone: +v })}
                   />
+                  {weaponSettings.bone === 0 ? (
+                    <CheckboxField
+                      label="Change bone"
+                      helperText="Change the bone if it is not main(like shoulder, eblow, knee, etc.)"
+                      checked={weaponSettings.changeAfterNearest}
+                      onChange={(v) => changeSettings({ ...weaponSettings, changeAfterNearest: v })}
+                    />
+                  ) : (
+                    ""
+                  )}
                   <RangeField
                     label={`Smooth: ${weaponSettings.smooth}`}
                     helperText="Slowing down the movement of the aiming"

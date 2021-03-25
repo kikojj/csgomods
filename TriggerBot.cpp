@@ -106,7 +106,7 @@ void TriggerBot::loop() {
 		return;
 	}
 	else {
-		std::cout << "[Trigger]: Undefined weapon ID = " << (int)activeWeapon.m_iItemDefinitionIndex() << std::endl;
+		std::cout << "[Trigger]: Undefined weapon ID = " << (int)activeWeapon.itemDI() << std::endl;
 		shouldShoot = false;
 		shouldWait = false;
 		return;
@@ -114,7 +114,6 @@ void TriggerBot::loop() {
 
 	BaseEntity entity(client.entityList->getByID(client.localPlayer->m_iCrosshairId() - 1));
 	if (entity.classID() != ClassID::CCSPlayer) {
-		//Sleep(Settings::triggerbot_delay_before_shoot);
 		shouldShoot = false;
 		shouldWait = false;
 		return;
@@ -127,19 +126,23 @@ void TriggerBot::loop() {
 		return;
 	}
 
-	if (GetAsyncKeyState(Settings::triggerbot_key)) {
+	if (!shouldShoot) {
+		lastPressTime = std::chrono::high_resolution_clock::now();
 		shouldShoot = true;
-		Sleep(20);
-
-		using namespace std::chrono;
-
-		high_resolution_clock::time_point killTime = high_resolution_clock::now();
-		shouldWait = true;
-		while (
-			GetAsyncKeyState(Settings::triggerbot_key) &&
-			duration_cast<std::chrono::duration<double>>(high_resolution_clock::now() - killTime).count() <= (double)((double)Settings::triggerbot_delay_after_shoot / (double)1000)
-			) {
+	}
+	else if (!shouldWait) {
+		if (activeWeapon.isPistol()) {
+			shouldShoot = false;
 		}
+	}
+
+	if (
+		std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastPressTime).count() >
+		(double)((double)Settings::triggerbot_delay_before_shoot / (double)1000)
+		) {
 		shouldWait = false;
+	}
+	else {
+		shouldWait = true;
 	}
 }

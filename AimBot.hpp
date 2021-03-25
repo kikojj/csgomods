@@ -22,6 +22,7 @@ class AimBot {
 private:
 	//aim
 	Skeleton bone = Skeleton::NEAREST;
+	bool changeAfterNearest = false;
 	float fov = 0;
 	float smooth = 0;
 
@@ -30,6 +31,13 @@ private:
 	float rcsScaleX = 0;
 	float rcsScaleY = 0;
 
+	//neccesary variables
+	BasePlayer closestEnemy;
+	float closestAngle = 360.0f;
+	Skeleton closestBone = Skeleton::HEAD;
+	std::chrono::high_resolution_clock::time_point lastKillTime = std::chrono::high_resolution_clock::now();
+
+	void resetSettings();
 	Vector3 getBonePos(BasePlayer&, Skeleton);
 	Vector3 calcAngle(Vector3, Vector3);
 	float getFov(Vector3, Vector2);
@@ -40,6 +48,7 @@ private:
 public:
 	bool shouldShoot = false;
 	bool shouldWait = false;
+
 	AimBot();
 	void loop();
 };

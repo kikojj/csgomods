@@ -21,11 +21,11 @@ colorRGBA Visuals::getHpBasedColor(BasePlayer& player){
 	return color;
 }
 
-void Visuals::loop() {
-	if (!Settings::visuals_glowEsp_enable && !Settings::visuals_chams_enable) {
-		return;
-	}
+void Visuals::resetRender(BasePlayer& player){
+	player.render({ 255, 255, 255, 0 });
+}
 
+void Visuals::loop() {
 	if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
 		return;
 	}
@@ -33,6 +33,17 @@ void Visuals::loop() {
 	for (auto glowObject : client.glowObjectManager->array()) {
 		auto entity = BaseEntity(glowObject.second.dwBaseEntity);
 		auto entityClassID = entity.classID();
+
+
+		if (entityClassID == ClassID::CCSPlayer) {
+			BasePlayer player(entity);
+
+			if (!player.get() || player.m_iHealth() <= 0 || player.m_bDormant()) {
+				continue;
+			}
+
+			resetRender(player);
+		}
 
 		if (Settings::visuals_glowEsp_enable) {
 			if (entityClassID == ClassID::CC4) {
@@ -60,6 +71,12 @@ void Visuals::loop() {
 						else {
 							drawEntity(glowObject, getHpBasedColor(player), Settings::visuals_glowEsp_style);
 						}
+
+						if (Settings::visuals_glowEsp_show_defusing) {
+							if (player.m_bIsDefusing()) {
+								drawEntity(glowObject, Settings::visuals_glowEsp_defusing_color, Settings::visuals_glowEsp_style);
+							}
+						}
 					}
 				}
 				else {
@@ -79,12 +96,12 @@ void Visuals::loop() {
 						else {
 							drawEntity(glowObject, getHpBasedColor(player), Settings::visuals_glowEsp_style);
 						}
-					}
-				}
 
-				if (Settings::visuals_glowEsp_show_defusing) {
-					if (player.m_bIsDefusing()) {
-						drawEntity(glowObject, Settings::visuals_glowEsp_defusing_color, Settings::visuals_glowEsp_style);
+						if (Settings::visuals_glowEsp_show_defusing) {
+							if (player.m_bIsDefusing()) {
+								drawEntity(glowObject, Settings::visuals_glowEsp_defusing_color, Settings::visuals_glowEsp_style);
+							}
+						}
 					}
 				}
 			}

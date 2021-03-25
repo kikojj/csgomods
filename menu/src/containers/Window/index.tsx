@@ -14,13 +14,25 @@ import {
 import { ActiveTab } from "@utils";
 import { useStyles } from "./styles";
 
+const LS_ACTIVE_TAB = "csgomods_active_tab";
+
 export const Window = () => {
   const classes = useStyles();
 
   const { connected } = React.useContext(SocketContext);
   const { skins } = React.useContext(DataContext);
 
-  const [activeTab, setActiveTab] = React.useState<ActiveTab>(ActiveTab.TAB_VISUALS);
+  const [activeTab, _setActiveTab] = React.useState<ActiveTab>(
+    localStorage.getItem(LS_ACTIVE_TAB) ? parseInt(localStorage.getItem(LS_ACTIVE_TAB)!) : ActiveTab.TAB_VISUALS
+  );
+
+  function setActiveTab(v: ActiveTab | ((prev: ActiveTab) => ActiveTab)) {
+    const value = typeof v === "function" ? v(activeTab) : v;
+
+    localStorage.setItem(LS_ACTIVE_TAB, value.toString());
+
+    _setActiveTab(value);
+  }
 
   return (
     <div className={classes.container}>
