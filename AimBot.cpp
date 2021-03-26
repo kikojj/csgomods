@@ -62,6 +62,7 @@ void AimBot::setAngle(Vector2 dstAngle) {
 }
 
 void AimBot::applyWeaponSettings(IAimbotSettings settings){
+	this->firstPerfectShoot = settings.firstPerfectShoot;
 	this->fov = settings.fov;
 	this->bone = settings.bone;
 	this->changeAfterNearest = settings.changeAfterNearest;
@@ -277,8 +278,13 @@ void AimBot::loop() {
 
 			//TRY TO DO GOOD SMOOTH(NEED UNBIND MOUSE1 IN GAME)
 			if (getFov(enemyAngle, Vector2(engine.clientState->dwViewAngles())) != 0 && client.localPlayer->m_iShotsFired() == 0) {
-				shouldWait = true;
 				shouldShoot = false;
+				if (firstPerfectShoot) {
+					shouldWait = true;
+				}
+				else {
+					shouldWait = false;
+				}
 			}
 			else {
 				shouldShoot = true;

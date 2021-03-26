@@ -288,6 +288,12 @@
     <ClInclude Include="SDK\Client\GlobalVars.hpp">
       <Filter>SDK\Client</Filter>
     </ClInclude>
+    <ClInclude Include="Utils\ClientCmdUD\CMDToggle.hpp">
+      <Filter>Utils\ClientCmdUD</Filter>
+    </ClInclude>
+    <ClInclude Include="SDK\Utils\IPlayerInfo.hpp">
+      <Filter>SDK\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Visuals.cpp">
@@ -371,6 +377,9 @@
     </ClCompile>
     <ClCompile Include="MenuServer.cpp">
       <Filter>MenuServer</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ClientCmdUD\CMDToggle.cpp">
+      <Filter>Utils\ClientCmdUD</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

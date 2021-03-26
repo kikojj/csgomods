@@ -1,7 +1,7 @@
 import React from "react";
 
 import { DataContext, SettingsContext } from "@contexts";
-import { WeaponSelect, BoneSelect } from "@containers";
+import { BoneSelect } from "@containers";
 import { Group, CheckboxField, RangeField, SelectField, SelectItem, KeyInputField, Button } from "@components";
 
 import { capitalizeFirstLetter, DEFAULT_AIMBOT_SETTINGS, IAimbotSettings, TSettings, Weapon } from "@utils";
@@ -14,10 +14,6 @@ export const AimbotContent: React.FC = () => {
   const { activeWeapon: gameActiveWeapon, getActiveWeapon } = React.useContext(DataContext);
 
   const [activeWeapon, setActiveWeapon] = React.useState<Weapon>(gameActiveWeapon);
-
-  const triggerFields = {
-    enable: `triggerbot_${activeWeapon.sectionName}_enable` as keyof TSettings,
-  };
 
   React.useEffect(() => {
     getActiveWeapon();
@@ -189,6 +185,12 @@ export const AimbotContent: React.FC = () => {
               />
               {weaponSettings.enable ? (
                 <React.Fragment>
+                  <CheckboxField
+                    label="Perfect first"
+                    helperText="First bullet will 100% hit the target"
+                    checked={weaponSettings.firstPerfectShoot}
+                    onChange={(v) => changeSettings({ ...weaponSettings, firstPerfectShoot: v })}
+                  />
                   <RangeField
                     label={`Fov: ${weaponSettings.fov}`}
                     min={0}
@@ -272,94 +274,6 @@ export const AimbotContent: React.FC = () => {
                   </Button>
                   <Button onClick={addWeaponSettings}>Add {activeWeapon.name} settings</Button>
                 </React.Fragment>
-              ) : (
-                ""
-              )}
-            </Group>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-      <div className={classes.container}>
-        <div>
-          <Group marginTop={35} label="Triggerbot">
-            <CheckboxField
-              label="Enable"
-              checked={settings.triggerbot_enable}
-              onChange={(v) => updateValue("triggerbot_enable", v)}
-            />
-            {settings.triggerbot_enable ? (
-              <React.Fragment>
-                <CheckboxField
-                  label="Flash check"
-                  helperText="Check if you are blinded"
-                  checked={settings.triggerbot_flash_check}
-                  onChange={(v) => updateValue("triggerbot_flash_check", v)}
-                />
-                <CheckboxField
-                  label="Jump check"
-                  helperText="Check if you are jumping"
-                  checked={settings.triggerbot_jump_check}
-                  onChange={(v) => updateValue("triggerbot_jump_check", v)}
-                />
-                <CheckboxField
-                  label="Friendly fire"
-                  helperText="Aim if player is teammates"
-                  checked={settings.triggerbot_friendly_fire}
-                  onChange={(v) => updateValue("triggerbot_friendly_fire", v)}
-                />
-                <RangeField
-                  label={`Delay before: ${settings.triggerbot_delay_before_shoot}`}
-                  helperText="Delay before shooting"
-                  min={0}
-                  max={2000}
-                  step={10}
-                  value={settings.triggerbot_delay_before_shoot}
-                  onChange={(v) => updateValue("triggerbot_delay_before_shoot", v)}
-                />
-                <RangeField
-                  label={`Delay after: ${settings.triggerbot_delay_after_shoot}`}
-                  helperText="Delay after shooting"
-                  min={0}
-                  max={2000}
-                  step={10}
-                  value={settings.triggerbot_delay_after_shoot}
-                  onChange={(v) => updateValue("triggerbot_delay_after_shoot", v)}
-                />
-                <SelectField
-                  placeholder="Type"
-                  helperText="Use key to activate aim"
-                  value={settings.triggerbot_use_key ? "1" : "0"}
-                  onChange={(v) => updateValue("triggerbot_use_key", v === "1")}
-                >
-                  <SelectItem value="0">Auto</SelectItem>
-                  <SelectItem value="1">Key</SelectItem>
-                </SelectField>
-                {settings.triggerbot_use_key ? (
-                  <KeyInputField value={settings.triggerbot_key} onChange={(v) => updateValue("triggerbot_key", v)} />
-                ) : (
-                  ""
-                )}
-              </React.Fragment>
-            ) : (
-              ""
-            )}
-          </Group>
-        </div>
-        {settings.triggerbot_enable ? (
-          <div>
-            <Group marginTop={35} marginLeft={35} label="Weapon triggerbot">
-              <WeaponSelect
-                value={activeWeapon.itemDI.toString()}
-                onChnage={(itemDI) => setActiveWeapon(new Weapon({ itemDI: +itemDI }))}
-              />
-              {activeWeapon.itemDI > 0 ? (
-                <CheckboxField
-                  label="Enable"
-                  checked={settings[triggerFields.enable] as boolean}
-                  onChange={(v) => updateValue(triggerFields.enable, v)}
-                />
               ) : (
                 ""
               )}

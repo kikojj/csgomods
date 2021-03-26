@@ -55,9 +55,10 @@ public:
 		return _read;
 	}
 
-	std::string readString(const DWORD dwAddress) {
-		char _read[128];
-		ReadProcessMemory(_process, LPVOID(dwAddress), _read, sizeof(char[128]), NULL);
+	template<int size>
+	std::string readStr(const DWORD dwAddress) {
+		char _read[size];
+		ReadProcessMemory(_process, LPVOID(dwAddress), _read, sizeof(char[size]), NULL);
 		return std::string(_read);
 	}
 
@@ -79,25 +80,13 @@ public:
 		CloseHandle(_process);
 	}
 
-	//smart allocator
+	//allocator
 	std::map<LPVOID, uintptr_t> allocators;
 
 	LPVOID allocateNewPage(uintptr_t size) {
 		auto address = VirtualAllocEx(_process, NULL, (size > 4096 ? size : 4096), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 		allocators[address] = size;
 		return address;
-	}
-
-	void free() {
-		for (auto allocator : allocators) {
-			free(allocator.first);
-		}
-	}
-
-	void free(LPVOID address) {
-		if (allocators[address] > 0) {
-			VirtualFreeEx(_process, address, 4096, MEM_COMMIT | MEM_RESERVE);
-		}
 	}
 
 	LPVOID allocate(uintptr_t size = 4096) {
@@ -110,6 +99,18 @@ public:
 			}
 		}
 		return allocateNewPage(size);
+	}
+
+	void free() {
+		for (auto allocator : allocators) {
+			free(allocator.first);
+		}
+	}
+
+	void free(LPVOID address) {
+		if (allocators[address] > 0) {
+			VirtualFreeEx(_process, address, 4096, MEM_COMMIT | MEM_RESERVE);
+		}
 	}
 };
 

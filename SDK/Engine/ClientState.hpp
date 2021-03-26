@@ -18,7 +18,7 @@ public:
 		return mem.read<int>(engineDll.dwBase + Offsets::signatures::dwClientState);
 	}
 
-//props
+//methods
 public:
 	int getLocalPlayer() {
 		return mem.read<int>(get() + Offsets::signatures::dwClientState_GetLocalPlayer);
@@ -49,5 +49,13 @@ public:
 	int dwModelPrecache() {
 		//SHOULD FIND SIGNATURE
 		return mem.read<int>(get() + 0x52A4);
+	}
+	int playerInfo() {
+		auto playerInfo = mem.read<int>(get() + Offsets::signatures::dwClientState_PlayerInfo);
+		return playerInfo;
+	}
+	int maxPlayers() {
+		auto maxPlayers = mem.read<int>(get() + Offsets::signatures::dwClientState_MaxPlayer);
+		return maxPlayers;
 	}
 };

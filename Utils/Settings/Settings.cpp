@@ -79,6 +79,9 @@ IAimbotSettings Settings::getAimbotSettingsFromJsonXX(jsonxx::Value* v) {
 	if (obj.has<jsonxx::Boolean>("enable")) {
 		settings.enable = obj.get<jsonxx::Boolean>("enable");
 	}
+	if (obj.has<jsonxx::Boolean>("firstPerfectShoot")) {
+		settings.firstPerfectShoot = obj.get<jsonxx::Boolean>("firstPerfectShoot");
+	}
 	if (obj.has<jsonxx::Number>("bone")) {
 		settings.bone = (Skeleton)obj.get<jsonxx::Number>("bone");
 	}
@@ -110,6 +113,7 @@ jsonxx::Value Settings::aimbotSettingsToJsonXX(IAimbotSettings settings) {
 	o <<
 		"use" << settings.use <<
 		"enable" << settings.enable <<
+		"firstPerfectShoot" << settings.firstPerfectShoot <<
 		"bone" << (int)settings.bone <<
 		"changeAfterNearest" << settings.changeAfterNearest <<
 		"fov" << settings.fov <<
@@ -449,6 +453,7 @@ bool Settings::aimbot_friendly_fire = false;
 IAimbotSettings Settings::aimbot_global = {
 	false,
 	false,
+	false,
 	0,
 	Skeleton::NEAREST,
 	false,
@@ -458,6 +463,7 @@ IAimbotSettings Settings::aimbot_global = {
 	0.0f
 };
 IAimbotSettings Settings::aimbot_pistols = {
+	false,
 	false,
 	false,
 	0,
@@ -471,6 +477,7 @@ IAimbotSettings Settings::aimbot_pistols = {
 IAimbotSettings Settings::aimbot_heavies = {
 	false,
 	false,
+	false,
 	0,
 	Skeleton::NEAREST,
 	false,
@@ -480,6 +487,7 @@ IAimbotSettings Settings::aimbot_heavies = {
 	0.0f
 };
 IAimbotSettings Settings::aimbot_shoutguns = {
+	false,
 	false,
 	false,
 	0,
@@ -493,6 +501,7 @@ IAimbotSettings Settings::aimbot_shoutguns = {
 IAimbotSettings Settings::aimbot_smgs = {
 	false,
 	false,
+	false,
 	0,
 	Skeleton::NEAREST,
 	false,
@@ -504,6 +513,7 @@ IAimbotSettings Settings::aimbot_smgs = {
 IAimbotSettings Settings::aimbot_rifles = {
 	false,
 	false,
+	false,
 	0,
 	Skeleton::NEAREST,
 	false,
@@ -513,6 +523,7 @@ IAimbotSettings Settings::aimbot_rifles = {
 	0.0f
 };
 IAimbotSettings Settings::aimbot_snipers = {
+	false,
 	false,
 	false,
 	0,

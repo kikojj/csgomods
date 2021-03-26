@@ -55,6 +55,7 @@ struct ISkinchangerWeapon {
 struct IAimbotSettings {
   bool use = false;
   bool enable = false;
+  bool firstPerfectShoot = false;
   float fov = 0.0f;
   Skeleton bone = Skeleton::NEAREST;
   bool changeAfterNearest = false;

@@ -165,6 +165,7 @@
     <ClInclude Include="SDK\Utils\ClientStates.hpp" />
     <ClInclude Include="SDK\Utils\ColorRGBA.hpp" />
     <ClInclude Include="SDK\Utils\CPlane.hpp" />
+    <ClInclude Include="SDK\Utils\IPlayerInfo.hpp" />
     <ClInclude Include="SDK\Utils\ISurface.hpp" />
     <ClInclude Include="SDK\Utils\CUserCmd.hpp" />
     <ClInclude Include="SDK\Utils\Defines.hpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="Utils\BspParser\requirements.hpp" />
     <ClInclude Include="Utils\BspParser\valve_structs.hpp" />
     <ClInclude Include="Utils\ClientCmdUD\ClientCmdUD.hpp" />
+    <ClInclude Include="Utils\ClientCmdUD\CMDToggle.hpp" />
     <ClInclude Include="Utils\GlobalVars.hpp" />
     <ClInclude Include="Utils\Helpers\Helpers.hpp" />
     <ClInclude Include="Utils\JsonXX\jsonxx.h" />
@@ -223,6 +225,7 @@
     <ClCompile Include="SDK\Utils\ItemDefinitionIndex.cpp" />
     <ClCompile Include="Utils\BspParser\bsp_parser.cpp" />
     <ClCompile Include="Utils\ClientCmdUD\ClientCmdUD.cpp" />
+    <ClCompile Include="Utils\ClientCmdUD\CMDToggle.cpp" />
     <ClCompile Include="Utils\Helpers\Helpers.cpp" />
     <ClCompile Include="Utils\JsonXX\jsonxx.cc" />
     <ClCompile Include="Utils\Offsets\Offsets.cpp" />

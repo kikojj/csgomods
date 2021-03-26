@@ -26,10 +26,17 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
         },
         {
           title: "Aimbot",
-          subtitle: "Legit, Trigger, Weapon settings, Recoil control",
+          subtitle: "Legit, Weapon settings, Recoil control",
           iconUrl: AimbotIcon,
           active: activeTab === ActiveTab.TAB_AIMBOT,
           onClick: () => setActiveTab(ActiveTab.TAB_AIMBOT),
+        },
+        {
+          title: "Triggerbot",
+          subtitle: "Trigger, Weapon settings,",
+          iconUrl: AimbotIcon,
+          active: activeTab === ActiveTab.TAB_TRIGGER,
+          onClick: () => setActiveTab(ActiveTab.TAB_TRIGGER),
         },
         {
           title: "Skinchanger",
@@ -40,7 +47,7 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
         },
         {
           title: "Miscellaneous",
-          subtitle: "Bhop, Auto pistols, Auto accept, Anti-flash",
+          subtitle: "Bhop, Auto pistols, Auto accept, Rank reveal",
           iconUrl: MiscellaneousIcon,
           active: activeTab === ActiveTab.TAB_MISC,
           onClick: () => setActiveTab(ActiveTab.TAB_MISC),

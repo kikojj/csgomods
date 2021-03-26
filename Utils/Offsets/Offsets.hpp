@@ -39,6 +39,13 @@ namespace Offsets {
     static int m_iClip1;
     static int m_iCompetitiveRanking;
     static int m_iCompetitiveWins;
+    static int m_iPing;
+    static int m_iKills;
+    static int m_iAssists;
+    static int m_iDeaths;
+    static int m_iMVPs;
+    static int m_iScore;
+    static int m_szClan;
     static int m_iCrosshairId;
     static int m_iEntityQuality;
     static int m_iFOVStart;

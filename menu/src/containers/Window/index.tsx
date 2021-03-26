@@ -9,6 +9,7 @@ import {
   MiscContent,
   ConfigsContent,
   LoadingContent,
+  TriggerbotContent,
 } from "@containers";
 
 import { ActiveTab } from "@utils";
@@ -44,6 +45,8 @@ export const Window = () => {
           <VisualsContent />
         ) : activeTab === ActiveTab.TAB_AIMBOT ? (
           <AimbotContent />
+        ) : activeTab === ActiveTab.TAB_TRIGGER ? (
+          <TriggerbotContent />
         ) : activeTab === ActiveTab.TAB_SKINCHANGER ? (
           <SkinchangerContent />
         ) : activeTab === ActiveTab.TAB_MISC ? (

@@ -36,6 +36,13 @@ int Offsets::netvars::m_iAccountID;
 int Offsets::netvars::m_iClip1;
 int Offsets::netvars::m_iCompetitiveRanking;
 int Offsets::netvars::m_iCompetitiveWins;
+int Offsets::netvars::m_iPing;
+int Offsets::netvars::m_iKills;
+int Offsets::netvars::m_iAssists;
+int Offsets::netvars::m_iDeaths;
+int Offsets::netvars::m_iMVPs;
+int Offsets::netvars::m_iScore;
+int Offsets::netvars::m_szClan;
 int Offsets::netvars::m_iCrosshairId;
 int Offsets::netvars::m_iEntityQuality;
 int Offsets::netvars::m_iFOVStart;
@@ -267,9 +274,15 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_hOwner = Scanner::getNetvar("m_hOwner", "m_hOwner", "DT_PredictedViewModel");
 
   //DT_CSPlayerResource
-  Offsets::netvars::m_iCompetitiveRanking = Scanner::getNetvar("m_iCompetitiveRanking",  "m_iCompetitiveRanking",  "DT_CSPlayerResource");
-  Offsets::netvars::m_iCompetitiveWins    = Scanner::getNetvar("m_iCompetitiveWins",     "m_iCompetitiveWins",     "DT_CSPlayerResource");
-
+  Offsets::netvars::m_iCompetitiveRanking = Scanner::getNetvar("m_iCompetitiveRanking",  "m_iCompetitiveRanking",   "DT_CSPlayerResource");
+  Offsets::netvars::m_iPing               = Scanner::getNetvar("m_iPing",                "m_iPing",                 "DT_CSPlayerResource");
+  Offsets::netvars::m_iKills              = Scanner::getNetvar("m_iKills",               "m_iKills",                "DT_CSPlayerResource");
+  Offsets::netvars::m_iAssists            = Scanner::getNetvar("m_iAssists",             "m_iAssists",              "DT_CSPlayerResource");
+  Offsets::netvars::m_iDeaths             = Scanner::getNetvar("m_iDeaths",              "m_iDeaths",               "DT_CSPlayerResource");
+  Offsets::netvars::m_iMVPs               = Scanner::getNetvar("m_iMVPs",                "m_iMVPs",                 "DT_CSPlayerResource");
+  Offsets::netvars::m_iScore              = Scanner::getNetvar("m_iScore",               "m_iScore",                "DT_CSPlayerResource");
+  Offsets::netvars::m_szClan              = Scanner::getNetvar("m_szClan",               "m_szClan",                "DT_CSPlayerResource");
+  
   //DT_BaseViewModel
   Offsets::netvars::m_nModelIndex = Scanner::getNetvar("m_nModelIndex", "m_nModelIndex", "DT_BaseViewModel");
 

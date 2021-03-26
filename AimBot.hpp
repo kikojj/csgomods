@@ -21,6 +21,7 @@
 class AimBot {
 private:
 	//aim
+	bool firstPerfectShoot = false;
 	Skeleton bone = Skeleton::NEAREST;
 	bool changeAfterNearest = false;
 	float fov = 0;

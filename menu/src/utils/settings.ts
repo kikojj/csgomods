@@ -47,6 +47,7 @@ export enum TeamNum {
 export interface IAimbotSettings {
   use: boolean;
   enable: boolean;
+  firstPerfectShoot: boolean;
   fov: number;
   bone: number;
   changeAfterNearest: boolean;
@@ -59,6 +60,7 @@ export interface IAimbotSettings {
 export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
   use: false,
   enable: false,
+  firstPerfectShoot: false,
   fov: 0,
   bone: 0,
   changeAfterNearest: false,

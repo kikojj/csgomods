@@ -24,6 +24,7 @@
 #include "Utils/Offsets/Offsets.hpp"
 #include "Utils/VisibleCheck/VisibleCheck.h"
 #include "Utils/ClientCmdUD/ClientCmdUD.hpp"
+#include "Utils/ClientCmdUD/CMDToggle.hpp"
 
 using namespace std;
 
