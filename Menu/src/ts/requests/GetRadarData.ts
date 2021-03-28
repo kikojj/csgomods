@@ -18,6 +18,10 @@ export interface IRadarData {
 
   competitiveRanking: number;
   competitiveWins: number;
+
+  x: number;
+  y: number;
+  z: number;
 }
 
 export type TGetRadarDataResponse = {

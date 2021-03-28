@@ -88,7 +88,10 @@ void MenuServer::getRadarData(std::vector<IRadarData> radarData){
       << "MVPs" << data.MVPs
       << "score" << data.score
       << "competitiveRanking" << data.competitiveRanking
-      << "competitiveWins" << data.competitiveWins;
+      << "competitiveWins" << data.competitiveWins
+      << "x" << data.x
+      << "y" << data.y
+      << "z" << data.z;
     arrayData.append(obj);
   }
 

@@ -117,7 +117,7 @@ public:
 		}
 		return false;
 	}
-	IPlayerInfo playerInfo() {
+	IPlayerInfo info() {
 		auto items = mem.read<int>(mem.read<int>(engine.clientState->playerInfo() + 0x40) + 0xC);
 
 		auto _info = mem.read<int>(items + 0x28 + EntityList::getEntityID(get()) * 0x34);

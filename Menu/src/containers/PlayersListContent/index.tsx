@@ -66,6 +66,109 @@ const Player: React.FC<PlayerProps> = ({ playerData }) => {
   );
 };
 
+const Header: React.FC = () => {
+  const classes = useStyles();
+  return (
+    <div className={classes.player} style={{ fontSize: 12 }}>
+      <div className={classes.player_info}>
+        <div className={classes.player_stat}>Ping</div>
+        <div className={classes.player_name}>Name</div>
+        <div className={classes.player_rank}>Rank</div>
+        <div className={classes.player_wins}>Wins</div>
+      </div>
+      <div className={classes.player_stats}>
+        <div className={classes.player_money}>Money</div>
+        <div className={classes.player_stat}>K</div>
+        <div className={classes.player_stat}>A</div>
+        <div className={classes.player_stat}>D</div>
+        <div className={classes.player_mvps}>MVP</div>
+        <div className={classes.player_stat} style={{ marginRight: 0 }}>
+          S
+        </div>
+      </div>
+    </div>
+  );
+};
+
+type AverageProps = { data: IRadarData[] };
+const Average: React.FC<AverageProps> = ({ data }) => {
+  const classes = useStyles();
+
+  const players = data.filter((p) => !p.isFakePlayer);
+
+  let avgMoney = 0;
+  let avgKills = 0;
+  let avgAssists = 0;
+  let avgDeaths = 0;
+  let avgMVPs = 0;
+  let avgScore = 0;
+
+  let avgRanks = 0;
+  let avgWins = 0;
+
+  if (data.length > 0) {
+    avgMoney = data.map((p) => p.money).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+
+    avgKills = data.map((p) => p.kills).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+
+    avgAssists = data.map((p) => p.assists).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+
+    avgDeaths = data.map((p) => p.deaths).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+
+    avgMVPs = data.map((p) => p.MVPs).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+
+    avgScore = data.map((p) => p.score).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+  }
+
+  if (players.length > 0) {
+    avgRanks =
+      players.map((p) => p.competitiveRanking).reduce((prevValue, currentValue) => prevValue + currentValue) /
+      players.length;
+    avgWins =
+      players.map((p) => p.competitiveWins).reduce((prevValue, currentValue) => prevValue + currentValue) /
+      players.length;
+  }
+
+  return (
+    <div className={classes.player}>
+      <div className={classes.player_info}>
+        <div className={classes.player_stat}>AVG</div>
+        <div className={classes.player_name}></div>
+        <div className={classes.player_rank}>
+          {players.length > 0 ? (
+            <img
+              src={avgRanks < 1 || avgRanks > 18 ? ranks.Rank_None : ranks[`Rank_${avgRanks}` as keyof typeof ranks]}
+              alt=""
+            />
+          ) : (
+            ""
+          )}
+        </div>
+        <div className={classes.player_wins}>
+          {players.length > 0 ? (
+            <React.Fragment>
+              <img src={CupIcon} alt="" />
+              {avgWins}
+            </React.Fragment>
+          ) : (
+            ""
+          )}
+        </div>
+      </div>
+      <div className={classes.player_stats}>
+        <div className={classes.player_money}>${avgMoney}</div>
+        <div className={classes.player_stat}>{avgKills}</div>
+        <div className={classes.player_stat}>{avgAssists}</div>
+        <div className={classes.player_stat}>{avgDeaths}</div>
+        <div className={classes.player_mvps}>{avgMVPs}</div>
+        <div className={classes.player_stat} style={{ marginRight: 0 }}>
+          {avgScore}
+        </div>
+      </div>
+    </div>
+  );
+};
+
 export const PlayersListContent: React.FC = () => {
   const classes = useStyles();
 
@@ -79,13 +182,21 @@ export const PlayersListContent: React.FC = () => {
   const TList: React.FC = React.useCallback(() => {
     return (
       <List
-        items={Ts.map((data) => {
-          return {
-            content: <Player playerData={data} />,
-            onClick: () => setSelectedPlayer(data.userID),
-            selected: selectedPlayer === data.userID,
-          };
-        })}
+        items={[
+          {
+            content: <Header />,
+          },
+          ...Ts.map((data) => {
+            return {
+              content: <Player playerData={data} />,
+              onClick: () => setSelectedPlayer(data.userID),
+              selected: selectedPlayer === data.userID,
+            };
+          }),
+          {
+            content: <Average data={Ts} />,
+          },
+        ]}
       />
     );
   }, [Ts]);
@@ -93,13 +204,21 @@ export const PlayersListContent: React.FC = () => {
   const CTList: React.FC = React.useCallback(() => {
     return (
       <List
-        items={CTs.map((data) => {
-          return {
-            content: <Player playerData={data} />,
-            onClick: () => setSelectedPlayer(data.userID),
-            selected: selectedPlayer === data.userID,
-          };
-        })}
+        items={[
+          {
+            content: <Header />,
+          },
+          ...CTs.map((data) => {
+            return {
+              content: <Player playerData={data} />,
+              onClick: () => setSelectedPlayer(data.userID),
+              selected: selectedPlayer === data.userID,
+            };
+          }),
+          {
+            content: <Average data={CTs} />,
+          },
+        ]}
       />
     );
   }, [CTs]);

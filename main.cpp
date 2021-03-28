@@ -91,30 +91,11 @@ int main() {
 			int lastActiveWeaponIDI = -1;
 			TeamNum lastTeam = TeamNum::Invalid;
 			while (isWorking) {
-				if (
-					engine.clientState->state() != ClientStates::INGAME ||
-					engine.clientState->m_nDeltaTick() == -1 ||
-					client.localPlayer->m_iHealth() <= 0 ||
-					client.localPlayer->teamNum() < TeamNum::TERRORIST
-					) {
+				if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
 					continue;
 				}
 
-				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-				BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
-				auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
-
-				if (activeWeaponIDI != (int)ItemDefinitionIndex::Invalid && activeWeaponIDI != lastActiveWeaponIDI) {
-					lastActiveWeaponIDI = activeWeaponIDI;
-					menuServer.getActiveWeapon(activeWeaponIDI);
-				}
-
-				auto team = client.localPlayer->teamNum();
-				if (lastTeam != team) {
-					lastTeam = team;
-					menuServer.getTeam(team);
-				}
-
+				//Radar Data
 				vector<IRadarData> radarData;
 				for (const auto& entityObject : client.entityList->array()) {
 					auto entity = entityObject.first;
@@ -125,14 +106,17 @@ int main() {
 
 					BasePlayer player(entity);
 
+					auto playerInfo = player.info();
+					auto position = player.m_vecOrigin();
+
 					radarData.push_back({
-							player.playerInfo().szName,
-							player.playerInfo().userId,
+							playerInfo.szName,
+							playerInfo.userId,
 							player.teamNum(),
-							player.playerInfo().fakeplayer,
+							playerInfo.fakeplayer,
 
 							player.ping(),
-							 player.m_iAccount(),
+							player.m_iAccount(),
 							player.kills(),
 							player.assists(),
 							player.deaths(),
@@ -141,9 +125,34 @@ int main() {
 
 							player.competitiveRanking(),
 							player.competitiveWins(),
-					});
+
+							position.x,
+							position.y,
+							position.z
+						});
 				}
 				menuServer.getRadarData(radarData);
+
+				if (client.localPlayer->m_iHealth() <= 0 || client.localPlayer->teamNum() < TeamNum::TERRORIST) {
+					continue;
+				}
+
+				//My active Weapon
+				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
+				BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+				auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
+
+				if (activeWeaponIDI != (int)ItemDefinitionIndex::Invalid && activeWeaponIDI != lastActiveWeaponIDI) {
+					lastActiveWeaponIDI = activeWeaponIDI;
+					menuServer.getActiveWeapon(activeWeaponIDI);
+				}
+
+				//My team
+				auto team = client.localPlayer->teamNum();
+				if (lastTeam != team) {
+					lastTeam = team;
+					menuServer.getTeam(team);
+				}
 
 				Sleep(500);
 			}

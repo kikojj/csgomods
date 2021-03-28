@@ -285,6 +285,7 @@ void Offsets::initNetvars(){
   PNETVAR(int32_t, m_nPersonaDataPublicCommendsFriendly, "DT_CSPlayerResource", "m_nPersonaDataPublicCommendsFriendly");
   */
   Offsets::netvars::m_iCompetitiveRanking = Scanner::getNetvar("m_iCompetitiveRanking",  "m_iCompetitiveRanking",   "DT_CSPlayerResource");
+  Offsets::netvars::m_iCompetitiveWins    = Scanner::getNetvar("m_iCompetitiveWins",     "m_iCompetitiveWins",      "DT_CSPlayerResource");
   Offsets::netvars::m_iPing               = Scanner::getNetvar("m_iPing",                "m_iPing",                 "DT_CSPlayerResource");
   Offsets::netvars::m_iKills              = Scanner::getNetvar("m_iKills",               "m_iKills",                "DT_CSPlayerResource");
   Offsets::netvars::m_iAssists            = Scanner::getNetvar("m_iAssists",             "m_iAssists",              "DT_CSPlayerResource");

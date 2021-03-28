@@ -1,19 +1,14 @@
 import { makeStyles } from "@material-ui/styles";
 import { colors, hexAlpha } from "@utils";
 
-export type Props = {
-  color: string;
-};
 export const useStyles = makeStyles({
   container: {},
   item: {
     padding: 10,
-    backgroundColor: colors.darkBlue,
+    backgroundColor: colors.secondary,
 
     fontSize: 14,
     color: "#fff",
-
-    cursor: "pointer",
 
     transition: "0.2s background ease",
 
@@ -25,8 +20,13 @@ export const useStyles = makeStyles({
       borderRadius: "0 0 2px 2px",
     },
 
-    "&:hover": {
-      backgroundColor: hexAlpha(colors.darkBlue, 50),
+    "&-active": {
+      backgroundColor: colors.darkBlue,
+      cursor: "pointer",
+
+      "&:hover": {
+        backgroundColor: hexAlpha(colors.darkBlue, 50),
+      },
     },
 
     "&-selected": {

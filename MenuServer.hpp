@@ -61,6 +61,10 @@ struct IRadarData {
 
   int competitiveRanking = 0;
   int competitiveWins = 0;
+
+  float x = 0;
+  float y = 0;
+  float z = 0;
 };
 
 class MenuServer {

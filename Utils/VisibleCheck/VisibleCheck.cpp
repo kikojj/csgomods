@@ -77,6 +77,10 @@ DWORD WINAPI hkCreateMoveEnd(){ return 0; }
 
 CVisibleCheck::CVisibleCheck(){
 	hooked = false;
+	dwVisibleStruct = 0;
+	allocatedAddressTraceOutput = nullptr;
+	allocatedAddressVisibleStruct = nullptr;
+	allocatedAddressHookCode = nullptr;
 	
 	for (int i = 0; i < 64; i++){
 		visibleStruct.player[i] = false;
@@ -97,6 +101,85 @@ CVisibleCheck::~CVisibleCheck() {
 	if (allocatedAddressHookCode) {
 		mem.free(allocatedAddressHookCode);
 	}
+}
+
+bool CVisibleCheck::init() {
+	if (hooked) {
+		return true;
+	}
+
+	// Set CreateMove local Vars
+	ICreateMoveVars hkCreateMoveVars;
+#pragma region hkCreateMoveVars initialization
+	hkCreateMoveVars.dwClientState = mem.read<DWORD>(engineDll.dwBase + Offsets::signatures::dwClientState);
+	hkCreateMoveVars.dwEntityList = clientDll.dwBase + Offsets::signatures::dwEntityList;
+	hkCreateMoveVars.dwLocalPlayer = clientDll.dwBase + Offsets::signatures::dwLocalPlayer;
+	hkCreateMoveVars.m_nDeltaTick = mem.read<DWORD>(engineDll.dwBase + Offsets::signatures::clientstate_delta_ticks);
+	hkCreateMoveVars.m_dwBoneMatrix = Offsets::netvars::m_dwBoneMatrix;
+	hkCreateMoveVars.m_vecViewOffset = Offsets::netvars::m_vecViewOffset;
+	hkCreateMoveVars.m_vecOrigin = Offsets::netvars::m_vecOrigin;
+	hkCreateMoveVars.m_lifeState = Offsets::netvars::m_lifeState;
+	hkCreateMoveVars.m_iTeamNum = Offsets::netvars::m_iTeamNum;
+	hkCreateMoveVars.m_iHealth = Offsets::netvars::m_iHealth;
+	hkCreateMoveVars.m_bDormant = Offsets::netvars::m_bDormant;
+	hkCreateMoveVars.dwTraceLine = Offsets::signatures::dwTraceLine;
+	hkCreateMoveVars.min_fraction = 0.97f;
+	hkCreateMoveVars.all_bones[0] = 3;
+	hkCreateMoveVars.all_bones[1] = 4;
+	hkCreateMoveVars.all_bones[2] = 6;
+	hkCreateMoveVars.all_bones[3] = 7;
+	hkCreateMoveVars.all_bones[4] = 8;
+	hkCreateMoveVars.all_bones[5] = 11;
+	hkCreateMoveVars.all_bones[6] = 12;
+	hkCreateMoveVars.all_bones[7] = 13;
+	hkCreateMoveVars.all_bones[8] = 41;
+	hkCreateMoveVars.all_bones[9] = 42;
+	hkCreateMoveVars.all_bones[10] = 43;
+	hkCreateMoveVars.all_bones[11] = 70;
+	hkCreateMoveVars.all_bones[12] = 71;
+	hkCreateMoveVars.all_bones[13] = 72;
+	hkCreateMoveVars.all_bones[14] = 77;
+	hkCreateMoveVars.all_bones[15] = 78;
+	hkCreateMoveVars.all_bones[16] = 79;
+#pragma endregion
+
+	// Allocate memory for result TraceLine function
+	allocatedAddressTraceOutput = mem.allocate();
+	hkCreateMoveVars.traceOutput = (CGameTrace*)allocatedAddressTraceOutput;
+
+	// Allocate memory for visibleStruct
+	allocatedAddressVisibleStruct = mem.allocate(sizeof(IVisible));
+	hkCreateMoveVars.visibleStruct = (IVisible*)allocatedAddressVisibleStruct;
+
+	// Allocate memory for Hook
+	allocatedAddressHookCode = mem.allocate();
+	LPVOID hookCodeAddress = allocatedAddressHookCode;
+
+	if (!hkCreateMoveVars.traceOutput || !hkCreateMoveVars.visibleStruct || !(DWORD)hookCodeAddress)
+		return false;
+
+	// Write hkCreateMove function in to CSGO
+	if (!WriteProcessMemory(mem._process, hookCodeAddress, hkCreateMove, (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove, NULL))
+		return false;
+
+	// Write hkCreateMoveVars(Local Variables for CreateMove hook)
+	DWORD dw_hkCreateMoveVars = (DWORD)hookCodeAddress + (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove;
+	if (!WriteProcessMemory(mem._process, (LPVOID)dw_hkCreateMoveVars, &hkCreateMoveVars, sizeof(ICreateMoveVars), NULL))
+		return false;
+
+	// Set pointer to hkCreateMoveVars
+	if (!WriteProcessMemory(mem._process, (LPVOID)((DWORD)hookCodeAddress + 0x9), &dw_hkCreateMoveVars, sizeof(DWORD), NULL))
+		return false;
+
+	DWORD dwClientMode = mem.read<DWORD>(mem.read<DWORD>(Offsets::signatures::dwClientMode));
+
+	VirtualFunction vfClientMode(dwClientMode);
+	vfClientMode.hook(24, (DWORD)hookCodeAddress);
+
+	dwVisibleStruct = (DWORD)hkCreateMoveVars.visibleStruct;
+	hooked = true;
+
+	return hooked;
 }
 	
 bool CVisibleCheck::updateVisibleStruct(){
@@ -151,81 +234,58 @@ bool CVisibleCheck::isVisible(int entityId, int bone) {
 	return visibleStruct.playerBones[entityId][bone];
 }
 
-bool CVisibleCheck::init(){
-	if (hooked) {
-		return true;
-	}
-		
-	// Set CreateMove local Vars
-	ICreateMoveVars hkCreateMoveVars;
-	#pragma region hkCreateMoveVars initialization
-	hkCreateMoveVars.dwClientState 		= mem.read<DWORD>(engineDll.dwBase + Offsets::signatures::dwClientState);
-	hkCreateMoveVars.dwEntityList 		= clientDll.dwBase + Offsets::signatures::dwEntityList;
-	hkCreateMoveVars.dwLocalPlayer 		= clientDll.dwBase + Offsets::signatures::dwLocalPlayer;
-	hkCreateMoveVars.m_nDeltaTick 		= mem.read<DWORD>(engineDll.dwBase + Offsets::signatures::clientstate_delta_ticks);
-	hkCreateMoveVars.m_dwBoneMatrix 	= Offsets::netvars::m_dwBoneMatrix;
-	hkCreateMoveVars.m_vecViewOffset 	= Offsets::netvars::m_vecViewOffset;
-	hkCreateMoveVars.m_vecOrigin 			= Offsets::netvars::m_vecOrigin;
-	hkCreateMoveVars.m_lifeState 			= Offsets::netvars::m_lifeState;
-	hkCreateMoveVars.m_iTeamNum 			= Offsets::netvars::m_iTeamNum;
-	hkCreateMoveVars.m_iHealth 				= Offsets::netvars::m_iHealth;
-	hkCreateMoveVars.m_bDormant 			= Offsets::netvars::m_bDormant;
-	hkCreateMoveVars.dwTraceLine 			= Offsets::signatures::dwTraceLine;
-	hkCreateMoveVars.min_fraction			= 0.97f;
-	hkCreateMoveVars.all_bones[0] = 3;
-	hkCreateMoveVars.all_bones[1] = 4;
-	hkCreateMoveVars.all_bones[2] = 6;
-	hkCreateMoveVars.all_bones[3] = 7;
-	hkCreateMoveVars.all_bones[4] = 8;
-	hkCreateMoveVars.all_bones[5] = 11;
-	hkCreateMoveVars.all_bones[6] = 12;
-	hkCreateMoveVars.all_bones[7] = 13;
-	hkCreateMoveVars.all_bones[8] = 41;
-	hkCreateMoveVars.all_bones[9] = 42;
-	hkCreateMoveVars.all_bones[10] = 43;
-	hkCreateMoveVars.all_bones[11] = 70;
-	hkCreateMoveVars.all_bones[12] = 71;
-	hkCreateMoveVars.all_bones[13] = 72;
-	hkCreateMoveVars.all_bones[14] = 77;
-	hkCreateMoveVars.all_bones[15] = 78;
-	hkCreateMoveVars.all_bones[16] = 79;
-	#pragma endregion
-	
-	// Allocate memory for result TraceLine function
-	allocatedAddressTraceOutput = mem.allocate();
-	hkCreateMoveVars.traceOutput = (CGameTrace*)allocatedAddressTraceOutput;
-	
-	// Allocate memory for visibleStruct
-	allocatedAddressVisibleStruct = mem.allocate(sizeof(IVisible));
-	hkCreateMoveVars.visibleStruct = (IVisible*)allocatedAddressVisibleStruct;
-	
-	// Allocate memory for Hook
-	allocatedAddressHookCode = mem.allocate();
-	LPVOID hookCodeAddress = allocatedAddressHookCode;
-		
-	if (!hkCreateMoveVars.traceOutput || !hkCreateMoveVars.visibleStruct || !(DWORD)hookCodeAddress)
-		return false;
-	
-	// Write hkCreateMove function in to CSGO
-	if (!WriteProcessMemory(mem._process, hookCodeAddress, hkCreateMove, (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove, NULL))
-		return false;
-	
-	// Write hkCreateMoveVars(Local Variables for CreateMove hook)
-	DWORD dw_hkCreateMoveVars = (DWORD)hookCodeAddress + (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove;
-	if (!WriteProcessMemory(mem._process, (LPVOID)dw_hkCreateMoveVars, &hkCreateMoveVars, sizeof(ICreateMoveVars), NULL))
-		return false;
-	
-	// Set pointer to hkCreateMoveVars
-	if (!WriteProcessMemory(mem._process, (LPVOID)((DWORD)hookCodeAddress + 0x9), &dw_hkCreateMoveVars, sizeof(DWORD), NULL))
-		return false;
+bool CVisibleCheck::lineGoesThroughSmoke(Vec3 start, Vec3 end) {
+	// 0xC + 0xC + 0x1
+	const int RESERVE_SIZE = 0x19;
+	static unsigned int SHELLCODE_SIZE = sizeof(LGTSShellcode) - RESERVE_SIZE;
 
-	DWORD dwClientMode = mem.read<DWORD>(mem.read<DWORD>(Offsets::signatures::dwClientMode));
+	// Allocate room for our shellcode in csgo
+	auto shellcodeAddr = mem.allocate(sizeof(LGTSShellcode));
 
-	VirtualFunction vfClientMode(dwClientMode);
-	vfClientMode.hook(24, (DWORD)hookCodeAddress);
-	
-	dwVisibleStruct = (DWORD)hkCreateMoveVars.visibleStruct;
-	hooked = true;
+	DWORD fLineThroughSmoke = Offsets::signatures::dwLineThroughSmoke;
 
-	return hooked;
+	DWORD param_startAddr = (DWORD)shellcodeAddr + SHELLCODE_SIZE;
+	DWORD param_endAddr = (DWORD)param_startAddr + sizeof(Vec3);
+	DWORD returnAddr = param_endAddr + sizeof(Vec3);
+
+	DWORD param_end_y = (DWORD)param_endAddr + 4;
+	DWORD param_end_z = (DWORD)param_endAddr + 8;
+
+	DWORD param_start_y = (DWORD)param_startAddr + 4;
+	DWORD param_start_z = (DWORD)param_startAddr + 8;
+
+	// write our end vector and data member positions in the asm
+	memcpy(LGTSShellcode + 0xA, &param_endAddr, sizeof(DWORD));
+	memcpy(LGTSShellcode + 0x12, &param_end_y, sizeof(DWORD));
+	memcpy(LGTSShellcode + 0x1B, &param_end_z, sizeof(DWORD));
+
+	// write our start vector and data member positions in the asm
+	memcpy(LGTSShellcode + 0x28, &param_startAddr, sizeof(DWORD));
+	memcpy(LGTSShellcode + 0x30, &param_start_y, sizeof(DWORD));
+	memcpy(LGTSShellcode + 0x38, &param_start_z, sizeof(DWORD));
+
+	// write the addr of the function
+	memcpy(LGTSShellcode + 0x40, &fLineThroughSmoke, sizeof(DWORD));
+
+	// write the addr of where we store the return value
+	memcpy(LGTSShellcode + 0x47, &returnAddr, sizeof(DWORD));
+
+	// plug in our passed parameters
+	memcpy(LGTSShellcode + 0x50, &start, sizeof(Vec3));
+	memcpy(LGTSShellcode + 0x5C, &end, sizeof(Vec3));
+
+
+	// Write our shellcode
+	mem.write((DWORD)shellcodeAddr, LGTSShellcode);
+
+	// Run the shellcode
+	mem.createThread((uintptr_t)shellcodeAddr);
+
+	// Get our return value
+	bool returnVal = mem.read<bool>(returnAddr);
+
+	// Free our allocated memory
+	mem.free(shellcodeAddr);
+
+	return returnVal;
 }
