@@ -50,6 +50,7 @@ export const useStyles = makeStyles({
     justifyContent: "space-between",
   },
   tab_content_text: {
+    marginRight: 15,
     flex: 1,
   },
   tab_content_text_title: {

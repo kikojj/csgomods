@@ -224,28 +224,28 @@ export const AimbotContent: React.FC = () => {
                   />
                   <CheckboxField
                     label="RCS Enable"
-                    checked={weaponSettings.rcs_enable}
-                    onChange={(v) => changeSettings({ ...weaponSettings, rcs_enable: v })}
+                    checked={weaponSettings.rcsEnable}
+                    onChange={(v) => changeSettings({ ...weaponSettings, rcsEnable: v })}
                   />
-                  {weaponSettings.rcs_enable ? (
+                  {weaponSettings.rcsEnable ? (
                     <React.Fragment>
                       <RangeField
-                        label={`RCS X: ${weaponSettings.rcs_scale_x.toString()}%`}
+                        label={`RCS X: ${weaponSettings.rcsScaleX.toString()}%`}
                         helperText="Horizontal recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={weaponSettings.rcs_scale_x}
-                        onChange={(v) => changeSettings({ ...weaponSettings, rcs_scale_x: v })}
+                        value={weaponSettings.rcsScaleX}
+                        onChange={(v) => changeSettings({ ...weaponSettings, rcsScaleX: v })}
                       />
                       <RangeField
-                        label={`RCS Y: ${weaponSettings.rcs_scale_y.toString()}%`}
+                        label={`RCS Y: ${weaponSettings.rcsScaleY.toString()}%`}
                         helperText="Vertical recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={weaponSettings.rcs_scale_y}
-                        onChange={(v) => changeSettings({ ...weaponSettings, rcs_scale_y: v })}
+                        value={weaponSettings.rcsScaleY}
+                        onChange={(v) => changeSettings({ ...weaponSettings, rcsScaleY: v })}
                       />
                     </React.Fragment>
                   ) : (

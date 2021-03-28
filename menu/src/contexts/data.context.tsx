@@ -7,8 +7,13 @@ import {
   GET_ALL_SKINS,
   TGetTeamResponse,
   GET_TEAM,
+  TGetRadarDataResponse,
+  GET_RADAR_DATA,
+  IRadarData,
+  TGetMapNameResponse,
+  GET_MAP_NAME,
 } from "@ts/requests";
-import { Skin, TeamNum, Weapon } from "@utils";
+import { isObjectsEqual, Skin, TeamNum, Weapon } from "@utils";
 import { TGetAllSkinsResponse } from "@ts/requests";
 
 const Data = () => {
@@ -18,11 +23,15 @@ const Data = () => {
   const [team, setTeam] = React.useState<TeamNum>(TeamNum.NO_TEAM);
   const [skins, setSkins] = React.useState<Skin[]>([]);
   const [defaultSkins, setDefaultSkins] = React.useState<TGetAllSkinsResponse["message"]["default"]>({});
+  const [radarData, setRadarData] = React.useState<IRadarData[]>([]);
+  const [mapName, setMapName] = React.useState<string>("");
 
   React.useEffect(() => {
     socket.addOnMessageListener(GET_ACTIVE_WEAPON, onGetActiveWeapon);
     socket.addOnMessageListener(GET_ALL_SKINS, onGetAllSkins);
     socket.addOnMessageListener(GET_TEAM, onGetTeam);
+    socket.addOnMessageListener(GET_RADAR_DATA, onGetRadarData);
+    socket.addOnMessageListener(GET_MAP_NAME, onGetMapName);
   }, []);
 
   const onGetActiveWeapon = React.useCallback((message: TGetActiveWeaponResponse["message"]) => {
@@ -54,6 +63,31 @@ const Data = () => {
     socket.send(GET_TEAM);
   }, []);
 
+  const onGetRadarData = React.useCallback((message: TGetRadarDataResponse["message"]) => {
+    setRadarData((radarData) => {
+      let wasChanged = false;
+      message.forEach((d) => {
+        const dataUser = radarData.find((d_) => {
+          return d_.userID === d.userID;
+        });
+        if (dataUser && !isObjectsEqual(dataUser, d)) {
+          wasChanged = true;
+        } else if (!dataUser) {
+          wasChanged = true;
+        }
+      });
+
+      if (wasChanged) {
+        return message;
+      }
+      return radarData;
+    });
+  }, []);
+
+  const onGetMapName = React.useCallback((message: TGetMapNameResponse["message"]) => {
+    setMapName(message);
+  }, []);
+
   return {
     activeWeapon,
     getActiveWeapon,
@@ -63,6 +97,7 @@ const Data = () => {
     defaultSkins,
     team,
     getTeam,
+    radarData,
   };
 };
 
@@ -75,6 +110,7 @@ const defaultValue: ReturnType<typeof Data> = {
   defaultSkins: {},
   team: TeamNum.NO_TEAM,
   getTeam: () => 0,
+  radarData: [],
 };
 
 export const DataContext = React.createContext<ReturnType<typeof Data>>(defaultValue);

@@ -11,56 +11,50 @@
 #include "GlowObjectManager.hpp"
 
 class EntityList {
+//types
+public:
+	typedef std::pair<BaseEntity, int> EntityObject;
+
 //main methods
 public:
 	EntityList() {};
 
-	int get() {
+	static int get() {
 		return clientDll.dwBase + Offsets::signatures::dwEntityList;
 	}
 
 //methods
 public:
-	int size() {
+	static int size() {
 		auto count = mem.read<int>(get() + 0x24);
-		//std::cout << "EntityList::size(): " << count << std::endl;
 		return count;
 	}
-	BaseEntity getByID(int id) {
+	static std::vector<EntityObject> array(int size = size()) {
+		std::vector<EntityObject> entityList;
+
+		for (int i = 0; i <= size; i++) {
+			BaseEntity entity(getByID(i));
+
+			if (entity.get() <= 0 ) {
+				continue;
+			}
+
+			entityList.push_back({ entity, i });
+		}
+
+		return entityList;
+	}
+	static BaseEntity getByID(int id) {
 		return BaseEntity(mem.read<int>(clientDll.dwBase + Offsets::signatures::dwEntityList + id * 0x10));
 	}
-	int getEntityID(BaseEntity entity) {
-		auto vecSize = size();
-		for (int i = 0; i <= vecSize; i++) {
-			auto _entity = getByID(i);
-			if (_entity.get() == entity.get()) {
+	static int getEntityID(int base) {
+		int vecSize = size();
+		for (int i = 0; i < vecSize; i++) {
+			auto entity = getByID(i);
+			if (entity.get() == base) {
 				return i;
 			}
 		}
-
 		return -1;
-	}
-	std::vector<BaseEntity> array() {
-		std::vector<BaseEntity> entityList;
-		auto vecSize = size();
-		for (int i = 0; i <= vecSize; i++) {
-			BaseEntity entity(getByID(i));
-			if (entity.get() <= 0 || entity.classID() != ClassID::Invalid) {
-				continue;
-			}
-
-			entityList.push_back(entity);
-		}
-
-		GlowObjectManager gom;
-		for (const auto& glowObject : gom.array()) {
-			BaseEntity entity(glowObject.second.dwBaseEntity);
-			if (entity.get() <= 0 || entity.classID() == ClassID::Invalid) {
-				continue;
-			}
-
-			entityList.push_back(entity);
-		}
-		return entityList;
 	}
  };

@@ -60,9 +60,9 @@ struct IAimbotSettings {
   Skeleton bone = Skeleton::NEAREST;
   bool changeAfterNearest = false;
   float smooth = 0.0f;
-  bool rcs_enable = false;
-  float rcs_scale_x = 0.0f;
-  float rcs_scale_y = 0.0f;
+  bool rcsEnable = false;
+  float rcsScaleX = 0.0f;
+  float rcsScaleY = 0.0f;
 };
 
 class Settings {

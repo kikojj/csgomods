@@ -36,6 +36,7 @@ namespace Offsets {
     static int m_hOwner;
     static int m_hOwnerEntity;
     static int m_iAccountID;
+    static int m_iAccount;
     static int m_iClip1;
     static int m_iCompetitiveRanking;
     static int m_iCompetitiveWins;

@@ -94,14 +94,14 @@ IAimbotSettings Settings::getAimbotSettingsFromJsonXX(jsonxx::Value* v) {
 	if (obj.has<jsonxx::Number>("smooth")) {
 		settings.smooth = (float)obj.get<jsonxx::Number>("smooth");
 	}
-	if (obj.has<jsonxx::Boolean>("rcs_enable")) {
-		settings.rcs_enable = obj.get<jsonxx::Boolean>("rcs_enable");
+	if (obj.has<jsonxx::Boolean>("rcsEnable")) {
+		settings.rcsEnable = obj.get<jsonxx::Boolean>("rcsEnable");
 	}
-	if (obj.has<jsonxx::Number>("rcs_scale_x")) {
-		settings.rcs_scale_x = (float)obj.get<jsonxx::Number>("rcs_scale_x");
+	if (obj.has<jsonxx::Number>("rcsScaleX")) {
+		settings.rcsScaleX = (float)obj.get<jsonxx::Number>("rcsScaleX");
 	}
-	if (obj.has<jsonxx::Number>("rcs_scale_y")) {
-		settings.rcs_scale_y = (float)obj.get<jsonxx::Number>("rcs_scale_y");
+	if (obj.has<jsonxx::Number>("rcsScaleY")) {
+		settings.rcsScaleY = (float)obj.get<jsonxx::Number>("rcsScaleY");
 	}
 
 	return settings;
@@ -118,9 +118,9 @@ jsonxx::Value Settings::aimbotSettingsToJsonXX(IAimbotSettings settings) {
 		"changeAfterNearest" << settings.changeAfterNearest <<
 		"fov" << settings.fov <<
 		"smooth" << settings.smooth <<
-		"rcs_enable" << settings.rcs_enable <<
-		"rcs_scale_x" << settings.rcs_scale_x <<
-		"rcs_scale_y" << settings.rcs_scale_y;
+		"rcsEnable" << settings.rcsEnable <<
+		"rcsScaleX" << settings.rcsScaleX <<
+		"rcsScaleY" << settings.rcsScaleY;
 
 	return o;
 }

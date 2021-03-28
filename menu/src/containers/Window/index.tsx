@@ -10,6 +10,7 @@ import {
   ConfigsContent,
   LoadingContent,
   TriggerbotContent,
+  PlayersListContent,
 } from "@containers";
 
 import { ActiveTab } from "@utils";
@@ -53,6 +54,8 @@ export const Window = () => {
           <MiscContent />
         ) : activeTab === ActiveTab.TAB_CONFIG ? (
           <ConfigsContent />
+        ) : activeTab === ActiveTab.TAB_PLAYERSLIST ? (
+          <PlayersListContent />
         ) : (
           ""
         )}

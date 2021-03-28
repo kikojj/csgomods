@@ -5,7 +5,7 @@ import { Menu as CMenu } from "@components";
 
 import { ActiveTab } from "@utils";
 import { SERVER_PORT } from "@utils/constants";
-import { AimbotIcon, ConfigsIcon, MiscellaneousIcon, SkinchangerIcon, VisualsIcon } from "./images";
+import { AimbotIcon, ConfigsIcon, MiscellaneousIcon, SkinchangerIcon, VisualsIcon, PlayersIcon } from "./images";
 
 export type MenuProps = {
   activeTab: ActiveTab;
@@ -33,7 +33,7 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
         },
         {
           title: "Triggerbot",
-          subtitle: "Trigger, Weapon settings,",
+          subtitle: "Triggerbot, Weapon settings",
           iconUrl: AimbotIcon,
           active: activeTab === ActiveTab.TAB_TRIGGER,
           onClick: () => setActiveTab(ActiveTab.TAB_TRIGGER),
@@ -58,6 +58,12 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
           iconUrl: ConfigsIcon,
           active: activeTab === ActiveTab.TAB_CONFIG,
           onClick: () => setActiveTab(ActiveTab.TAB_CONFIG),
+        },
+        {
+          title: "Players List",
+          iconUrl: PlayersIcon,
+          active: activeTab === ActiveTab.TAB_PLAYERSLIST,
+          onClick: () => setActiveTab(ActiveTab.TAB_PLAYERSLIST),
         },
       ]}
       onExit={() => {

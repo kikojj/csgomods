@@ -33,6 +33,7 @@ int Offsets::netvars::m_hObserverTarget;
 int Offsets::netvars::m_hOwner;
 int Offsets::netvars::m_hOwnerEntity;
 int Offsets::netvars::m_iAccountID;
+int Offsets::netvars::m_iAccount;
 int Offsets::netvars::m_iClip1;
 int Offsets::netvars::m_iCompetitiveRanking;
 int Offsets::netvars::m_iCompetitiveWins;
@@ -211,6 +212,7 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_angEyeAnglesY               = Scanner::getNetvar("m_angEyeAngles",                 "m_angEyeAngles[1]",      "DT_CSPlayer");
   Offsets::netvars::m_flNextAttack                = Scanner::getNetvar("m_flNextAttack",                 "m_flNextAttack",         "DT_CSPlayer");
   Offsets::netvars::m_iMostRecentModelBoneCounter = Scanner::getNetvar("m_iMostRecentModelBoneCounter",  "m_nForceBone",           "DT_CSPlayer", 4);
+  Offsets::netvars::m_iAccount                    = Scanner::getNetvar("m_iAccount",                     "m_iAccount",             "DT_CSPlayer");
 
   //DT_BasePlayer
   Offsets::netvars::m_Collision         = Scanner::getNetvar("m_Collision",        "m_Collision",        "DT_BasePlayer");
@@ -274,6 +276,14 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_hOwner = Scanner::getNetvar("m_hOwner", "m_hOwner", "DT_PredictedViewModel");
 
   //DT_CSPlayerResource
+  /*
+  PNETVAR(int32_t, m_nActiveCoinRank, "DT_CSPlayerResource", "m_nActiveCoinRank");
+  PNETVAR(int32_t, m_nMusicID, "DT_CSPlayerResource", "m_nMusicID");
+  PNETVAR(int32_t, m_nPersonaDataPublicLevel, "DT_CSPlayerResource", "m_nPersonaDataPublicLevel");
+  PNETVAR(int32_t, m_nPersonaDataPublicCommendsLeader, "DT_CSPlayerResource", "m_nPersonaDataPublicCommendsLeader");
+  PNETVAR(int32_t, m_nPersonaDataPublicCommendsTeacher, "DT_CSPlayerResource", "m_nPersonaDataPublicCommendsTeacher");
+  PNETVAR(int32_t, m_nPersonaDataPublicCommendsFriendly, "DT_CSPlayerResource", "m_nPersonaDataPublicCommendsFriendly");
+  */
   Offsets::netvars::m_iCompetitiveRanking = Scanner::getNetvar("m_iCompetitiveRanking",  "m_iCompetitiveRanking",   "DT_CSPlayerResource");
   Offsets::netvars::m_iPing               = Scanner::getNetvar("m_iPing",                "m_iPing",                 "DT_CSPlayerResource");
   Offsets::netvars::m_iKills              = Scanner::getNetvar("m_iKills",               "m_iKills",                "DT_CSPlayerResource");

@@ -114,9 +114,39 @@ int main() {
 					lastTeam = team;
 					menuServer.getTeam(team);
 				}
-			}
 
-			Sleep(1);
+				vector<IRadarData> radarData;
+				for (const auto& entityObject : client.entityList->array()) {
+					auto entity = entityObject.first;
+
+					if (entity.classID() != ClassID::CCSPlayer) {
+						continue;
+					}
+
+					BasePlayer player(entity);
+
+					radarData.push_back({
+							player.playerInfo().szName,
+							player.playerInfo().userId,
+							player.teamNum(),
+							player.playerInfo().fakeplayer,
+
+							player.ping(),
+							 player.m_iAccount(),
+							player.kills(),
+							player.assists(),
+							player.deaths(),
+							player.MVPs(),
+							player.score(),
+
+							player.competitiveRanking(),
+							player.competitiveWins(),
+					});
+				}
+				menuServer.getRadarData(radarData);
+
+				Sleep(500);
+			}
 		});
 
 		thread thMenuServer([]() {
@@ -169,11 +199,11 @@ int main() {
 			auto lastClientState = 0;
 			while (isWorking) {
 				if (engine.clientState->m_nDeltaTick() == -1) {
-					continue;
+					//continue;
 				}
 				auto state = engine.clientState->state();
 				if (state == ClientStates::INGAME && lastClientState != (int)state) {
-					while (client.localPlayer->teamNum() != TeamNum::TERRORIST && client.localPlayer->teamNum() != TeamNum::COUNTER_TERRORIST) {
+					while ((client.localPlayer->teamNum() != TeamNum::TERRORIST && client.localPlayer->teamNum() != TeamNum::COUNTER_TERRORIST) || engine.clientState->m_nDeltaTick() == -1) {
 						Sleep(100);
 					}
 
@@ -181,12 +211,17 @@ int main() {
 					auto gameDir = engine.dwGameDir().data();
 					auto mapDir = engine.clientState->mapDirectory().data();
 
-					bsp_parser.load_map(gameDir, mapDir);
+					//bsp now is not in use
+					//bsp_parser.load_map(gameDir, mapDir);
+
+					menuServer.getMapName(string(mapDir));
 
 					//for skinchanger
 					Helpers::updateModelIndexes();
 				}
 				lastClientState = (int)state;
+
+				Sleep(1);
 			}
 		});
 

@@ -59,10 +59,44 @@ void MenuServer::getTeam(websocketpp::connection_hdl hdl) {
   getTeam(client.localPlayer->teamNum());
 }
 
+void MenuServer::getMapName(websocketpp::connection_hdl hdl){
+  auto mapDir = engine.clientState->mapDirectory().data();
+  sendMessage(hdl, WEBSOCKET_GET_MAP_NAME, std::string(mapDir));
+}
+
 void MenuServer::getTeam(TeamNum team){
   jsonxx::Object o;
   o << "team" << (int)team;
   sendMessageAll(WEBSOCKET_GET_TEAM, o);
+}
+
+void MenuServer::getRadarData(std::vector<IRadarData> radarData){
+  jsonxx::Array arrayData;
+
+  for (auto data : radarData) {
+    jsonxx::Object obj;
+    obj
+      << "name" << data.name
+      << "userID" << data.userID
+      << "teamNum" << (int)data.teamNum
+      << "isFakePlayer" << data.isFakePlayer
+      << "ping" << data.ping
+      << "money" << data.money
+      << "kills" << data.kills
+      << "assists" << data.assists
+      << "deaths" << data.deaths
+      << "MVPs" << data.MVPs
+      << "score" << data.score
+      << "competitiveRanking" << data.competitiveRanking
+      << "competitiveWins" << data.competitiveWins;
+    arrayData.append(obj);
+  }
+
+  sendMessageAll(WEBSOCKET_GET_RADAR_DATA, arrayData);
+}
+
+void MenuServer::getMapName(std::string name){
+  sendMessageAll(WEBSOCKET_GET_MAP_NAME, name);
 }
 
 void MenuServer::updateSettings(websocketpp::connection_hdl hdl, jsonxx::Object message){
@@ -169,6 +203,7 @@ void MenuServer::onOpen(websocketpp::connection_hdl hdl) {
     getAllSkins(hdl);
     getActiveWeapon(hdl);
     getTeam(hdl);
+    getMapName(hdl);
   }
   catch (const std::exception& e) {
     log("onOpen error: " + (std::string)e.what());
@@ -239,7 +274,7 @@ void MenuServer::sendMessage(websocketpp::connection_hdl hdl, std::string type, 
   }
 }
 
-void MenuServer::sendMessageAll(std::string type, jsonxx::Object message){
+void MenuServer::sendMessageAll(std::string type, jsonxx::Value message){
   try {
     for (auto hdl : connections) {
       sendMessage(hdl, type, message);

@@ -10,30 +10,42 @@
 #include "../../Utils/Offsets/Offsets.hpp"
 
 class GlowObjectManager {
+//types
+public:
+	typedef std::pair<IGlowObjectDefinition, int> GlowObject;
+
 //main methods
 public:
   GlowObjectManager() {};
 
-	int get() {
+	static int get() {
 		return mem.read<int>(clientDll.dwBase + Offsets::signatures::dwGlowObjectManager);
 	}
 
 //methods
 public:
-	int size() {
+	static int size() {
 		auto size = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwGlowObjectManager + 0x4);
 		return size;
 	}
-	std::vector<std::pair<int, IGlowObjectDefinition>> array() {
-		std::vector<std::pair<int, IGlowObjectDefinition>> glowObjectArray;
+	static std::vector<GlowObject> array() {
+		std::vector<GlowObject> glowObjectArray;
 		auto vecSize = size();
 		for (int i = 0; i <= vecSize; i++) {
 			auto glowObjectDefinition = mem.read<IGlowObjectDefinition>(get() + i * 0x38);
 
 			if (glowObjectDefinition.dwBaseEntity > 0) {
-				glowObjectArray.push_back({ get() + i * 0x38, glowObjectDefinition });
+				glowObjectArray.push_back({ glowObjectDefinition, i });
 			}
 		}
 		return glowObjectArray;
+	}
+	static int getObjectBase(int id) {
+		int base = get() + id * 0x38;
+		return base;
+	}
+	static int getObjectBase(GlowObject obj) {
+		int base = getObjectBase(obj.second);
+		return base;
 	}
 };

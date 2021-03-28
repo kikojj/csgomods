@@ -16,6 +16,8 @@ import {
   TGetAllSkinsResponse,
   TGetTeamInput,
   TGetTeamResponse,
+  TGetRadarDataResponse,
+  TGetMapNameResponse,
 } from "@ts/requests/";
 import { WEBSOCKET_PORT } from "@utils/constants";
 
@@ -28,7 +30,9 @@ type TMassage =
   | TGetConfigsListResponse
   | TGetActiveWeaponResponse
   | TGetAllSkinsResponse
-  | TGetTeamResponse;
+  | TGetTeamResponse
+  | TGetRadarDataResponse
+  | TGetMapNameResponse;
 type TMassageType = TMassage["type"];
 type TMassageListener = { type: TMassageType; func: (message: any) => void };
 

@@ -5,4 +5,5 @@ export enum ActiveTab {
   TAB_SKINCHANGER = 3,
   TAB_MISC = 4,
   TAB_CONFIG = 5,
+  TAB_PLAYERSLIST = 6,
 }

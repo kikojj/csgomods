@@ -14,7 +14,7 @@
 
 class Visuals {
 private:
-	void drawEntity(std::pair<int, IGlowObjectDefinition>, colorRGBA, GlowStyle);
+	void drawEntity(GlowObjectManager::GlowObject, colorRGBA, GlowStyle);
 	void resetRender(BasePlayer&);
 	colorRGBA getHpBasedColor(BasePlayer&);
 

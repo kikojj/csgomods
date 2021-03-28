@@ -3,3 +3,4 @@ export { default as ConfigsIcon } from "./ConfigsIcon.svg";
 export { default as MiscellaneousIcon } from "./MiscellaneousIcon.svg";
 export { default as SkinchangerIcon } from "./SkinchangerIcon.svg";
 export { default as VisualsIcon } from "./VisualsIcon.svg";
+export { default as PlayersIcon } from "./PlayersIcon.svg";

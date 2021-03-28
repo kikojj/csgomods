@@ -29,8 +29,10 @@
 #define WEBSOCKET_GET_ACTIVE_WEAPON "get_active_weapon"
 #define WEBSOCKET_GET_TEAM "get_team"
 #define WEBSOCKET_GET_ALL_SKINS "get_all_skins"
-#define WEBSOCKET_GAME_FULL_FORCE_UPDATE "game_full_force_update"
+#define WEBSOCKET_GET_RADAR_DATA "get_radar_data"
+#define WEBSOCKET_GET_MAP_NAME "get_map_name"
 
+#define WEBSOCKET_GAME_FULL_FORCE_UPDATE "game_full_force_update"
 #define WEBSOCKET_UPDATE_SETTINGS "update_settings"
 #define WEBSOCKET_LOAD_CONFIG "load_config"
 #define WEBSOCKET_SAVE_CONFIG "save_config"
@@ -42,6 +44,24 @@ using websocketpp::lib::placeholders::_2;
 
 typedef websocketpp::server<websocketpp::config::asio> Server;
 typedef std::set<websocketpp::connection_hdl, std::owner_less<websocketpp::connection_hdl>> connectionsList;
+
+struct IRadarData {
+  std::string name = "";
+  int userID = 0;
+  TeamNum teamNum = TeamNum::Invalid;
+  bool isFakePlayer = false;
+
+  int ping = 0;
+  int money = 0;
+  int kills = 0;
+  int assists = 0;
+  int deaths = 0;
+  int MVPs = 0;
+  int score = 0;
+
+  int competitiveRanking = 0;
+  int competitiveWins = 0;
+};
 
 class MenuServer {
 private:
@@ -57,9 +77,11 @@ public:
   MenuServer();
   void start();
   void sendMessage(websocketpp::connection_hdl, std::string, jsonxx::Value);
-  void sendMessageAll(std::string, jsonxx::Object);
+  void sendMessageAll(std::string, jsonxx::Value);
   void getActiveWeapon(int);
   void getTeam(TeamNum);
+  void getRadarData(std::vector<IRadarData>);
+  void getMapName(std::string);
 
   void closeMenu(websocketpp::connection_hdl);
   void stopListening(websocketpp::connection_hdl);
@@ -73,6 +95,7 @@ public:
   void gameFullForceUpdate(websocketpp::connection_hdl);
   void getAllSkins(websocketpp::connection_hdl);
   void getTeam(websocketpp::connection_hdl);
+  void getMapName(websocketpp::connection_hdl);
 };
 
 extern MenuServer menuServer;

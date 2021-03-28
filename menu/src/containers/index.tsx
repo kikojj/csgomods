@@ -9,6 +9,7 @@ export { TriggerbotContent } from "./TriggerbotContent";
 export { SkinchangerContent } from "./SkinchangerContent";
 export { MiscContent } from "./MiscContent";
 export { ConfigsContent } from "./ConfigsContent";
+export { PlayersListContent } from "./PlayersListContent";
 
 export { Menu, MenuProps } from "./Menu";
 export { Window } from "./Window";

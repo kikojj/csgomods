@@ -10,3 +10,5 @@ export { TGetActiveWeaponResponse, TGetActiveWeaponInput, GET_ACTIVE_WEAPON } fr
 export { TFullForceUpdateInput, GAME_FULL_FORCE_UPDATE } from "./FullForceUpdate";
 export { TGetAllSkinsInput, TGetAllSkinsResponse, GET_ALL_SKINS } from "./GetAllSkins";
 export { TGetTeamInput, TGetTeamResponse, GET_TEAM } from "./GetTeam";
+export { TGetRadarDataResponse, GET_RADAR_DATA, IRadarData } from "./GetRadarData";
+export { TGetMapNameResponse, GET_MAP_NAME } from "./GetMapName";

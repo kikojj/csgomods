@@ -45,16 +45,36 @@ float AimBot::getFov(Vector3 currentAngle, Vector2 dstAngle) {
 }
 
 void AimBot::setAngle(Vector2 dstAngle) {
-	if (this->smooth > 0)	{
+	if (client.localPlayer->m_iShotsFired() > 1) {
 		Vector2 viewAngle = Vector2(engine.clientState->dwViewAngles());
 
 		auto delta = viewAngle - dstAngle;
 		delta.clamp();
 
-		//set dstAngle if delta is so low
+		//skip if delta is so low
 		if (abs(delta.x) > 0.1 || abs(delta.y) > 0.1) {
-			dstAngle.x = viewAngle.x - delta.x / (.5f * this->smooth);
-			dstAngle.y = viewAngle.y - delta.y / (.5f * this->smooth);
+			if (this->rcsEnable) {
+				dstAngle.x = viewAngle.x - delta.x / (std::abs(100 - this->rcsScaleX) >= 1 ? std::abs(100 - this->rcsScaleX) : 1);
+				dstAngle.y = viewAngle.y - delta.y / (std::abs(100 - this->rcsScaleY) >= 1 ? std::abs(100 - this->rcsScaleY) : 1);
+			}
+			else {
+				dstAngle.x = viewAngle.x - delta.x / 100;
+				dstAngle.y = viewAngle.y - delta.y / 100;
+			}
+		}
+	}
+	else {
+		if (this->smooth > 0) {
+			Vector2 viewAngle = Vector2(engine.clientState->dwViewAngles());
+
+			auto delta = viewAngle - dstAngle;
+			delta.clamp();
+
+			//skip if delta is so low
+			if (abs(delta.x) > 0.1 || abs(delta.y) > 0.1) {
+				dstAngle.x = viewAngle.x - delta.x / this->smooth;
+				dstAngle.y = viewAngle.y - delta.y / this->smooth;
+			}
 		}
 	}
 
@@ -67,9 +87,9 @@ void AimBot::applyWeaponSettings(IAimbotSettings settings){
 	this->bone = settings.bone;
 	this->changeAfterNearest = settings.changeAfterNearest;
 	this->smooth = settings.smooth;
-	this->rcsEnable = settings.rcs_enable;
-	this->rcsScaleX = settings.rcs_scale_x;
-	this->rcsScaleY = settings.rcs_scale_y;
+	this->rcsEnable = settings.rcsEnable;
+	this->rcsScaleX = settings.rcsScaleX;
+	this->rcsScaleY = settings.rcsScaleY;
 }
 
 bool AimBot::applyWeaponsSettings(BaseCombatWeapon weapon){
@@ -211,7 +231,9 @@ void AimBot::loop() {
 	}
 
 	if (closestEnemy.get() <= 0) {
-		for (auto entity : client.entityList->array()) {
+		for (const auto& entityObject : client.entityList->array()) {
+			auto entity = entityObject.first;
+
 			if (!entity.get() || entity.get() == client.localPlayer->get()) {
 				continue;
 			}
@@ -230,7 +252,7 @@ void AimBot::loop() {
 				continue;
 			}
 
-			if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(player)) {
+			if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(entityObject)) {
 				continue;
 			}
 
@@ -245,7 +267,7 @@ void AimBot::loop() {
 			for (auto bone : aimBones) {
 				Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
 				auto bonePos = getBonePos(player, bone);
-				if (!client.localPlayer->canSeePlayer(player, (int)bone)) {
+				if (!client.localPlayer->canSeePlayer(entityObject, (int)bone)) {
 					continue;
 				}
 				auto enemyAngle = calcAngle(localPlayerPos, bonePos);

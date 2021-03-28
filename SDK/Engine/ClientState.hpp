@@ -39,7 +39,7 @@ public:
 		mem.write(get() + Offsets::signatures::clientstate_delta_ticks, value);
 	}
 	ClientStates state() {
-		auto state = (ClientStates)(mem.read<int>(get() + Offsets::signatures::dwClientState_State));
+		auto state = (ClientStates)mem.read<int>(get() + Offsets::signatures::dwClientState_State);
 		return state;
 	}
 	std::array<char, 0x120> mapDirectory() {

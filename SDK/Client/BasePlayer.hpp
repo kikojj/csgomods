@@ -58,6 +58,7 @@ public:
 	PROP(int,					m_lifeState,						get())
 	PROP(int,					m_bSpottedByMask,				get())
 	PROP(int,					m_nTickBase,						get())
+	PROP(int,					m_iAccount,							get())
 
 	PROP(float,				m_flFlashDuration,			get())
 	PROP(float,				m_flFlashAlpha,					get())
@@ -117,84 +118,64 @@ public:
 		return false;
 	}
 	IPlayerInfo playerInfo() {
-		EntityList entityList;
-
 		auto items = mem.read<int>(mem.read<int>(engine.clientState->playerInfo() + 0x40) + 0xC);
 
-		auto _info = mem.read<int>(items + 0x28 + entityList.getEntityID(*this) * 0x34);
+		auto _info = mem.read<int>(items + 0x28 + EntityList::getEntityID(get()) * 0x34);
 		auto info = mem.read<IPlayerInfo>(_info);
 
 		return info;
 	}
 	int competitiveRanking() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto competitiveRanking = mem.read<int>(playerResource + Offsets::netvars::m_iCompetitiveRanking + entityList.getEntityID(*this) * 4);
+		auto competitiveRanking = mem.read<int>(playerResource + Offsets::netvars::m_iCompetitiveRanking + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return competitiveRanking;
 	}
 	int competitiveWins() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto competitiveWins = mem.read<int>(playerResource + Offsets::netvars::m_iCompetitiveWins + entityList.getEntityID(*this) * 4);
+		auto competitiveWins = mem.read<int>(playerResource + Offsets::netvars::m_iCompetitiveWins + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return competitiveWins;
 	}
 	int ping() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto ping = mem.read<int>(playerResource + Offsets::netvars::m_iPing + entityList.getEntityID(*this) * 4);
+		auto ping = mem.read<int>(playerResource + Offsets::netvars::m_iPing + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return ping;
 	}
 	int kills() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto kills = mem.read<int>(playerResource + Offsets::netvars::m_iKills + entityList.getEntityID(*this) * 4);
+		auto kills = mem.read<int>(playerResource + Offsets::netvars::m_iKills + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return kills;
 	}
 	int assists() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto assists = mem.read<int>(playerResource + Offsets::netvars::m_iAssists + entityList.getEntityID(*this) * 4);
+		auto assists = mem.read<int>(playerResource + Offsets::netvars::m_iAssists + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return assists;
 	}
 	int deaths() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto deaths = mem.read<int>(playerResource + Offsets::netvars::m_iDeaths + entityList.getEntityID(*this) * 4);
+		auto deaths = mem.read<int>(playerResource + Offsets::netvars::m_iDeaths + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return deaths;
 	}
 	int score() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto score = mem.read<int>(playerResource + Offsets::netvars::m_iScore + entityList.getEntityID(*this) * 4);
+		auto score = mem.read<int>(playerResource + Offsets::netvars::m_iScore + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return score;
 	}
 	int MVPs() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto MVPs = mem.read<int>(playerResource + Offsets::netvars::m_iMVPs + entityList.getEntityID(*this) * 4);
+		auto MVPs = mem.read<int>(playerResource + Offsets::netvars::m_iMVPs + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return MVPs;
 	}
 	int clan() {
-		EntityList entityList;
-
 		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto clan = mem.read<int>(playerResource + Offsets::netvars::m_szClan + entityList.getEntityID(*this) * 4);
+		auto clan = mem.read<int>(playerResource + Offsets::netvars::m_szClan + (EntityList::getEntityID(get()) + 1) * 4);
 
 		return clan;
 	}

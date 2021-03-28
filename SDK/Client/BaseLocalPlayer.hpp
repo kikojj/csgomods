@@ -33,9 +33,11 @@ public:
 //methods
 public:
 	bool canSeePlayer(BasePlayer player, int bone = -1) {
-		EntityList entityList;
-
-		auto playerID = entityList.getEntityID(player);
+		auto playerID = EntityList::getEntityID(player.get());
+		return canSeePlayer({ player, playerID }, bone);
+	}
+	bool canSeePlayer(EntityList::EntityObject entityObject, int bone = -1) {
+		auto playerID = entityObject.second;
 		if (playerID == -1) {
 			return false;
 		}

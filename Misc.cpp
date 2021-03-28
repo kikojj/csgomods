@@ -11,7 +11,9 @@ void Misc::radarHack(){
 		return;
 	}
 
-	for (auto entity : client.entityList->array()) {
+	for (const auto& entityObject : client.entityList->array()) {
+		auto entity = entityObject.first;
+
 		if (entity.classID() != ClassID::CCSPlayer) {
 			continue;
 		}

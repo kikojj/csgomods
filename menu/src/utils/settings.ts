@@ -52,9 +52,9 @@ export interface IAimbotSettings {
   bone: number;
   changeAfterNearest: boolean;
   smooth: number;
-  rcs_enable: boolean;
-  rcs_scale_x: number;
-  rcs_scale_y: number;
+  rcsEnable: boolean;
+  rcsScaleX: number;
+  rcsScaleY: number;
 }
 
 export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
@@ -65,9 +65,9 @@ export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
   bone: 0,
   changeAfterNearest: false,
   smooth: 0,
-  rcs_enable: false,
-  rcs_scale_x: 0,
-  rcs_scale_y: 0,
+  rcsEnable: false,
+  rcsScaleX: 100,
+  rcsScaleY: 100,
 };
 
 export type TSettings = {

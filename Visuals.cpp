@@ -2,11 +2,11 @@
 
 Visuals::Visuals() {}
 
-void Visuals::drawEntity(std::pair<int, IGlowObjectDefinition> glowObject, colorRGBA color, GlowStyle style) {
-	glowObject.second.color(color);
-	glowObject.second.glowStyle = (int)style;
-	glowObject.second.renderWhenOccluded = true;
-	mem.write<IGlowObjectDefinition>(glowObject.first, glowObject.second);
+void Visuals::drawEntity(GlowObjectManager::GlowObject glowObject, colorRGBA color, GlowStyle style) {
+	glowObject.first.color(color);
+	glowObject.first.glowStyle = (int)style;
+	glowObject.first.renderWhenOccluded = true;
+	mem.write<IGlowObjectDefinition>(client.glowObjectManager->getObjectBase(glowObject), glowObject.first);
 }
 
 colorRGBA Visuals::getHpBasedColor(BasePlayer& player){
@@ -30,8 +30,8 @@ void Visuals::loop() {
 		return;
 	}
 
-	for (auto glowObject : client.glowObjectManager->array()) {
-		auto entity = BaseEntity(glowObject.second.dwBaseEntity);
+	for (const auto& glowObject : client.glowObjectManager->array()) {
+		auto entity = BaseEntity(glowObject.first.dwBaseEntity);
 		auto entityClassID = entity.classID();
 
 
