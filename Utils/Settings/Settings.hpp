@@ -98,6 +98,7 @@ public:
   static int aimbot_key;
   static int aimbot_delay_enemy;
   static bool aimbot_visible_check;
+  static bool aimbot_smoke_check;
   static bool aimbot_flash_check;
   static bool aimbot_jump_check;
   static bool aimbot_friendly_fire;
@@ -169,6 +170,5 @@ public:
   static bool misc_autoAccept_enable;
   static bool misc_antiFlash_enable;
   static int misc_antiFlash_maxAlpha;
-  static bool misc_rankReveal_enable;
   #pragma endregion
 };

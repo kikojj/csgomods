@@ -53,22 +53,22 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
           onClick: () => setActiveTab(ActiveTab.TAB_MISC),
         },
         {
+          title: "Players List",
+          subtitle: "Statistics, Ranks, Personal settings",
+          iconUrl: PlayersIcon,
+          active: activeTab === ActiveTab.TAB_PLAYERSLIST,
+          onClick: () => setActiveTab(ActiveTab.TAB_PLAYERSLIST),
+        },
+        {
           title: "Configs",
           subtitle: "Configs list",
           iconUrl: ConfigsIcon,
           active: activeTab === ActiveTab.TAB_CONFIG,
           onClick: () => setActiveTab(ActiveTab.TAB_CONFIG),
         },
-        {
-          title: "Players List",
-          iconUrl: PlayersIcon,
-          active: activeTab === ActiveTab.TAB_PLAYERSLIST,
-          onClick: () => setActiveTab(ActiveTab.TAB_PLAYERSLIST),
-        },
       ]}
       onExit={() => {
         send("stop_listening");
-        fetch(`http://localhost:${SERVER_PORT}/exit`, { method: "GET" });
       }}
     />
   );

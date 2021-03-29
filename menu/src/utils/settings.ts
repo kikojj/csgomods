@@ -77,6 +77,7 @@ export type TSettings = {
   aimbot_key: number;
   aimbot_delay_enemy: number;
   aimbot_visible_check: boolean;
+  aimbot_smoke_check: boolean;
   aimbot_flash_check: boolean;
   aimbot_jump_check: boolean;
   aimbot_friendly_fire: boolean;
@@ -156,7 +157,6 @@ export type TSettings = {
   misc_autoAccept_enable: boolean;
   misc_antiFlash_enable: boolean;
   misc_antiFlash_maxAlpha: number;
-  misc_rankReveal_enable: boolean;
   ///
 };
 
@@ -168,6 +168,7 @@ export const DEFAULT_SETTINGS: TSettings = {
   aimbot_key: 0,
   aimbot_delay_enemy: 0,
   aimbot_visible_check: false,
+  aimbot_smoke_check: false,
   aimbot_flash_check: false,
   aimbot_jump_check: false,
   aimbot_friendly_fire: false,
@@ -251,6 +252,5 @@ export const DEFAULT_SETTINGS: TSettings = {
   misc_autoAccept_enable: false,
   misc_antiFlash_enable: false,
   misc_antiFlash_maxAlpha: 255,
-  misc_rankReveal_enable: false,
   ///
 };

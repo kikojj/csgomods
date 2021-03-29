@@ -1,6 +1,10 @@
 #include "MenuServer.hpp"
 
-void MenuServer::stopListening(websocketpp::connection_hdl hdl){
+void MenuServer::stop(){
+  curlpp::Cleanup myCleanup;
+  std::ostringstream os;
+  os << curlpp::options::Url(std::string("http://localhost:") + std::to_string(HTTP_SERVER_PORT) + std::string("/exit"));
+
   server.stop_listening();
   server.stop();
   isWorking = false;
@@ -145,7 +149,7 @@ void MenuServer::onMessage(websocketpp::connection_hdl hdl, Server::message_ptr 
       auto type = data.get<jsonxx::String>("type");
 
       if (type == WEBSOCKET_STOP_LISTENING) {
-        stopListening(hdl);
+        stop();
         return;
       }
       else if (type == WEBSOCKET_GET_CONFIGS_LIST) {

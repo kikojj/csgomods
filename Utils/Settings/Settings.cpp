@@ -289,6 +289,7 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	ElifReadSettingBool(aimbot_use_key)
 	ElifReadSettingInt(aimbot_delay_enemy)
 	ElifReadSettingBool(aimbot_visible_check)
+	ElifReadSettingBool(aimbot_smoke_check)
 	ElifReadSettingBool(aimbot_flash_check)
 	ElifReadSettingBool(aimbot_jump_check)
 	ElifReadSettingBool(aimbot_friendly_fire)
@@ -356,7 +357,6 @@ void Settings::setValue(std::string name, jsonxx::Value* value) {
 	ElifReadSettingBool(misc_autoAccept_enable)
 	ElifReadSettingBool(misc_antiFlash_enable)
 	ElifReadSettingInt(misc_antiFlash_maxAlpha)
-	ElifReadSettingBool(misc_rankReveal_enable)
 }
 
 jsonxx::Object Settings::toJsonxxObject() {
@@ -367,6 +367,7 @@ jsonxx::Object Settings::toJsonxxObject() {
 		SetSetting(aimbot_use_key)
 		SetSetting(aimbot_delay_enemy)
 		SetSetting(aimbot_visible_check)
+		SetSetting(aimbot_smoke_check)
 		SetSetting(aimbot_flash_check)
 		SetSetting(aimbot_jump_check)
 		SetSetting(aimbot_friendly_fire)
@@ -433,8 +434,7 @@ jsonxx::Object Settings::toJsonxxObject() {
 		SetSetting(misc_autoAccept_enable)
 		SetSetting(skinchanger_enable)
 		SetSetting(misc_antiFlash_enable)
-		SetSetting(misc_antiFlash_maxAlpha)
-		SetSetting(misc_rankReveal_enable);
+		SetSetting(misc_antiFlash_maxAlpha);
 	
 	return settings;
 }
@@ -446,6 +446,7 @@ int Settings::aimbot_key = 0;
 bool Settings::aimbot_use_key = false;
 int Settings::aimbot_delay_enemy = 0;
 bool Settings::aimbot_visible_check = false;
+bool Settings::aimbot_smoke_check = false;
 bool Settings::aimbot_flash_check = false;
 bool Settings::aimbot_jump_check = false;
 bool Settings::aimbot_friendly_fire = false;
@@ -590,5 +591,4 @@ int Settings::misc_autoPistols_delay = 0;
 bool Settings::misc_autoAccept_enable = false;
 bool Settings::misc_antiFlash_enable = false;
 int Settings::misc_antiFlash_maxAlpha = 255;
-bool Settings::misc_rankReveal_enable = false;
 #pragma endregion

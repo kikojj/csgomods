@@ -12,7 +12,7 @@ void VirtualFunction::hook(int index, DWORD hkFunction) {
 
 	uintptr_t VFunction = getVirtualFunction(index);
 	DWORD dwProtection;
-	VirtualProtectEx(mem._process, (LPVOID)VFunction, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dwProtection);
+	VirtualProtectEx(mem.process, (LPVOID)VFunction, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dwProtection);
 	mem.write(VFunction, hkFunction);
-	VirtualProtectEx(mem._process, (LPVOID)VFunction, sizeof(DWORD), dwProtection, &dwProtection);
+	VirtualProtectEx(mem.process, (LPVOID)VFunction, sizeof(DWORD), dwProtection, &dwProtection);
 }

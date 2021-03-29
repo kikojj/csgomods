@@ -18,6 +18,9 @@
 #include "Utils/Settings/Settings.hpp"
 #include "Utils/Helpers/Helpers.hpp"
 
+#include <curlpp/cURLpp.hpp>
+#include <curlpp/Options.hpp>
+
 #define WEBSOCKET_PORT 2222
 #define HTTP_SERVER_PORT 2223
 #define HTTP_SERVER_DIRECTORY "./Menu/dist"
@@ -88,7 +91,7 @@ public:
   void getMapName(std::string);
 
   void closeMenu(websocketpp::connection_hdl);
-  void stopListening(websocketpp::connection_hdl);
+  void stop();
   void getAllSettings(websocketpp::connection_hdl);
   void getConfigsList(websocketpp::connection_hdl);
   void getActiveWeapon(websocketpp::connection_hdl);

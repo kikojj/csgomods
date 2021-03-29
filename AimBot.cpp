@@ -246,29 +246,21 @@ void AimBot::loop() {
 				continue;
 			}
 
-			if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(entityObject)) {
+			if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer({entityObject.first, entityObject.second}, (int)bone, Settings::aimbot_smoke_check)) {
 				continue;
 			}
 
-			std::vector<Skeleton> aimBones;
-			if (this->bone == Skeleton::NEAREST) {
-				aimBones = ALL_BONES;
-			}
-			else {
-				aimBones.push_back(this->bone);
-			}
-
-			for (auto bone : aimBones) {
+			for (auto bone : (this->bone == Skeleton::NEAREST ? ALL_BONES : std::vector<Skeleton>{ this->bone })) {
 				Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
 				auto bonePos = getBonePos(player, bone);
-				if (!client.localPlayer->canSeePlayer(entityObject, (int)bone)) {
+				if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer({ entityObject.first, entityObject.second }, (int)bone, Settings::aimbot_smoke_check)) {
 					continue;
 				}
 				auto enemyAngle = calcAngle(localPlayerPos, bonePos);
 				float fov = getFov(enemyAngle, engine.clientState->dwViewAngles());
 
 				if (fov < this->fov && fov < closestAngle) {
-					closestEnemy = player;
+					closestEnemy.base = player.base;
 					closestAngle = fov;
 					closestBone = bone;
 				}
@@ -281,69 +273,54 @@ void AimBot::loop() {
 		return;
 	}
 
-	if (Settings::aimbot_use_key) {
-		if (
-			GetAsyncKeyState(Settings::aimbot_key) &&
-			closestEnemy.m_iHealth() > 0 &&
-			(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy))
-			) {
-			Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
-			auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
+	if (Settings::aimbot_use_key && !GetAsyncKeyState(Settings::aimbot_key)) {
+		resetSettings();
+		return;
+	}
 
-			setAngle(enemyAngle.toVector2());
+	if (
+		closestEnemy.m_iHealth() > 0 &&
+		(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy, (int)bone, Settings::aimbot_smoke_check))
+		) {
+		Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
+		auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
 
-			//TRY TO DO GOOD SMOOTH(NEED UNBIND MOUSE1 IN GAME)
-			if (getFov(enemyAngle, Vector2(engine.clientState->dwViewAngles())) != 0 && client.localPlayer->m_iShotsFired() == 0) {
-				shouldShoot = false;
-				if (firstPerfectShoot) {
-					shouldWait = true;
-				}
-				else {
-					shouldWait = false;
-				}
+		setAngle(enemyAngle.toVector2());
+
+		//TRY TO DO GOOD SMOOTH(NEED UNBIND MOUSE1 IN GAME)
+		if (getFov(enemyAngle, Vector2(engine.clientState->dwViewAngles())) != 0 && client.localPlayer->m_iShotsFired() == 0) {
+			shouldShoot = false;
+			if (firstPerfectShoot) {
+				shouldWait = true;
 			}
 			else {
-				shouldShoot = true;
 				shouldWait = false;
-			}
-
-			//If nearest go to the main bone after closest bone
-			if (
-				bone == Skeleton::NEAREST &&
-				changeAfterNearest &&
-				getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 &&
-				std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()
-				) {
-				closestAngle = 360.f;
-				for (auto bone : MAIN_BONES) {
-					auto bonePos = getBonePos(closestEnemy, bone);
-					if (!client.localPlayer->canSeePlayer(closestEnemy, (int)bone)) {
-						continue;
-					}
-					auto _enemyAngle = calcAngle(localPlayerPos, bonePos);
-					float fov = getFov(_enemyAngle, engine.clientState->dwViewAngles());
-
-					if (fov < closestAngle) {
-						closestAngle = fov;
-						closestBone = bone;
-					}
-				}
 			}
 		}
 		else {
-			if (!shouldWait) {
-				lastKillTime = std::chrono::high_resolution_clock::now();
-			}
-			if (closestEnemy.m_iHealth() <= 0 || shouldWait) {
-				if (
-					std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastKillTime).count()
-					>
-					(double)((double)Settings::aimbot_delay_enemy / (double)1000)
-					) {
-					resetSettings();
+			shouldShoot = true;
+			shouldWait = false;
+		}
+
+		//If nearest go to the main bone after closest bone
+		if (
+			bone == Skeleton::NEAREST &&
+			changeAfterNearest &&
+			getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 &&
+			std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()
+			) {
+			closestAngle = 360.f;
+			for (auto bone : MAIN_BONES) {
+				auto bonePos = getBonePos(closestEnemy, bone);
+				if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(closestEnemy, (int)bone, Settings::aimbot_smoke_check)) {
+					continue;
 				}
-				else {
-					shouldWait = true;
+				auto _enemyAngle = calcAngle(localPlayerPos, bonePos);
+				float fov = getFov(_enemyAngle, engine.clientState->dwViewAngles());
+
+				if (fov < closestAngle) {
+					closestAngle = fov;
+					closestBone = bone;
 				}
 			}
 		}
@@ -352,30 +329,16 @@ void AimBot::loop() {
 		if (!shouldWait) {
 			lastKillTime = std::chrono::high_resolution_clock::now();
 		}
-		if (
-			closestEnemy.m_iHealth() > 0 &&
-			(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy))
-			) {
-			Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
-			auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
-
-			setAngle(enemyAngle.toVector2());
-		}
-		else {
-			if (!shouldWait) {
-				lastKillTime = std::chrono::high_resolution_clock::now();
+		if (closestEnemy.m_iHealth() <= 0 || shouldWait) {
+			if (
+				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastKillTime).count()
+				>
+				(double)((double)Settings::aimbot_delay_enemy / (double)1000)
+				) {
+				resetSettings();
 			}
-			if (closestEnemy.m_iHealth() <= 0 || shouldWait) {
-				if (
-					std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastKillTime).count()
-					>
-					(double)((double)Settings::aimbot_delay_enemy / (double)1000)
-					) {
-					resetSettings();
-				}
-				else {
-					shouldWait = true;
-				}
+			else {
+				shouldWait = true;
 			}
 		}
 	}

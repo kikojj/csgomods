@@ -11,12 +11,12 @@ bool WINAPI hkCreateMove(float flInputSampleTime, CUserCmd* pCmd) {
 	UTIL_TraceLine_t TraceLine = (UTIL_TraceLine_t)Vars->dwTraceLine;
 
 	if (!pCmd->commandNumber || !isInGame || !localPlayer || deltaTick == -1) {
-		return false;
+		return true;
 	}
 
 	bool localIsAlive = !*(bool*)(localPlayer + Vars->m_lifeState);
 	if (!localIsAlive) {
-		return false;
+		return true;
 	}
 
 	Vars->localOrigin = *(Vec3*)(localPlayer + Vars->m_vecOrigin);
@@ -70,7 +70,7 @@ bool WINAPI hkCreateMove(float flInputSampleTime, CUserCmd* pCmd) {
 		Vars->visibleStruct->player[i] = isVisible;
 	}
 
-	return false;
+	return true;
 }
 DWORD WINAPI hkCreateMoveEnd(){ return 0; }
 #pragma optimize("", on)
@@ -159,16 +159,16 @@ bool CVisibleCheck::init() {
 		return false;
 
 	// Write hkCreateMove function in to CSGO
-	if (!WriteProcessMemory(mem._process, hookCodeAddress, hkCreateMove, (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove, NULL))
+	if (!mem.write((DWORD)hookCodeAddress, hkCreateMove, (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove))
 		return false;
 
 	// Write hkCreateMoveVars(Local Variables for CreateMove hook)
 	DWORD dw_hkCreateMoveVars = (DWORD)hookCodeAddress + (DWORD)hkCreateMoveEnd - (DWORD)hkCreateMove;
-	if (!WriteProcessMemory(mem._process, (LPVOID)dw_hkCreateMoveVars, &hkCreateMoveVars, sizeof(ICreateMoveVars), NULL))
+	if (!mem.write(dw_hkCreateMoveVars, hkCreateMoveVars))
 		return false;
 
 	// Set pointer to hkCreateMoveVars
-	if (!WriteProcessMemory(mem._process, (LPVOID)((DWORD)hookCodeAddress + 0x9), &dw_hkCreateMoveVars, sizeof(DWORD), NULL))
+	if (!mem.write((DWORD)hookCodeAddress + 0x9, dw_hkCreateMoveVars))
 		return false;
 
 	DWORD dwClientMode = mem.read<DWORD>(mem.read<DWORD>(Offsets::signatures::dwClientMode));
@@ -191,9 +191,7 @@ bool CVisibleCheck::updateVisibleStruct(){
 		return false;
 	}
 
-	if (!ReadProcessMemory(mem._process, (LPVOID)dwVisibleStruct, &visibleStruct, sizeof(IVisible), NULL)) {
-		return false;
-	}
+	visibleStruct = mem.read<IVisible>(dwVisibleStruct);
 	
 	return true;
 }
@@ -235,16 +233,12 @@ bool CVisibleCheck::isVisible(int entityId, int bone) {
 }
 
 bool CVisibleCheck::lineGoesThroughSmoke(Vec3 start, Vec3 end) {
-	// 0xC + 0xC + 0x1
-	const int RESERVE_SIZE = 0x19;
-	static unsigned int SHELLCODE_SIZE = sizeof(LGTSShellcode) - RESERVE_SIZE;
-
 	// Allocate room for our shellcode in csgo
 	auto shellcodeAddr = mem.allocate(sizeof(LGTSShellcode));
 
 	DWORD fLineThroughSmoke = Offsets::signatures::dwLineThroughSmoke;
 
-	DWORD param_startAddr = (DWORD)shellcodeAddr + SHELLCODE_SIZE;
+	DWORD param_startAddr = (DWORD)shellcodeAddr + LGTS_SHELLCODE_SIZE;
 	DWORD param_endAddr = (DWORD)param_startAddr + sizeof(Vec3);
 	DWORD returnAddr = param_endAddr + sizeof(Vec3);
 

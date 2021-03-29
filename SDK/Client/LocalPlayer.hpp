@@ -32,19 +32,20 @@ public:
 
 //methods
 public:
-	bool canSeePlayer(BasePlayer player, int bone = -1) {
+	bool canSeePlayer(BasePlayer player, int bone = -1, bool smokeCheck = true) {
 		auto playerID = EntityList::getEntityID(player.get());
-		return canSeePlayer({ player, playerID }, bone);
+		return canSeePlayer({ player, playerID }, bone, smokeCheck);
 	}
 	bool canSeePlayer(EntityList::EntityObject entityObject, int bone = -1, bool smokeCheck = true) {
 		auto playerID = entityObject.second;
-		if (playerID == -1) {
+
+		if (playerID < 0) {
 			return false;
 		}
 
 		bool isVisible = false;
 
-		if (bone == -1) {
+		if (bone <= 0) {
 			isVisible = visibleCheck.isVisible(playerID);
 		}
 		else {
@@ -52,19 +53,16 @@ public:
 		}
 
 		if (smokeCheck && isVisible) {
-			isVisible = false;
-
-			BasePlayer player(entityObject.first);
-
 			auto myView = (Vector3(m_vecOrigin()) + Vector3(m_vecViewOffset())).toVec3();
 
-			for (auto bone : (bone == -1 ? ALL_BONES : std::vector<Skeleton>{ (Skeleton)bone })) {
-				auto playerBonePos = player.getBonePos(bone).toVec3();
+			BasePlayer player(entityObject.first);
+			auto playerBonePos = player.getBonePos(bone <= 0 ? Skeleton::CHEST : (Skeleton)bone).toVec3();
 
-				if (!visibleCheck.lineGoesThroughSmoke(myView, playerBonePos)) {
-					isVisible = true;
-					break;
-				}
+			if (!visibleCheck.lineGoesThroughSmoke(myView, playerBonePos)) {
+				isVisible = true;
+			}
+			else {
+				isVisible = false;
 			}
 		}
 

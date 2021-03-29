@@ -36,13 +36,4 @@ private:
 
 public:
 	void autoAccept();
-
-private:
-	LPVOID rankRevealAddress = nullptr;
-	bool revealedGame = false;
-	bool holdingTab = false;
-	bool revealedWarmup = false;
-public:
-	void showRanks();
-	void rankReveal();
 };

@@ -139,6 +139,8 @@ private:
 		// reserved memory for bool return value
 		0x12															// [@ 0x68]
 	};
+	//sizeof(LGTSShellcode) - (0xC + 0xC + 0x1)
+	const short LGTS_SHELLCODE_SIZE = 80;
 
 public:
 	bool lineGoesThroughSmoke(Vec3, Vec3);

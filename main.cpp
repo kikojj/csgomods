@@ -30,6 +30,7 @@ using namespace std;
 
 #pragma region Global Vars
 MenuServer menuServer;
+
 Memory mem;
 PModule clientDll;
 PModule engineDll;
@@ -56,9 +57,10 @@ Misc misc;
 int main() {
 	try {
 		cout << "[Main]: Waiting for process '" << GAME_NAME << "'." << endl;
-		while (!mem.attach(GAME_NAME, PROCESS_ALL_ACCESS)) {
+		while (!mem.findProcess(GAME_NAME)) {
 			Sleep(100);
 		}
+		mem.attach(mem.findProcess(GAME_NAME), PROCESS_ALL_ACCESS);
 		cout << "[Main]: Attached in process '" << GAME_NAME << "'." << endl;
 
 		clientDll = mem.getModule(CLIENT_DLL_NAME);
@@ -193,11 +195,6 @@ int main() {
 			Sleep(1);
 		}});
 
-		thread thMiscRankReveal([]() { while (isWorking) {
-			misc.rankReveal();
-			Sleep(1);
-		}});
-
 		thread thMap([]() {
 			auto lastClientState = 0;
 			while (isWorking) {
@@ -281,6 +278,13 @@ int main() {
 			}
 		});
 
+		thread thWorking([]() {
+			while (mem.findProcess(GAME_NAME)) {
+				Sleep(500);
+			}
+			menuServer.stop();
+		});
+
 		thMenuServer.join();
 		thMenuData.join();
 		thMenuOpen.join();
@@ -289,7 +293,6 @@ int main() {
 		thMiscRadarHack.join();
 		thMiscBhop.join();
 		thMiscAntiFlash.join();
-		thMiscRankReveal.join();
 		thMap.join();
 		thVisibleCheck.join();
 		thShoot.join();

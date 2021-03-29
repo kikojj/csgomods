@@ -10,10 +10,10 @@
 
 class Memory {
 public:
-	HANDLE _process;
-	DWORD _pId;
+	HANDLE process;
+	DWORD pID;
 
-	inline bool attach(const char* pName, DWORD dwAccess) {
+	inline DWORD findProcess(const char* pName) {
 		HANDLE handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 
 		PROCESSENTRY32 entry;
@@ -21,17 +21,21 @@ public:
 
 		do {
 			if (!strcmp(_bstr_t(entry.szExeFile), pName)) {
-				_pId = entry.th32ProcessID;
+				DWORD _pID = entry.th32ProcessID;
 				CloseHandle(handle);
-				_process = OpenProcess(dwAccess, false, _pId);
-				return true;
+				return _pID;
 			}
 		} while (Process32Next(handle, &entry));
-		return false;
+		return 0;
+	}
+
+	inline void attach(DWORD _pID, DWORD dwAccess) {
+		process = OpenProcess(dwAccess, false, _pID);
+		pID = _pID;
 	}
 
 	inline PModule getModule(const char* pModule) {
-		HANDLE module = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, _pId);
+		HANDLE module = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
 		MODULEENTRY32 entry;
 		entry.dwSize = sizeof(entry);
 
@@ -51,24 +55,24 @@ public:
 	template<class T>
 	T read(const DWORD dwAddress) {
 		T _read;
-		ReadProcessMemory(_process, LPVOID(dwAddress), &_read, sizeof(T), NULL);
+		ReadProcessMemory(process, LPVOID(dwAddress), &_read, sizeof(T), NULL);
 		return _read;
 	}
 
 	template<int size>
 	std::string readStr(const DWORD dwAddress) {
 		char _read[size];
-		ReadProcessMemory(_process, LPVOID(dwAddress), _read, sizeof(char[size]), NULL);
+		ReadProcessMemory(process, LPVOID(dwAddress), _read, sizeof(char[size]), NULL);
 		return std::string(_read);
 	}
 
 	template<class T>
-	void write(const DWORD dwAddress, const T& value) {
-		WriteProcessMemory(_process, LPVOID(dwAddress), &value, sizeof(T), NULL);
+	bool write(const DWORD dwAddress, const T& value, SIZE_T size = sizeof(T)) {
+		return WriteProcessMemory(process, LPVOID(dwAddress), &value, size, NULL);
 	}
 
 	inline void createThread(uintptr_t address, LPVOID parameter = 0) {
-		HANDLE hThread = CreateRemoteThread(_process, 0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(address), parameter, 0, 0);
+		HANDLE hThread = CreateRemoteThread(process, 0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(address), parameter, 0, 0);
 		if (!hThread) {
 			return;
 		}
@@ -77,14 +81,14 @@ public:
 	}
 
 	void exit() {
-		CloseHandle(_process);
+		CloseHandle(process);
 	}
 
 	//allocator
 	std::map<LPVOID, uintptr_t> allocators;
 
 	LPVOID allocateNewPage(uintptr_t size) {
-		auto address = VirtualAllocEx(_process, NULL, (size > 4096 ? size : 4096), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+		auto address = VirtualAllocEx(process, NULL, (size > 4096 ? size : 4096), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
 		allocators[address] = size;
 		return address;
 	}
@@ -109,7 +113,7 @@ public:
 
 	void free(LPVOID address) {
 		if (allocators[address] > 0) {
-			VirtualFreeEx(_process, address, 4096, MEM_COMMIT | MEM_RESERVE);
+			VirtualFreeEx(process, address, 4096, MEM_COMMIT | MEM_RESERVE);
 		}
 	}
 };

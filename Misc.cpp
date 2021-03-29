@@ -126,58 +126,6 @@ void Misc::antiFlash(){
 	}
 }
 
-void Misc::showRanks(){
-	//if (rankRevealAddress == nullptr) {
-	//	rankRevealAddress = reinterpret_cast<char*>(mem.allocate(12));
-	//}
-	//mem.createThread(Offsets::signatures::dwRankReveal, rankRevealAddress);
-	//std::cout << "showRanks" << std::endl;
-}
-
-void Misc::rankReveal(){
-	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		client.localPlayer->teamNum() <= TeamNum::Invalid ||
-		engine.clientState->m_nDeltaTick() == -1
-		) {
-		return;
-	}
-
-	if (!Settings::misc_rankReveal_enable) {
-		return;
-	}
-
-	if (!revealedGame){
-		int GameRules = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwGameRulesProxy);
-		bool isQueuedMatchmaking = mem.read<bool>(GameRules + Offsets::netvars::m_bIsQueuedMatchmaking);
-
-		if (revealedWarmup || isQueuedMatchmaking){
-			if (GetAsyncKeyState(VK_TAB) & 0x8000){
-				holdingTab = true;
-			}
-			else if (holdingTab){
-				holdingTab = false;
-				bool warmupPeriod = mem.read<bool>(GameRules + Offsets::netvars::m_bWarmupPeriod);
-
-				if (warmupPeriod){
-					if (!revealedWarmup){
-						revealedWarmup = true;
-						showRanks();
-					}
-				}
-				else {
-					bool freezePeriod = mem.read<bool>(GameRules + Offsets::netvars::m_bFreezePeriod);
-
-					if (!revealedGame && !freezePeriod){
-						revealedGame = true;
-						showRanks();
-					}
-				}
-			}
-		}
-	}
-}
-
 void Misc::autoAccept(){
 	if (!Settings::misc_autoAccept_enable) {
 		return;

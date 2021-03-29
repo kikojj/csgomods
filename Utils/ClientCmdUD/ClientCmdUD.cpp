@@ -16,7 +16,8 @@ bool ClientCmdUD::execute(const char* command){
 		return false;
 	}
 
-	WriteProcessMemory(mem._process, reinterpret_cast<LPVOID>(address + 15), command, strlen(command) + 1, 0);
+	WriteProcessMemory(mem.process, LPVOID((DWORD)address + 15), command, strlen(command) + 1, NULL);
+	//mem.write(address + 15, command, strlen(command) + 1);
 	mem.createThread(address);
 
 	return true;
