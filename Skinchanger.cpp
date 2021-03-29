@@ -1,6 +1,6 @@
 #include "Skinchanger.hpp"
 
-void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, ISkinchangerWeapon settings){
+void Skinchanger::applyWeaponSettings(BaseWeapon weapon, ISkinchangerWeapon settings){
 	weapon.m_iItemIDHigh(-1);
 	weapon.m_iAccountID(weapon.m_OriginalOwnerXuidLow());
 
@@ -29,7 +29,7 @@ void Skinchanger::applyWeaponSettings(BaseCombatWeapon weapon, ISkinchangerWeapo
 	}
 }
 
-void Skinchanger::applyKnifeSettings(BaseCombatWeapon knife, ISkinchangerWeapon settings){
+void Skinchanger::applyKnifeSettings(BaseWeapon knife, ISkinchangerWeapon settings){
 	auto weaponModel = modelIndexes[settings.itemDI];
 
 	knife.itemDI(settings.itemDI);
@@ -57,7 +57,7 @@ void Skinchanger::loop() {
 	auto localPlayerTeam = client.localPlayer->teamNum();
 
 	for (auto weaponId : client.localPlayer->myWeapons()) {
-		BaseCombatWeapon weapon(client.entityList->getByID(weaponId - 1));
+		BaseWeapon weapon(client.entityList->getByID(weaponId - 1));
 
 		if (!weapon.get()) {
 			continue;
@@ -74,13 +74,13 @@ void Skinchanger::loop() {
 	}
 
 	auto activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 	if (!activeWeapon.get() || !activeWeapon.isKnife()) {
 		return;
 	}
 
 	int knifeViewModelID = client.localPlayer->m_hViewModel() & 0xfff;
-	BaseCombatWeapon knife(client.entityList->getByID((knifeViewModelID - 1)));
+	BaseWeapon knife(client.entityList->getByID((knifeViewModelID - 1)));
 	if (!knife.get() || !Settings::skinchanger_knives[localPlayerTeam].enable) {
 		return;
 	}

@@ -41,7 +41,7 @@ void TriggerBot::loop() {
 	}
 
 	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 
 	if (activeWeapon.isPistol()) {
 		if (!Settings::triggerbot_pistols_enable) {

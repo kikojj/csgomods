@@ -15,13 +15,13 @@
 
 #include "BaseEntity.hpp"
 
-class BaseCombatWeapon : public BaseEntity {
+class BaseWeapon : public BaseEntity {
 //main methods
 public:
-	BaseCombatWeapon(int _base) {
+	BaseWeapon(int _base) {
 		this->base = _base;
 	}
-	BaseCombatWeapon(BaseEntity entity) {
+	BaseWeapon(BaseEntity entity) {
 		this->base = entity.get();
 	}
 
@@ -30,7 +30,7 @@ public:
 	PROP(bool,					m_bInReload,						get())
 
 	PROP(short,					m_iItemDefinitionIndex, get())
-	PROP(int,						m_iClip1,								get())										//the number of remaining bullets in the clip
+	PROP(int,						m_iClip1,								get())	//the number of remaining bullets in the clip
 	PROP(int,						m_OriginalOwnerXuidLow, get())
 	PROP(int,						m_nFallbackSeed,				get())
 	PROP(int,						m_nFallbackStatTrak,		get())
@@ -43,7 +43,7 @@ public:
 	PROP(unsigned long, m_nFallbackPaintKit,		get())
 
 	PROP(float,					m_flFallbackWear,				get())
-	PROP(float,					m_flNextPrimaryAttack,	get())			//next weapon attack in ticks
+	PROP(float,					m_flNextPrimaryAttack,	get())	//next weapon attack in ticks
 
 	PROP(std::string,		m_szCustomName,					get())
 

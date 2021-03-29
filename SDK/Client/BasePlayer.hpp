@@ -19,7 +19,6 @@
 
 #include "BaseEntity.hpp"
 #include "EntityList.hpp"
-#include "BaseCombatWeapon.hpp"
 
 class BasePlayer : public BaseEntity {
 //main methods
@@ -66,7 +65,6 @@ public:
 
 	PROP(Vec2,				m_viewPunchAngle,				get())
 	PROP(Vec2,				m_aimPunchAngle,				get())	//shoting angle on screen's plane, only if shooting
-	PROP(Vec3,				m_vecOrigin,						get())	//player position
 	PROP(Vec3,				m_vecViewOffset,				get())	//player eyes pos offset(must add this to m_vecOrigin to get real eyes pos)
 
 	PROP(RenderColor, m_clrRender,						get())

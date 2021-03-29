@@ -11,14 +11,8 @@ void Misc::radarHack(){
 		return;
 	}
 
-	for (const auto& entityObject : client.entityList->array()) {
-		auto entity = entityObject.first;
-
-		if (entity.classID() != ClassID::CCSPlayer) {
-			continue;
-		}
-
-		BasePlayer player(entity);
+	for (const auto& entityObject : client.entityList->players()) {
+		BasePlayer player(entityObject.first);
 
 		if (player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
 			continue;
@@ -91,7 +85,7 @@ void Misc::autoPistols(){
 	}
 
 	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 
 	if (activeWeapon.isPistol() && activeWeapon.itemDI() != ItemDefinitionIndex::WEAPON_R8Revolver && activeWeapon.itemDI() != ItemDefinitionIndex::WEAPON_CZ75Auto) {
 		if (!shouldShoot) {

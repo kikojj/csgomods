@@ -12,15 +12,15 @@
 
 #include "BaseEntity.hpp"
 
-class BasePlantedC4 : public BaseEntity {
+class PlantedC4 : public BaseEntity {
 //main methods
 public:
-	BasePlantedC4() {}
-	BasePlantedC4(BaseEntity entity) {
+	PlantedC4() {}
+	PlantedC4(BaseEntity entity) {
 		this->base = entity.get();
 	};
 
-	virtual int get() {
+	int get() {
 		return this->base;
 	}
 

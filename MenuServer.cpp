@@ -32,7 +32,7 @@ void MenuServer::getActiveWeapon(websocketpp::connection_hdl hdl){
   }
 
   int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-  BaseCombatWeapon activeWeapon = BaseCombatWeapon(client.entityList->getByID(activeWeaponID - 1));
+  BaseWeapon activeWeapon = BaseWeapon(client.entityList->getByID(activeWeaponID - 1));
   auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
   if (activeWeaponIDI == (int)ItemDefinitionIndex::Invalid) {
     return;

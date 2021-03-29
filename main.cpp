@@ -97,14 +97,8 @@ int main() {
 
 				//Radar Data
 				vector<IRadarData> radarData;
-				for (const auto& entityObject : client.entityList->array()) {
-					auto entity = entityObject.first;
-
-					if (entity.classID() != ClassID::CCSPlayer) {
-						continue;
-					}
-
-					BasePlayer player(entity);
+				for (const auto& entityObject : client.entityList->players()) {
+					BasePlayer player(entityObject.first);
 
 					auto playerInfo = player.info();
 					auto position = player.m_vecOrigin();
@@ -139,7 +133,7 @@ int main() {
 
 				//My active Weapon
 				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-				BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+				BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 				auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
 
 				if (activeWeaponIDI != (int)ItemDefinitionIndex::Invalid && activeWeaponIDI != lastActiveWeaponIDI) {
@@ -254,7 +248,7 @@ int main() {
 				misc.autoPistols();
 
 				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-				BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+				BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 
 				if (shouldShoot) {
 					if (Settings::aimbot_enable && aimBot.shouldWait && !aimBot.shouldShoot) {

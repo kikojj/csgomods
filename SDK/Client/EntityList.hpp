@@ -44,6 +44,25 @@ public:
 
 		return entityList;
 	}
+	static std::vector<EntityObject> players(int size = engine.clientState->maxPlayers()) {
+		std::vector<EntityObject> playerList;
+
+		for (int i = 0; i <= size; i++) {
+			BaseEntity entity(getByID(i));
+
+			if (entity.get() <= 0) {
+				continue;
+			}
+
+			if (entity.classID() != ClassID::CCSPlayer) {
+				continue;
+			}
+
+			playerList.push_back({ entity, i });
+		}
+
+		return playerList;
+	}
 	static BaseEntity getByID(int id) {
 		return BaseEntity(mem.read<int>(clientDll.dwBase + Offsets::signatures::dwEntityList + id * 0x10));
 	}

@@ -92,7 +92,7 @@ void AimBot::applyWeaponSettings(IAimbotSettings settings){
 	this->rcsScaleY = settings.rcsScaleY;
 }
 
-bool AimBot::applyWeaponsSettings(BaseCombatWeapon weapon){
+bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 	auto itemDI = weapon.itemDI();
 
 	//weapon settings
@@ -223,7 +223,7 @@ void AimBot::loop() {
 	}
 
 	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseCombatWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
 
 	if (!activeWeapon.get() || !applyWeaponsSettings(activeWeapon)) {
 		resetSettings();
@@ -231,18 +231,12 @@ void AimBot::loop() {
 	}
 
 	if (closestEnemy.get() <= 0) {
-		for (const auto& entityObject : client.entityList->array()) {
-			auto entity = entityObject.first;
+		for (const auto& entityObject : client.entityList->players()) {
+			BasePlayer player(entityObject.first);
 
-			if (!entity.get() || entity.get() == client.localPlayer->get()) {
+			if (!player.get() || player == (*client.localPlayer)) {
 				continue;
 			}
-
-			if (entity.classID() != ClassID::CCSPlayer) {
-				continue;
-			}
-
-			BasePlayer player(entity);
 
 			if (player.m_iHealth() <= 0) {
 				continue;

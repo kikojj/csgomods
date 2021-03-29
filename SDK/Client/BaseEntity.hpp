@@ -7,6 +7,7 @@
 #include "../../Utils/Offsets/Offsets.hpp"
 
 #include "../Utils/ClassID.hpp"
+#include "../Utils/Vector.hpp"
 
 #include "../Vars.hpp"
 
@@ -26,6 +27,9 @@ public:
 	void operator=(BaseEntity entity) {
 		this->base = entity.get();
 	}
+	bool operator==(BaseEntity& entity) {
+		return this->get() == entity.get();
+	}
 
 //props
 public:
@@ -36,6 +40,8 @@ public:
 																	+ 0x8)											//GetClientClass
 															+ 0x1),													//ClientClass
 															0x14, int, value)
+
+	PROP(Vec3,		m_vecOrigin, get())	//entity position
 
 //methods
 public:

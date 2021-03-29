@@ -13,7 +13,7 @@
 
 #include "../Vars.hpp"
 
-#include "BaseLocalPlayer.hpp"
+#include "LocalPlayer.hpp"
 #include "EntityList.hpp"
 #include "GlowObjectManager.hpp"
 #include "GlobalVars.hpp"
@@ -21,7 +21,7 @@
 class Client {
 //main variables
 public:
-	BaseLocalPlayer* localPlayer;
+	LocalPlayer* localPlayer;
 	EntityList* entityList;
 	GlowObjectManager* glowObjectManager;
 	GlobalVars* globalVars;
@@ -29,7 +29,7 @@ public:
 //main methods
 public:
 	Client() {
-		localPlayer = new BaseLocalPlayer();
+		localPlayer = new LocalPlayer();
 		entityList = new EntityList();
 		glowObjectManager = new GlowObjectManager();
 		globalVars = new GlobalVars();

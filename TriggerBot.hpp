@@ -7,7 +7,7 @@
 #include "SDK/Client/Client.hpp"
 #include "SDK/Client/BaseEntity.hpp"
 #include "SDK/Client/BasePlayer.hpp"
-#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Client/BaseWeapon.hpp"
 #include "SDK/Utils/FlagsState.hpp"
 
 #include "Utils/Helpers/Helpers.hpp"

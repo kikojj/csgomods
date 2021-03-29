@@ -15,10 +15,10 @@
 #include "BasePlayer.hpp"
 #include "EntityList.hpp"
 
-class BaseLocalPlayer : public BasePlayer {
+class LocalPlayer : public BasePlayer {
 //main methods
 public:
-	BaseLocalPlayer() {}
+	LocalPlayer() {}
 
 	virtual int get(){
 		return mem.read<int>(clientDll.dwBase + Offsets::signatures::dwLocalPlayer);

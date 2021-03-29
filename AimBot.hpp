@@ -7,7 +7,7 @@
 
 #include "SDK/Client/Client.hpp"
 #include "SDK/Client/BasePlayer.hpp"
-#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Client/BaseWeapon.hpp"
 #include "SDK/Engine/Engine.hpp"
 #include "SDK/Utils/Skeleton.hpp"
 #include "SDK/Utils/BoneVector.hpp"
@@ -44,7 +44,7 @@ private:
 	float getFov(Vector3, Vector2);
 	void setAngle(Vector2);
 	void applyWeaponSettings(IAimbotSettings);
-	bool applyWeaponsSettings(BaseCombatWeapon);
+	bool applyWeaponsSettings(BaseWeapon);
 
 public:
 	bool shouldShoot = false;

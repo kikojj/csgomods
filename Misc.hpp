@@ -4,7 +4,7 @@
 #include <chrono>
 
 #include "SDK/Client/BaseEntity.hpp"
-#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Client/BaseWeapon.hpp"
 #include "SDK/Utils/FlagsState.hpp"
 
 #include "Utils/Memory/Memory.hpp"

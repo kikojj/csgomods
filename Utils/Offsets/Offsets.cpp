@@ -180,6 +180,7 @@ void Offsets::initNetvars(){
   //DT_BaseEntity
   Offsets::netvars::m_bSpotted        = Scanner::getNetvar("m_bSpotted",       "m_bSpotted",       "DT_BaseEntity");
   Offsets::netvars::m_bSpottedByMask  = Scanner::getNetvar("m_bSpottedByMask", "m_bSpottedByMask", "DT_BaseEntity");
+  Offsets::netvars::m_vecOrigin       = Scanner::getNetvar("m_vecOrigin",      "m_vecOrigin",      "DT_BaseEntity");
 
   //DT_CSPlayer
   Offsets::netvars::m_ArmorValue                  = Scanner::getNetvar("m_ArmorValue",                   "m_ArmorValue",           "DT_CSPlayer");
@@ -227,7 +228,6 @@ void Offsets::initNetvars(){
   Offsets::netvars::m_iObserverMode     = Scanner::getNetvar("m_iObserverMode",    "m_iObserverMode",    "DT_BasePlayer");
   Offsets::netvars::m_iTeamNum          = Scanner::getNetvar("m_iTeamNum",         "m_iTeamNum",         "DT_BasePlayer");
   Offsets::netvars::m_nTickBase         = Scanner::getNetvar("m_nTickBase",        "m_nTickBase",        "DT_BasePlayer");
-  Offsets::netvars::m_vecOrigin         = Scanner::getNetvar("m_vecOrigin",        "m_vecOrigin",        "DT_BasePlayer");
   Offsets::netvars::m_viewPunchAngle    = Scanner::getNetvar("m_viewPunchAngle",   "m_viewPunchAngle",   "DT_BasePlayer");
   Offsets::netvars::m_clrRender         = Scanner::getNetvar("m_clrRender",        "m_clrRender",        "DT_BaseEntity");
 

@@ -9,7 +9,7 @@
 #include <websocketpp/server.hpp>
 
 #include "SDK/Client/Client.hpp"
-#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Client/BaseWeapon.hpp"
 #include "SDK/Engine/Engine.hpp"
 #include "SDK/Utils/TeamNum.hpp"
 

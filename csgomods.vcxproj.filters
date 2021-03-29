@@ -255,13 +255,13 @@
     <ClInclude Include="SDK\Engine\Engine.hpp">
       <Filter>SDK\Engine</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Client\BaseCombatWeapon.hpp">
+    <ClInclude Include="SDK\Client\BaseWeapon.hpp">
       <Filter>SDK\Client</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Client\BaseEntity.hpp">
       <Filter>SDK\Client</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Client\BaseLocalPlayer.hpp">
+    <ClInclude Include="SDK\Client\LocalPlayer.hpp">
       <Filter>SDK\Client</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Client\Client.hpp">

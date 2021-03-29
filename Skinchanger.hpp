@@ -4,7 +4,7 @@
 
 #include "SDK/Engine/Engine.hpp"
 #include "SDK/Client/Client.hpp"
-#include "SDK/Client/BaseCombatWeapon.hpp"
+#include "SDK/Client/BaseWeapon.hpp"
 #include "SDK/Utils/ItemDefinitionIndex.hpp"
 
 #include "Utils/Helpers/Helpers.hpp"
@@ -13,8 +13,8 @@
 
 class Skinchanger {
 private:
-  void applyWeaponSettings(BaseCombatWeapon, ISkinchangerWeapon);
-  void applyKnifeSettings(BaseCombatWeapon, ISkinchangerWeapon);
+  void applyWeaponSettings(BaseWeapon, ISkinchangerWeapon);
+  void applyKnifeSettings(BaseWeapon, ISkinchangerWeapon);
 
 public:
   Skinchanger();
