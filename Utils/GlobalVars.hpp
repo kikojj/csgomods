@@ -2,7 +2,7 @@
 
 #include <map>
 
-#include "../SDK/Utils/ItemDefinitionIndex.hpp"
+#include "../SDK/Utils/Item.hpp"
 
-extern bool isWorking;
-extern std::map<ItemDefinitionIndex, int> modelIndexes;
+extern bool g_b_working;
+extern std::map<c_item::en_defenition_index, int> g_model_indexes;

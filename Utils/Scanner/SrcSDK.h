@@ -1,49 +1,48 @@
 #pragma once
 #include <Windows.h>
 
-class RecvProp;
+class c_recv_prop;
 
-class RecvTable
+class c_recv_table
 {
 public:
 
-	RecvProp*	m_pProps;
-	int			m_nProps;
-	void*		m_pDecoder;
-	char*		m_pNetTableName;
-	bool		m_bInitialized;
-	bool		m_bInMainList;
+	c_recv_prop*	p_props;
+	int						i_props;
+	void*					decoder;
+	char*					net_table__name;
+	bool					initialized;
+	bool					in_main_list;
 };
 
 //unnecessary class pointers have been converted to void* for simplicity
 
-class RecvProp
-{
+class c_recv_prop{
 public:
-	char*					m_pVarName;
-	void*					m_RecvType;
-	int                     m_Flags;
-	int                     m_StringBufferSize;
-	int                     m_bInsideArray;
-	const void*				m_pExtraData;
-	RecvProp*				m_pArrayProp;
-	void*					m_ArrayLengthProxy;
-	void*					m_ProxyFn;
-	void*					m_DataTableProxyFn;
-	RecvTable* m_pDataTable;
-	int                     m_Offset;
-	int                     m_ElementStride;
-	int                     m_nElements;
-	const char*				m_pParentArrayPropName;
+	char*					var_name;
+	void*					recv_type;
+	int						flags;
+	int						string_buffer_size;
+	int						inside_array;
+	const void*		extra_data;
+	c_recv_prop*	array_prop;
+	void*					array_length_proxy;
+	void*					proxy_fn;
+	void*					data_table_proxy_fn;
+	c_recv_table*	data_table;
+	int           offset;
+	int           element_stride;
+	int           elements;
+	const char*		parent_array_prop_name;
 };
 
-class ClientClass
+class c_client_class
 {
 public:
-	void*			m_pCreateFn;
-	void*			m_pCreateEventFn;
-	char*			m_pNetworkName;
-	RecvTable*		m_pRecvTable;
-	ClientClass*	m_pNext;
-	int				m_ClassID;
+	void*						create_fn;
+	void*						create_event_fn;
+	char*						network_name;
+	c_recv_table*		recv_table;
+	c_client_class*	next;
+	int							class_id;
 };

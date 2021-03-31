@@ -9,70 +9,70 @@
 #include "../VirtualFunction/VirtualFunction.hpp"
 
 #include "../../SDK/Utils/Vector.hpp"
-#include "../../SDK/Utils/IEngineTrace.hpp"
-#include "../../SDK/Utils/CGameTrace.hpp"
-#include "../../SDK/Utils/CUserCmd.hpp"
+#include "../../SDK/Utils/EngineTrace.hpp"
+#include "../../SDK/Utils/GameTrace.hpp"
+#include "../../SDK/Utils/UserCmd.hpp"
 
-#define dwCreateMoveVars 0x00123456
+#define DW_CREATE_MOVE_VARS 0x00123456
 
-class CVisibleCheck {
+class c_visible_check {
 public:
-	struct IVisible {
+	struct s_visible {
 		bool player[64];
-		bool playerBones[64][80];
+		bool player_bones[64][80];
 	};
-	struct ICreateMoveVars {
+	struct s_create_move_vars {
 		//offsets
-		DWORD dwTraceLine;
-		DWORD dwClientState;
-		DWORD dwEntityList;
-		DWORD dwLocalPlayer;
-		DWORD m_nDeltaTick;
-		DWORD m_dwBoneMatrix;
-		DWORD m_vecViewOffset;
-		DWORD m_vecOrigin;
-		DWORD m_lifeState;
-		DWORD m_iTeamNum;
-		DWORD m_iHealth;
-		DWORD m_bDormant;
+		DWORD dw_trace_line;
+		DWORD dw_client_state;
+		DWORD dw_entity_list;
+		DWORD dw_local_player;
+		DWORD dw_delta_tick;
+		DWORD dw_bone_matrix;
+		DWORD dw_view_offset;
+		DWORD dw_origin;
+		DWORD dw_life_state;
+		DWORD dw_team_num;
+		DWORD dw_health;
+		DWORD dw_dormant;
 
 		//needable variables
 		int all_bones[17];
 
 		//local variables
-		Vec3 localOrigin;
-		Vec3 localViewOffset;
-		Vec3 localEyePosition;
-		Vec3 enemyBonePosition;
+		s_vec3 local_origin;
+		s_vec3 local_view_offset;
+		s_vec3 local_eye_position;
+		s_vec3 enemy_bone_position;
 		float min_fraction;
 
 		//output trace_t struct
-		CGameTrace* traceOutput;
+		c_game_trace* trace_output;
 
 		//player's visible struct
-		IVisible* visibleStruct;
+		s_visible* visible_struct;
 	};
 
 private:
 	bool hooked;
-	DWORD dwVisibleStruct;
-	IVisible visibleStruct;
-	LPVOID allocatedAddressTraceOutput;
-	LPVOID allocatedAddressVisibleStruct;
-	LPVOID allocatedAddressHookCode;
+	DWORD dw_visible_struct;
+	s_visible visible_struct;
+	LPVOID p_allocated_trace_output;
+	LPVOID p_allocated_visible_struct;
+	LPVOID p_allocated_hook_code;
 
 public:
-	CVisibleCheck();
-	~CVisibleCheck();
+	c_visible_check();
+	~c_visible_check();
 
 	bool 	init();
-	bool 	updateVisibleStruct();
-	bool 	isVisible(int);
-	bool 	isVisible(int, int);
+	bool 	update_visible_struct();
+	bool 	is_visible(int);
+	bool 	is_visible(int, int);
 
 //lineGoesThroughSmoke
 private:
-	BYTE LGTSShellcode[105] = {
+	BYTE lgts_shellcode[105] = {
 		//0xCC,									// int 3 [debug]
 
 		// Prologue
@@ -143,7 +143,7 @@ private:
 	const short LGTS_SHELLCODE_SIZE = 80;
 
 public:
-	bool lineGoesThroughSmoke(Vec3, Vec3);
+	bool line_goes_through_smoke(s_vec3, s_vec3);
 };
 
-extern CVisibleCheck visibleCheck;
+extern c_visible_check g_visible_check;

@@ -80,7 +80,7 @@ export const SkinSelect: React.FC<SkinSelectProps> = ({ activeTeam, activeWeapon
             image={skin.image}
             name={`${activeWeapon.name} | ${skin.name}`}
             rarity={skin.rarityID}
-            active={weaponSettings && weaponSettings?.paintKit === skin.paintKit}
+            active={weaponSettings && weaponSettings?.paint_kit === skin.paintKit}
             onClick={() => applyPaintKit(skin.paintKit)}
           />
         ))}

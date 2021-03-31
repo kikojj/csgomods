@@ -6,7 +6,7 @@
 #include "../Offsets/Offsets.hpp"
 #include "../Memory/Memory.hpp"
 
-class ClientCmdUD {
+class c_client_cmd {
 private:
 	uintptr_t address = 0;
 	BYTE shellcode[15 + 128] = {
@@ -22,4 +22,4 @@ public:
 	bool execute(const char* command);
 };
 
-extern ClientCmdUD clientCmdUD;
+extern c_client_cmd g_client_cmd;

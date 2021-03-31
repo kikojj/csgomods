@@ -38,7 +38,7 @@ export const WeaponSelect: React.FC<WeaponSelectProps> = ({ setActiveWeapon }) =
           if (settings.skinchanger_weapons[itemDI]) {
             let skin = skins.find(
               (s) =>
-                +s.paintKit === +settings.skinchanger_weapons[itemDI]!.paintKit! &&
+                +s.paintKit === +settings.skinchanger_weapons[itemDI]!.paint_kit! &&
                 settings.skinchanger_weapons[itemDI]?.enable
             );
             if (skin) {

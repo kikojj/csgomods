@@ -1,17 +1,17 @@
 #pragma once
 
-enum struct EntityQuality : int {
+enum struct en_entity_quality: int {
   Invalid = -1,
-  QUALITY_NORMAL,
-  QUALITY_GENUINE,
-  QUALITY_VINTAGE,
-  QUALITY_UNUSUAL,
-  QUALITY_COMMUNITY = 5,
-  QUALITY_DEVELOPER,
-  QUALITY_SELF_MADE,
-  QUALITY_CUSTOMIZED,
-  QUALITY_STRANGE,
-  QUALITY_COMPLETED,
-  QUALITY_TOURNAMENT = 12,
+  Normal,
+  Genuine,
+  Vintage,
+  Unusual,
+  Community = 5,
+  Developer,
+  SelftMade,
+  Customized,
+  Strange,
+  Completed,
+  Tournament = 12,
   InvalidLast
 };

@@ -5,15 +5,15 @@
 
 #include "../Memory/Memory.hpp"
 
-class VirtualFunction {
+class c_virtual_function {
 private:
-  DWORD dwBase;
+  DWORD base;
   std::map <int, DWORD> hooks;
 
-  DWORD getVirtualFunction(int);
+  DWORD get_virtual_function(int);
 
 public:
-  VirtualFunction(DWORD);
+  c_virtual_function(DWORD);
   void hook(int, DWORD);
 
 };

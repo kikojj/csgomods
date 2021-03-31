@@ -1,95 +1,95 @@
 #include "Skinchanger.hpp"
 
-void Skinchanger::applyWeaponSettings(BaseWeapon weapon, ISkinchangerWeapon settings){
-	weapon.m_iItemIDHigh(-1);
-	weapon.m_iAccountID(weapon.m_OriginalOwnerXuidLow());
+void c_skinchanger::apply_weapon_settings(c_base_weapon weapon, c_settings::s_skinchanger_weapon settings){
+	weapon.m_i_item_id_high(-1);
+	weapon.m_i_account_id(weapon.m_original_owner_xuid_low());
 
-	weapon.m_nFallbackPaintKit(settings.paintKit);
+	weapon.m_n_fallback_paint_kit(settings.paint_kit);
 
-	weapon.m_flFallbackWear(settings.wear);
+	weapon.m_f_fallback_wear(settings.wear);
 
-	if (settings.quality != EntityQuality::Invalid) {
-		weapon.entityQuality(settings.quality);
+	if (settings.quality != en_entity_quality::Invalid) {
+		weapon.entity_quality(settings.quality);
 	}
-	else if (weapon.isKnife()) {
-		weapon.entityQuality(EntityQuality::QUALITY_UNUSUAL);
+	else if (weapon.is_knife()) {
+		weapon.entity_quality(en_entity_quality::Unusual);
 	}
 
-	if (settings.customName != "") {
-		weapon.m_szCustomName(settings.customName);
+	if (settings.custom_name != "") {
+		weapon.m_sz_custom_name(settings.custom_name);
 	}
-	if (settings.statTrack >= 0) {
-		if (settings.quality == EntityQuality::Invalid || settings.quality == EntityQuality::QUALITY_NORMAL) {
-			weapon.entityQuality(EntityQuality::QUALITY_STRANGE);
+	if (settings.stat_track >= 0) {
+		if (settings.quality == en_entity_quality::Invalid || settings.quality == en_entity_quality::Normal) {
+			weapon.entity_quality(en_entity_quality::Strange);
 		}
-		weapon.m_nFallbackStatTrak(settings.statTrack);
+		weapon.m_n_fallback_stat_trak(settings.stat_track);
 	}
 	if (settings.seed > 0) {
-		weapon.m_nFallbackSeed(settings.seed);
+		weapon.m_n_fallback_seed(settings.seed);
 	}
 }
 
-void Skinchanger::applyKnifeSettings(BaseWeapon knife, ISkinchangerWeapon settings){
-	auto weaponModel = modelIndexes[settings.itemDI];
+void c_skinchanger::apply_knife_settings(c_base_weapon knife, c_settings::s_skinchanger_weapon settings){
+	auto weaponModel = g_model_indexes[settings.item_di];
 
-	knife.itemDI(settings.itemDI);
-	knife.m_nModelIndex(weaponModel);
-	knife.m_iViewModelIndex(weaponModel);
+	knife.item_di(settings.item_di);
+	knife.m_n_model_index(weaponModel);
+	knife.m_i_view_model_index(weaponModel);
 
-	applyWeaponSettings(knife, settings);
+	apply_weapon_settings(knife, settings);
 }
 
-Skinchanger::Skinchanger(){}
+c_skinchanger::c_skinchanger(){}
 
-void Skinchanger::loop() {
+void c_skinchanger::loop() {
 	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->teamNum() < TeamNum::TERRORIST
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_client.local_player->m_i_health() <= 0 ||
+		g_client.local_player->team_num() == en_team_num::Invalid
 		) {
 		return;
 	}
 
-	if (!Settings::skinchanger_enable) {
+	if (!c_settings::skinchanger_enable) {
 		return;
 	}
 
-	auto localPlayerTeam = client.localPlayer->teamNum();
+	auto localPlayerTeam = g_client.local_player->team_num();
 
-	for (auto weaponId : client.localPlayer->myWeapons()) {
-		BaseWeapon weapon(client.entityList->getByID(weaponId - 1));
+	for (auto weaponId : g_client.local_player->my_weapons()) {
+		c_base_weapon weapon(g_client.entity_list->get_by_id(weaponId - 1));
 
 		if (!weapon.get()) {
 			continue;
 		}
 
-		auto weaponDI = weapon.itemDI();
-		auto weaponModel =  modelIndexes[Settings::skinchanger_knives[localPlayerTeam].itemDI];
-		if (weapon.isKnife() && weaponModel > 0 && Settings::skinchanger_knives[localPlayerTeam].enable) {
-			applyKnifeSettings(weapon, Settings::skinchanger_knives[localPlayerTeam]);
+		auto weaponDI = weapon.item_di();
+		auto weaponModel =  g_model_indexes[c_settings::skinchanger_knives[localPlayerTeam].item_di];
+		if (weapon.is_knife() && weaponModel > 0 && c_settings::skinchanger_knives[localPlayerTeam].enable) {
+			apply_knife_settings(weapon, c_settings::skinchanger_knives[localPlayerTeam]);
 		}
-		else if (Settings::skinchanger_weapons[weaponDI].enable) {
-			applyWeaponSettings(weapon, Settings::skinchanger_weapons[weaponDI]);
+		else if (c_settings::skinchanger_weapons[weaponDI].enable) {
+			apply_weapon_settings(weapon, c_settings::skinchanger_weapons[weaponDI]);
 		}
 	}
 
-	auto activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
-	if (!activeWeapon.get() || !activeWeapon.isKnife()) {
+	auto activeWeaponID = g_client.local_player->m_h_active_weapon() & 0xfff;
+	c_base_weapon activeWeapon(g_client.entity_list->get_by_id(activeWeaponID - 1));
+	if (!activeWeapon.get() || !activeWeapon.is_knife()) {
 		return;
 	}
 
-	int knifeViewModelID = client.localPlayer->m_hViewModel() & 0xfff;
-	BaseWeapon knife(client.entityList->getByID((knifeViewModelID - 1)));
-	if (!knife.get() || !Settings::skinchanger_knives[localPlayerTeam].enable) {
+	int knifeViewModelID = g_client.local_player->m_h_view_model() & 0xfff;
+	c_base_weapon knife(g_client.entity_list->get_by_id((knifeViewModelID - 1)));
+	if (!knife.get() || !c_settings::skinchanger_knives[localPlayerTeam].enable) {
 		return;
 	}
 
-	auto knifeModel = modelIndexes[Settings::skinchanger_knives[localPlayerTeam].itemDI];
+	auto knifeModel = g_model_indexes[c_settings::skinchanger_knives[localPlayerTeam].item_di];
 	if (knifeModel <= 0) {
 		return;
 	}
 
-	knife.m_nModelIndex(knifeModel);
-	knife.m_hWeaponWorldModel(knifeModel + 1);
+	knife.m_n_model_index(knifeModel);
+	knife.m_h_weapon_world_model(knifeModel + 1);
 }

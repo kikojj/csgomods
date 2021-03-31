@@ -1,24 +1,24 @@
 #include "Helpers.hpp"
 
-void Helpers::shoot() {
+void c_helpers::shoot() {
 	mouse_event(MOUSEEVENTF_LEFTDOWN, 0, 0, 0, 0);
 	Sleep(10);
 	mouse_event(MOUSEEVENTF_LEFTUP, 0, 0, 0, 0);
 }
 
-void Helpers::jump(){
-	client.dwForceJump(KeyEvent::KEY_DOWN);
+void c_helpers::jump(){
+	g_client.dw_force_jump(en_key_event::KeyDown);
 	Sleep(10);
-	client.dwForceJump(KeyEvent::KEY_UP);
+	g_client.dw_force_jump(en_key_event::KeyUp);
 }
 
-void Helpers::keyboardPressKey(int key){
+void c_helpers::keyboard_press_key(int key){
 	keybd_event(key, 0, 0, 0);
 	Sleep(10);
 	keybd_event(key, 0, KEYEVENTF_KEYUP, 0);
 }
 
-void Helpers::toggleSteamOverlay(){
+void c_helpers::toggle_steam_overlay(){
 	keybd_event(VK_TAB, 0, 0, 0);
 	keybd_event(VK_SHIFT, 0, 0, 0);
 	Sleep(10);
@@ -26,29 +26,29 @@ void Helpers::toggleSteamOverlay(){
 	keybd_event(VK_SHIFT, 0, KEYEVENTF_KEYUP, 0);
 }
 
-bool Helpers::isMouseActive(){
-	return (client.dwInput().mouseActive && (client.dwMouseEnable() ^ (short)Offsets::signatures::dwMouseEnablePtr) && !engine.isOverlayActive());
+bool c_helpers::is_mouse_active(){
+	return (g_client.dw_input().mouse_active && (g_client.dw_mouse_enable() ^ (short)c_offsets::signatures::dw_mouse_enable_ptr) && !g_engine.is_overlay_active());
 }
 
-bool Helpers::isFlashed(float flash){
+bool c_helpers::is_flashed(float flash){
 	return flash > 120.f ? true : false;
 }
 
-void Helpers::exit(){
-	mem.free();
-	mem.exit();
+void c_helpers::exit(){
+	g_mem.free();
+	g_mem.exit();
 	std::exit(0);
 }
 
-int Helpers::getModelIndex(std::string name) {
-	int dwModelPrecache = engine.clientState->dwModelPrecache();
-	int modelBase = mem.read<int>(mem.read<int>(dwModelPrecache + 0x40) + 0xC) + 0xC;
+int c_helpers::get_model_index(std::string name) {
+	auto i_model_precache = g_engine.client_state->model_precache();
+	auto i_model_base = g_mem.read<int>(g_mem.read<int>(i_model_precache + 0x40) + 0xC) + 0xC;
 
 	for (int i = 0; i < 1024; i++) {
-		int model = mem.read<int>(modelBase + (i * 0x34));
+		auto i_model = g_mem.read<int>(i_model_base + (i * 0x34));
 
-		std::string modelString = std::string(mem.read<std::array<char, 128>>(model).data());
-		if (modelString.find(name) != std::string::npos) {
+		std::string str_model = std::string(g_mem.read<std::array<char, 128>>(i_model).data());
+		if (str_model.find(name) != std::string::npos) {
 			return i;
 		}
 	}
@@ -56,71 +56,71 @@ int Helpers::getModelIndex(std::string name) {
 	return -1;
 }
 
-int Helpers::getModelIndex(ItemDefinitionIndex itemDI) {
-	switch (itemDI)
+int c_helpers::get_model_index(c_item::en_defenition_index di) {
+	switch (di)
 	{
-	case ItemDefinitionIndex::WEAPON_Knife:
-		return Helpers::getModelIndex("models/weapons/v_knife_default_ct.mdl");
+	case c_item::en_defenition_index::WeaponKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_default_ct.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_KnifeT:
-		return Helpers::getModelIndex("models/weapons/v_knife_default_t.mdl");
+	case c_item::en_defenition_index::WeaponKnifeT:
+		return c_helpers::get_model_index("models/weapons/v_knife_default_t.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_Bayonet:
-		return Helpers::getModelIndex("models/weapons/v_knife_bayonet.mdl");
+	case c_item::en_defenition_index::WeaponBayonet:
+		return c_helpers::get_model_index("models/weapons/v_knife_bayonet.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_FlipKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_flip.mdl");
+	case c_item::en_defenition_index::WeaponFlipKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_flip.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_GutKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_gut.mdl");
+	case c_item::en_defenition_index::WeaponGutKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_gut.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_Karambit:
-		return Helpers::getModelIndex("models/weapons/v_knife_karam.mdl");
+	case c_item::en_defenition_index::WeaponKarambit:
+		return c_helpers::get_model_index("models/weapons/v_knife_karam.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_M9Bayonet:
-		return Helpers::getModelIndex("models/weapons/v_knife_m9_bay.mdl");
+	case c_item::en_defenition_index::WeaponM9Bayonet:
+		return c_helpers::get_model_index("models/weapons/v_knife_m9_bay.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_HuntsmanKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_tactical.mdl");
+	case c_item::en_defenition_index::WeaponHuntsmanKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_tactical.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_FlachionKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_falchion_advanced.mdl");
+	case c_item::en_defenition_index::WeaponFlachionKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_falchion_advanced.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_BowieKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_survival_bowie.mdl");
+	case c_item::en_defenition_index::WeaponBowieKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_survival_bowie.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_ButterflyKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_butterfly.mdl");
+	case c_item::en_defenition_index::WeaponButterflyKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_butterfly.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_ShadowDaggers:
-		return Helpers::getModelIndex("models/weapons/v_knife_push.mdl");
+	case c_item::en_defenition_index::WeaponShadowDaggers:
+		return c_helpers::get_model_index("models/weapons/v_knife_push.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_UrsusKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_ursus.mdl");
+	case c_item::en_defenition_index::WeaponUrsusKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_ursus.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_NavajaKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_gypsy_jackknife.mdl");
+	case c_item::en_defenition_index::WeaponNavajaKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_gypsy_jackknife.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_StilettoKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_stiletto.mdl");
+	case c_item::en_defenition_index::WeaponStilettoKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_stiletto.mdl");
 		break;
-	case  ItemDefinitionIndex::WEAPON_TalonKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_widowmaker.mdl");
+	case  c_item::en_defenition_index::WeaponTalonKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_widowmaker.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_ClassicKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_css.mdl");
+	case c_item::en_defenition_index::WeaponClassicKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_css.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_ParacordKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_cord.mdl");
+	case c_item::en_defenition_index::WeaponParacordKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_cord.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_SurvivalKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_canis.mdl");
+	case c_item::en_defenition_index::WeaponSurvivalKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_canis.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_NomadKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_outdoor.mdl");
+	case c_item::en_defenition_index::WeaponNomadKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_outdoor.mdl");
 		break;
-	case ItemDefinitionIndex::WEAPON_SkeletonKnife:
-		return Helpers::getModelIndex("models/weapons/v_knife_skeleton.mdl");
+	case c_item::en_defenition_index::WeaponSkeletonKnife:
+		return c_helpers::get_model_index("models/weapons/v_knife_skeleton.mdl");
 		break;
 	default:
 		return -1;
@@ -128,17 +128,17 @@ int Helpers::getModelIndex(ItemDefinitionIndex itemDI) {
 	}
 }
 
-void Helpers::updateModelIndexes(){
-	if (engine.clientState->state() != ClientStates::INGAME) {
+void c_helpers::update_model_indexes(){
+	if (g_engine.client_state->state() != en_client_states::InGame) {
 		return;
 	}
 
-	auto knifes = ItemDefinition::knifes();
-	std::for_each(knifes.begin(), knifes.end(), [](ItemDefinitionIndex& itemDI) {
-		modelIndexes[itemDI] = getModelIndex(itemDI);
+	auto vec_knifes = c_item::knifes();
+	std::for_each(vec_knifes.begin(), vec_knifes.end(), [](c_item::en_defenition_index& di) {
+		g_model_indexes[di] = get_model_index(di);
 	});
 }
 
-void Helpers::fullForceUpdate(){
-	engine.clientState->m_nDeltaTick(-1);
+void c_helpers::full_force_update(){
+	g_engine.client_state->delta_tick(-1);
 }

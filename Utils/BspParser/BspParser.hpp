@@ -2,4 +2,4 @@
 
 #include "bsp_parser.hpp"
 
-extern rn::bsp_parser bsp_parser;
+extern rn::bsp_parser g_bsp_parser;

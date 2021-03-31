@@ -17,24 +17,24 @@ export enum EntityQuality {
 
 export interface ISkinchangerWeapon {
   enable: boolean;
-  paintKit: number;
+  paint_kit: number;
   quality: EntityQuality;
   wear: number;
-  customName: string;
-  statTrack: number;
+  custom_name: string;
+  stat_track: number;
   seed: number;
-  itemDI: ItemDefinitionIndex;
+  item_di: ItemDefinitionIndex;
 }
 
 export const DEFAULT_WEAPON_SETTINGS: ISkinchangerWeapon = {
   enable: true,
-  paintKit: -1,
+  paint_kit: -1,
   quality: EntityQuality.QUALITY_NORMAL,
   wear: 0.00001,
-  customName: "",
-  statTrack: -1,
+  custom_name: "",
+  stat_track: -1,
   seed: 0,
-  itemDI: ItemDefinitionIndex.INVALID_ITEM_DI,
+  item_di: ItemDefinitionIndex.INVALID_ITEM_DI,
 };
 
 export enum TeamNum {
@@ -47,27 +47,27 @@ export enum TeamNum {
 export interface IAimbotSettings {
   use: boolean;
   enable: boolean;
-  firstPerfectShoot: boolean;
+  first_perfect_shoot: boolean;
   fov: number;
   bone: number;
-  changeAfterNearest: boolean;
+  change_after_nearest: boolean;
   smooth: number;
-  rcsEnable: boolean;
-  rcsScaleX: number;
-  rcsScaleY: number;
+  rcs_enable: boolean;
+  rcs_scale_x: number;
+  rcs_scale_y: number;
 }
 
 export const DEFAULT_AIMBOT_SETTINGS: IAimbotSettings = {
   use: false,
   enable: false,
-  firstPerfectShoot: false,
+  first_perfect_shoot: false,
   fov: 0,
   bone: 0,
-  changeAfterNearest: false,
+  change_after_nearest: false,
   smooth: 0,
-  rcsEnable: false,
-  rcsScaleX: 100,
-  rcsScaleY: 100,
+  rcs_enable: false,
+  rcs_scale_x: 100,
+  rcs_scale_y: 100,
 };
 
 export type TSettings = {
@@ -112,26 +112,26 @@ export type TSettings = {
 
   //VISUALS
   //GLOW ESP
-  visuals_glowEsp_enable: boolean;
+  visuals_glow_esp_enable: boolean;
 
-  visuals_glowEsp_show_enemies: boolean;
-  visuals_glowEsp_show_friends: boolean;
-  visuals_glowEsp_show_c4: boolean;
-  visuals_glowEsp_show_defusing: boolean;
-  visuals_glowEsp_show_grenades: boolean;
+  visuals_glow_esp_show_enemies: boolean;
+  visuals_glow_esp_show_friends: boolean;
+  visuals_glow_esp_show_c4: boolean;
+  visuals_glow_esp_show_defusing: boolean;
+  visuals_glow_esp_show_grenades: boolean;
 
-  visuals_glowEsp_style: number;
-  visuals_glowEsp_mode: number;
+  visuals_glow_esp_style: number;
+  visuals_glow_esp_mode: number;
 
-  visuals_glowEsp_enemy_visible_color: ColorRGBA;
-  visuals_glowEsp_enemy_invisible_color: ColorRGBA;
-  visuals_glowEsp_friends_color: ColorRGBA;
-  visuals_glowEsp_c4_color: ColorRGBA;
-  visuals_glowEsp_defusing_color: ColorRGBA;
-  visuals_glowEsp_grenades_color: ColorRGBA;
+  visuals_glow_esp_enemy_visible_color: ColorRGBA;
+  visuals_glow_esp_enemy_invisible_color: ColorRGBA;
+  visuals_glow_esp_friends_color: ColorRGBA;
+  visuals_glow_esp_c4_color: ColorRGBA;
+  visuals_glow_esp_defusing_color: ColorRGBA;
+  visuals_glow_esp_grenades_color: ColorRGBA;
 
-  visuals_glowEsp_hpBased_0hp_color: ColorRGBA;
-  visuals_glowEsp_hpBased_100hp_color: ColorRGBA;
+  visuals_glow_esp_hp_based_0hp_color: ColorRGBA;
+  visuals_glow_esp_hp_based_100hp_color: ColorRGBA;
   ///
 
   //CHAMS
@@ -150,13 +150,13 @@ export type TSettings = {
   //
 
   ///MISC
-  misc_ingameRadar_enable: boolean;
+  misc_ingame_radar_enable: boolean;
   misc_bhop_enable: boolean;
-  misc_autoPistols_enable: boolean;
-  misc_autoPistols_delay: number;
-  misc_autoAccept_enable: boolean;
-  misc_antiFlash_enable: boolean;
-  misc_antiFlash_maxAlpha: number;
+  misc_auto_pistols_enable: boolean;
+  misc_auto_pistols_delay: number;
+  misc_auto_accept_enable: boolean;
+  misc_anti_flash_enable: boolean;
+  misc_anti_flash_max_alpha: number;
   ///
 };
 
@@ -205,26 +205,26 @@ export const DEFAULT_SETTINGS: TSettings = {
 
   //VISUALS
   //GLOW ESP
-  visuals_glowEsp_enable: false,
+  visuals_glow_esp_enable: false,
 
-  visuals_glowEsp_show_enemies: false,
-  visuals_glowEsp_show_friends: false,
-  visuals_glowEsp_show_c4: false,
-  visuals_glowEsp_show_defusing: false,
-  visuals_glowEsp_show_grenades: false,
+  visuals_glow_esp_show_enemies: false,
+  visuals_glow_esp_show_friends: false,
+  visuals_glow_esp_show_c4: false,
+  visuals_glow_esp_show_defusing: false,
+  visuals_glow_esp_show_grenades: false,
 
-  visuals_glowEsp_style: 0,
-  visuals_glowEsp_mode: 0,
+  visuals_glow_esp_style: 0,
+  visuals_glow_esp_mode: 0,
 
-  visuals_glowEsp_enemy_visible_color: { r: 0, g: 0, b: 0, a: 0 },
-  visuals_glowEsp_enemy_invisible_color: { r: 0, g: 0, b: 0, a: 0 },
-  visuals_glowEsp_friends_color: { r: 0, g: 0, b: 0, a: 0 },
-  visuals_glowEsp_c4_color: { r: 0, g: 0, b: 0, a: 0 },
-  visuals_glowEsp_defusing_color: { r: 0, g: 0, b: 0, a: 0 },
-  visuals_glowEsp_grenades_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_enemy_visible_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_enemy_invisible_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_friends_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_c4_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_defusing_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_grenades_color: { r: 0, g: 0, b: 0, a: 0 },
 
-  visuals_glowEsp_hpBased_0hp_color: { r: 0, g: 0, b: 0, a: 0 },
-  visuals_glowEsp_hpBased_100hp_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_hp_based_0hp_color: { r: 0, g: 0, b: 0, a: 0 },
+  visuals_glow_esp_hp_based_100hp_color: { r: 0, g: 0, b: 0, a: 0 },
   ///
 
   //CHAMS
@@ -245,12 +245,12 @@ export const DEFAULT_SETTINGS: TSettings = {
   //
 
   ///MISC
-  misc_ingameRadar_enable: false,
+  misc_ingame_radar_enable: false,
   misc_bhop_enable: false,
-  misc_autoPistols_enable: false,
-  misc_autoPistols_delay: 0,
-  misc_autoAccept_enable: false,
-  misc_antiFlash_enable: false,
-  misc_antiFlash_maxAlpha: 255,
+  misc_auto_pistols_enable: false,
+  misc_auto_pistols_delay: 0,
+  misc_auto_accept_enable: false,
+  misc_anti_flash_enable: false,
+  misc_anti_flash_max_alpha: 255,
   ///
 };

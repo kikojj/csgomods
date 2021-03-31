@@ -18,38 +18,37 @@
 #include "Utils/Settings/Settings.hpp"
 #include "Utils/Helpers/Helpers.hpp"
 
-class AimBot {
+class c_aim_bot {
 private:
 	//aim
-	bool firstPerfectShoot = false;
-	Skeleton bone = Skeleton::NEAREST;
-	bool changeAfterNearest = false;
+	bool first_perfect_shoot = false;
+	en_skeleton bone = en_skeleton::Nearest;
+	bool change_after_nearest = false;
 	float fov = 0;
 	float smooth = 0;
 
 	//rcs
-	bool rcsEnable = false;
-	float rcsScaleX = 0;
-	float rcsScaleY = 0;
+	bool rcs_enable = false;
+	float rcs_scale_x = 0;
+	float rcs_scale_y = 0;
 
 	//neccesary variables
-	BasePlayer closestEnemy;
-	float closestAngle = 360.0f;
-	Skeleton closestBone = Skeleton::HEAD;
-	std::chrono::high_resolution_clock::time_point lastKillTime = std::chrono::high_resolution_clock::now();
+	c_base_player closest_enemy;
+	float closest_angle = 360.0f;
+	en_skeleton closest_bone = en_skeleton::Head;
+	std::chrono::high_resolution_clock::time_point last_kill_time = std::chrono::high_resolution_clock::now();
 
-	void resetSettings();
-	Vector3 getBonePos(BasePlayer&, Skeleton);
-	Vector3 calcAngle(Vector3, Vector3);
-	float getFov(Vector3, Vector2);
-	void setAngle(Vector2);
-	void applyWeaponSettings(IAimbotSettings);
-	bool applyWeaponsSettings(BaseWeapon);
+	void reset_settings();
+	c_vector3 calc_angle(c_vector3, c_vector3);
+	float get_fov(c_vector3, c_vector2);
+	void set_angle(c_vector2);
+	void apply_weapon_settings(c_settings::s_aimbot_settings);
+	bool apply_weapons_settings(c_base_weapon);
 
 public:
-	bool shouldShoot = false;
-	bool shouldWait = false;
+	bool should_shoot = false;
+	bool should_wait = false;
 
-	AimBot();
+	c_aim_bot();
 	void loop();
 };

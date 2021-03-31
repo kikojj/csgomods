@@ -1,148 +1,135 @@
 #include "TriggerBot.hpp"
 
-TriggerBot::TriggerBot() {}
+c_trigger_bot::c_trigger_bot() {}
 
-void TriggerBot::loop() {
-	if (!Settings::triggerbot_enable) {
-		shouldShoot = false;
-		shouldWait = false;
+void c_trigger_bot::reset_settings() {
+	should_shoot = false;
+	should_wait = false;
+}
+
+void c_trigger_bot::loop() {
+	if (!c_settings::triggerbot_enable) {
+		reset_settings();
 		return;
 	}
 
 	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		engine.clientState->m_nDeltaTick() == -1 ||
-		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->teamNum() < TeamNum::TERRORIST ||
-		client.localPlayer->m_bDormant() ||
-		!Helpers::isMouseActive()
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_engine.client_state->delta_tick() == -1 ||
+		g_client.local_player->m_i_health() <= 0 ||
+		g_client.local_player->team_num() == en_team_num::Invalid ||
+		g_client.local_player->m_b_dormant() ||
+		!c_helpers::is_mouse_active()
 		) {
-		shouldShoot = false;
-		shouldWait = false;
+		reset_settings();
 		return;
 	}
 
-	if (Settings::triggerbot_use_key && !GetAsyncKeyState(Settings::triggerbot_key)) {
-		shouldShoot = false;
-		shouldWait = false;
+	if (c_settings::triggerbot_use_key && !GetAsyncKeyState(c_settings::triggerbot_key)){
+		reset_settings();
 		return;
 	}
 
-	if (Settings::aimbot_flash_check && Helpers::isFlashed(client.localPlayer->m_flFlashAlpha())) {
-		shouldShoot = false;
-		shouldWait = false;
+	if (c_settings::aimbot_flash_check && c_helpers::is_flashed(g_client.local_player->m_f_flash_alpha())) {
+		reset_settings();
 		return;
 	}
 
-	if (Settings::aimbot_jump_check && !FlagsState::isOnGround(client.localPlayer->m_fFlags())) {
-		shouldShoot = false;
-		shouldWait = false;
+	if (c_settings::aimbot_jump_check && !c_flags_state::is_on_ground(g_client.local_player->m_f_flags())) {
+		reset_settings();
 		return;
 	}
 
-	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	int activeWeaponID = g_client.local_player->m_h_active_weapon() & 0xfff;
+	c_base_weapon activeWeapon(g_client.entity_list->get_by_id(activeWeaponID - 1));
 
-	if (activeWeapon.isPistol()) {
-		if (!Settings::triggerbot_pistols_enable) {
-			shouldShoot = false;
-			shouldWait = false;
+	if (activeWeapon.is_pistol()) {
+		if (!c_settings::triggerbot_pistols_enable) {
+			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.isHeavy()) {
-		if (!Settings::triggerbot_heavies_enable) {
-			shouldShoot = false;
-			shouldWait = false;
+	else if (activeWeapon.is_heavy()) {
+		if (!c_settings::triggerbot_heavies_enable) {
+			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.isShotgun()) {
-		if (!Settings::triggerbot_shoutguns_enable) {
-			shouldShoot = false;
-			shouldWait = false;
+	else if (activeWeapon.is_shotgun()) {
+		if (!c_settings::triggerbot_shoutguns_enable) {
+			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.isSMG()) {
-		if (!Settings::triggerbot_smgs_enable) {
-			shouldShoot = false;
-			shouldWait = false;
+	else if (activeWeapon.is_smg()) {
+		if (!c_settings::triggerbot_smgs_enable) {
+			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.isRifle()) {
-		if (!Settings::triggerbot_rifles_enable) {
-			shouldShoot = false;
-			shouldWait = false;
+	else if (activeWeapon.is_rifle()) {
+		if (!c_settings::triggerbot_rifles_enable) {
+			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.isSnipers()) {
-		if (!Settings::triggerbot_snipers_enable) {
-			shouldShoot = false;
-			shouldWait = false;
+	else if (activeWeapon.is_snipers()) {
+		if (!c_settings::triggerbot_snipers_enable) {
+			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.isKnife()) {
-		shouldShoot = false;
-		shouldWait = false;
+	else if (activeWeapon.is_knife()) {
+		reset_settings();
 		return;
 	}
-	else if (activeWeapon.isBomb()) {
-		shouldShoot = false;
-		shouldWait = false;
+	else if (activeWeapon.is_bomb()) {
+		reset_settings();
 		return;
 	}
-	else if (activeWeapon.isGrenade()) {
-		shouldShoot = false;
-		shouldWait = false;
+	else if (activeWeapon.is_grenade()) {
+		reset_settings();
 		return;
 	}
-	else if (activeWeapon.isZeusX27()) {
-		shouldShoot = false;
-		shouldWait = false;
+	else if (activeWeapon.is_zeusx27()) {
+		reset_settings();
 		return;
 	}
 	else {
-		std::cout << "[Trigger]: Undefined weapon ID = " << (int)activeWeapon.itemDI() << std::endl;
-		shouldShoot = false;
-		shouldWait = false;
+		std::cout << "[Trigger]: Undefined weapon ID = " << (int)activeWeapon.item_di() << std::endl;
+		reset_settings();
 		return;
 	}
 
-	BaseEntity entity(client.entityList->getByID(client.localPlayer->m_iCrosshairId() - 1));
-	if (entity.classID() != ClassID::CCSPlayer) {
-		shouldShoot = false;
-		shouldWait = false;
+	c_base_entity entity(g_client.entity_list->get_by_id(g_client.local_player->m_i_crosshair_id() - 1));
+	if (entity.class_id() != en_class_id::CCSPlayer) {
+		reset_settings();
 		return;
 	}
 
-	BasePlayer player(entity);
-	if (!Settings::triggerbot_friendly_fire && player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
-		shouldShoot = false;
-		shouldWait = false;
+	c_base_player player(entity);
+	if (!c_settings::triggerbot_friendly_fire && player.team_num() == g_client.local_player->team_num()) {
+		reset_settings();
 		return;
 	}
 
-	if (!shouldShoot) {
-		lastPressTime = std::chrono::high_resolution_clock::now();
-		shouldShoot = true;
+	if (!should_shoot) {
+		last_press_time = std::chrono::high_resolution_clock::now();
+		should_shoot = true;
 	}
-	else if (!shouldWait) {
-		if (activeWeapon.isPistol()) {
-			shouldShoot = false;
+	else if (!should_wait) {
+		if (activeWeapon.is_pistol()) {
+			should_shoot = false;
 		}
 	}
 
 	if (
-		std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastPressTime).count() >
-		(double)((double)Settings::triggerbot_delay_before_shoot / (double)1000)
+		std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - last_press_time).count() >
+		(double)((double)c_settings::triggerbot_delay_before_shoot / (double)1000)
 		) {
-		shouldWait = false;
+		should_wait = false;
 	}
 	else {
-		shouldWait = true;
+		should_wait = true;
 	}
 }

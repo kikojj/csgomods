@@ -1,12 +1,12 @@
 #pragma once
 
-enum struct SkinRarity : int {
-  RARITY_COMMON = 1,
-  RARITY_UNCOMMON,
-  RARITY_RARE,
-  RARITY_MYTHICAL,
-  RARITY_LEGENDARY,
-  RARITY_ANCIENT,
-  RARITY_EXCEEDINGLY_RARE,
-  RARITY_IMMORTAL
+enum struct en_skin_rarity: int {
+  Common = 1,
+  Uncommon,
+  Rare,
+  Mythical,
+  Legendary,
+  Ancient,
+  ExceedinglyRare,
+  Immortal
 };

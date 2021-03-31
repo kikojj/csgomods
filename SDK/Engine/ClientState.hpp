@@ -9,53 +9,54 @@
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
 
-class ClientState {
+class c_client_state {
 //main methods
 public:
-	ClientState() {}
+	c_client_state() {}
 
-	int get() {
-		return mem.read<int>(engineDll.dwBase + Offsets::signatures::dwClientState);
+	int get(){
+		return g_mem.read<int>(g_engine_dll.base + c_offsets::signatures::dw_client_state);
 	}
 
 //methods
 public:
-	int getLocalPlayer() {
-		return mem.read<int>(get() + Offsets::signatures::dwClientState_GetLocalPlayer);
+	int get_local_player() {
+		return g_mem.read<int>(get() + c_offsets::signatures::dw_cs_get_local_player);
 	}
-	Vec2 dwViewAngles() {
-		return mem.read<Vec2>(get() + Offsets::signatures::dwClientState_ViewAngles);
+	s_vec2 view_angles() {
+		return g_mem.read<s_vec2>(get() + c_offsets::signatures::dw_cs_view_angles);
 	}
-	void dwViewAngles(Vec2 vec) {
-		auto _vec = Vector2(vec);
+	void view_angles(s_vec2 vec) {
+		auto _vec = c_vector2(vec);
 		_vec.clamp();
 		_vec.normalize();
-		mem.write(get() + Offsets::signatures::dwClientState_ViewAngles, _vec);
+		g_mem.write(get() + c_offsets::signatures::dw_cs_view_angles, _vec);
 	}
-	int m_nDeltaTick() {
-		return mem.read<int>(get() + Offsets::signatures::clientstate_delta_ticks);
+	int delta_tick() {
+		return g_mem.read<int>(get() + c_offsets::signatures::dw_cs_delta_ticks);
 	}
-	void m_nDeltaTick(int value) {
-		mem.write(get() + Offsets::signatures::clientstate_delta_ticks, value);
+	void delta_tick(int value) {
+		g_mem.write(get() + c_offsets::signatures::dw_cs_delta_ticks, value);
 	}
-	ClientStates state() {
-		auto state = (ClientStates)mem.read<int>(get() + Offsets::signatures::dwClientState_State);
-		return state;
+	en_client_states state() {
+		auto i_state = g_mem.read<int>(get() + c_offsets::signatures::dw_cs_state);
+		return (en_client_states)i_state;
 	}
-	std::array<char, 0x120> mapDirectory() {
-		auto mapDirectory = mem.read<std::array<char, 0x120>>(get() + Offsets::signatures::dwClientState_MapDirectory);
-		return mapDirectory;
+	std::array<char, 0x120> map_directory() {
+		auto arr_map_directory = g_mem.read<std::array<char, 0x120>>(get() + c_offsets::signatures::dw_cs_map_directory);
+		return arr_map_directory;
 	}
-	int dwModelPrecache() {
+	int model_precache() {
 		//SHOULD FIND SIGNATURE
-		return mem.read<int>(get() + 0x52A4);
+		auto i_model_precache = g_mem.read<int>(get() + 0x52A4);;
+		return i_model_precache;
 	}
-	int playerInfo() {
-		auto playerInfo = mem.read<int>(get() + Offsets::signatures::dwClientState_PlayerInfo);
-		return playerInfo;
+	int player_info() {
+		auto player_info = g_mem.read<int>(get() + c_offsets::signatures::dw_cs_player_info);
+		return player_info;
 	}
-	int maxPlayers() {
-		auto maxPlayers = mem.read<int>(get() + Offsets::signatures::dwClientState_MaxPlayer);
-		return maxPlayers;
+	int max_players() {
+		auto i_max_players = g_mem.read<int>(get() + c_offsets::signatures::dw_cs_max_player);
+		return i_max_players;
 	}
 };

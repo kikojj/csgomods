@@ -2,56 +2,56 @@
 
 #include <vector>
 
-enum struct Skeleton : int {
-  NEAREST = 0,
+enum struct en_skeleton: int {
+  Nearest = 0,
 
-  NAVEL = 3,
-  STOMACH = 4,
-  CHEST = 6,
-  NECK = 7,
-  HEAD = 8,
+  Navel = 3,
+  Stomach = 4,
+  Chest = 6,
+  Neck = 7,
+  Head = 8,
 
-  LEFT_SHOULDER = 11,
-  LEFT_EBLOW = 12,
-  LEFT_HAND = 13,
+  LeftShoulder = 11,
+  LeftEblow = 12,
+  LeftHand = 13,
 
-  RIGHT_SHOULDER = 41,
-  RIGHT_EBLOW = 42,
-  RIGHT_HAND = 43,
+  RightShoulder = 41,
+  RightEblow = 42,
+  RightHand = 43,
 
-  LEFT_THIGH = 70,
-  LEFT_KNEE = 71,
-  LEFT_FOOT = 72,
+  LeftThigh = 70,
+  LeftKnee = 71,
+  LeftFoot = 72,
 
-  RIGHT_THIGH = 77,
-  RIGHT_KNEE = 78,
-  RIGHT_FOOT = 79,
+  RightThigh = 77,
+  RightKnee = 78,
+  RightFoot = 79,
 };
 
-static std::vector<Skeleton> ALL_BONES = {
-    Skeleton::NAVEL,
-    Skeleton::STOMACH,
-    Skeleton::CHEST,
-    Skeleton::NECK,
-    Skeleton::HEAD,
-    Skeleton::LEFT_SHOULDER,
-    Skeleton::LEFT_EBLOW,
-    Skeleton::LEFT_HAND,
-    Skeleton::RIGHT_SHOULDER,
-    Skeleton::RIGHT_EBLOW,
-    Skeleton::RIGHT_HAND,
-    Skeleton::LEFT_THIGH,
-    Skeleton::LEFT_KNEE,
-    Skeleton::LEFT_FOOT,
-    Skeleton::RIGHT_THIGH,
-    Skeleton::RIGHT_KNEE,
-    Skeleton::RIGHT_FOOT
+static const std::vector<en_skeleton> ALL_BONES = {
+    en_skeleton::Navel,
+    en_skeleton::Stomach,
+    en_skeleton::Chest,
+    en_skeleton::Neck,
+    en_skeleton::Head,
+    en_skeleton::LeftShoulder,
+    en_skeleton::LeftEblow,
+    en_skeleton::LeftHand,
+    en_skeleton::RightShoulder,
+    en_skeleton::RightEblow,
+    en_skeleton::RightHand,
+    en_skeleton::LeftThigh,
+    en_skeleton::LeftKnee,
+    en_skeleton::LeftFoot,
+    en_skeleton::RightThigh,
+    en_skeleton::RightKnee,
+    en_skeleton::RightFoot
 };
 
-static std::vector<Skeleton> MAIN_BONES = {
-    Skeleton::NAVEL,
-    Skeleton::STOMACH,
-    Skeleton::CHEST,
-    Skeleton::NECK,
-    Skeleton::HEAD,
+static const std::vector<en_skeleton> MAIN_BONES = {
+    en_skeleton::Navel,
+    en_skeleton::Stomach,
+    en_skeleton::Chest,
+    en_skeleton::Neck,
+    en_skeleton::Head,
 };

@@ -1,10 +1,11 @@
 #pragma once
 
-enum struct ClientStates : int {
+enum struct en_client_states: int {
 	Invalid = -1,
-	LOBBY = 0,
-	LOADING = 1,
-	CONNECTING = 2,
-	CONNECTED = 5,
-	INGAME = 6
+	Lobby = 0,
+	Loading = 1,
+	Connecting = 2,
+	Connected = 5,
+	InGame = 6,
+	InvalidLast,
 };

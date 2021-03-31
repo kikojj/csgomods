@@ -1,44 +1,44 @@
 #include "Misc.hpp"
 
-Misc::Misc() {}
+c_misc::c_misc() {}
 
-void Misc::radarHack(){
-	if (!Settings::misc_ingameRadar_enable) {
+void c_misc::radar_hack(){
+	if (!c_settings::misc_ingame_radar_enable) {
 		return;
 	}
 
-	if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
+	if (g_engine.client_state->state() != en_client_states::InGame || g_engine.client_state->delta_tick() == -1) {
 		return;
 	}
 
-	for (const auto& entityObject : client.entityList->players()) {
-		BasePlayer player(entityObject.first);
+	for (const auto& entityObject : g_client.entity_list->players()) {
+		c_base_player player(entityObject.first);
 
-		if (player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
+		if (player.team_num() == g_client.local_player->team_num()) {
 			continue;
 		}
 
-		if (player.m_iHealth() <= 0) {
+		if (player.m_i_health() <= 0) {
 			continue;
 		}
 
-		if (!player.m_bSpotted()) {
-			player.m_bSpotted(true);
+		if (!player.m_b_spotted()) {
+			player.m_b_spotted(true);
 		}
 	}
 }
 
-void Misc::bhop() {
-	if (!Settings::misc_bhop_enable) {
+void c_misc::bhop() {
+	if (!c_settings::misc_bhop_enable) {
 		return;
 	}
 
 	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->teamNum() < TeamNum::TERRORIST ||
-		engine.clientState->m_nDeltaTick() == -1 ||
-		!Helpers::isMouseActive()
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_client.local_player->m_i_health() <= 0 ||
+		g_client.local_player->team_num() == en_team_num::Invalid ||
+		g_engine.client_state->delta_tick() == -1 ||
+		!c_helpers::is_mouse_active()
 		) {
 		return;
 	}
@@ -47,99 +47,100 @@ void Misc::bhop() {
 		return;
 	}
 
-	if (Vector3(client.localPlayer->m_vecVelocity()).isZero()) {
+	if (c_vector3(g_client.local_player->m_vec3_velocity()).is_zero()) {
 		return;
 	}
 
-	if (FlagsState::isOnGround(client.localPlayer->m_fFlags())) {
-		client.dwForceJump(KeyEvent::KEY_DOWN);
+	if (c_flags_state::is_on_ground(g_client.local_player->m_f_flags())) {
+		g_client.dw_force_jump(en_key_event::KeyDown);
 	}
 	else {
-		client.dwForceJump(KeyEvent::KEY_UP);
+		g_client.dw_force_jump(en_key_event::KeyUp);
 	}
 }
 
-void Misc::autoPistols(){
-	if (!Settings::misc_autoPistols_enable) {
-		shouldShoot = false;
-		shouldWait = false;
+void c_misc::reset_settings() {
+	should_shoot = false;
+	should_wait = false;
+}
+
+void c_misc::auto_pistols(){
+	if (!c_settings::misc_auto_pistols_enable) {
+		reset_settings();
 		return;
 	}
 
 	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->teamNum() < TeamNum::TERRORIST ||
-		engine.clientState->m_nDeltaTick() == -1 ||
-		!Helpers::isMouseActive()
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_client.local_player->m_i_health() <= 0 ||
+		g_client.local_player->team_num() == en_team_num::Invalid ||
+		g_engine.client_state->delta_tick() == -1 ||
+		!c_helpers::is_mouse_active()
 		) {
-		shouldShoot = false;
-		shouldWait = false;
+		reset_settings();
 		return;
 	}
 
 	if (!GetAsyncKeyState(VK_LBUTTON)) {
-		shouldShoot = false;
-		shouldWait = false;
+		reset_settings();
 		return;
 	}
 
-	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	int activeWeaponID = g_client.local_player->m_h_active_weapon() & 0xfff;
+	c_base_weapon activeWeapon(g_client.entity_list->get_by_id(activeWeaponID - 1));
 
-	if (activeWeapon.isPistol() && activeWeapon.itemDI() != ItemDefinitionIndex::WEAPON_R8Revolver && activeWeapon.itemDI() != ItemDefinitionIndex::WEAPON_CZ75Auto) {
-		if (!shouldShoot) {
-			lastPressTime = std::chrono::high_resolution_clock::now();
-			shouldShoot = true;
+	if (activeWeapon.is_pistol() && activeWeapon.item_di() != c_item::en_defenition_index::WeaponR8Revolver && activeWeapon.item_di() != c_item::en_defenition_index::WeaponCZ75Auto) {
+		if (!should_shoot) {
+			last_press_time = std::chrono::high_resolution_clock::now();
+			should_shoot = true;
 		}
 		else {
 			if (
-				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastPressTime).count() >
-				(double)((double)Settings::misc_autoPistols_delay / (double)1000)
+				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - last_press_time).count() >
+				(double)((double)c_settings::misc_auto_pistols_delay / (double)1000)
 				) {
-				shouldShoot = false;
-				shouldWait = false;
+				reset_settings();
 			}
 			else {
-				shouldWait = true;
+				should_wait = true;
 			}
 		}
 	}
 }
 
-void Misc::antiFlash(){
-	if (!Settings::misc_antiFlash_enable) {
+void c_misc::anti_flash(){
+	if (!c_settings::misc_anti_flash_enable) {
 		return;
 	}
 
 	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->teamNum() < TeamNum::TERRORIST ||
-		engine.clientState->m_nDeltaTick() == -1
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_client.local_player->m_i_health() <= 0 ||
+		g_client.local_player->team_num() == en_team_num::Invalid ||
+		g_engine.client_state->delta_tick() == -1
 		) {
 		return;
 	}
 
-	if (client.localPlayer->m_flFlashMaxAlpha() != Settings::misc_antiFlash_maxAlpha) {
-		client.localPlayer->m_flFlashMaxAlpha((float)Settings::misc_antiFlash_maxAlpha);
+	if (g_client.local_player->m_f_flash_max_alpha() != c_settings::misc_anti_flash_max_alpha) {
+		g_client.local_player->m_f_flash_max_alpha((float)c_settings::misc_anti_flash_max_alpha);
 	}
 }
 
-void Misc::autoAccept(){
-	if (!Settings::misc_autoAccept_enable) {
+void c_misc::auto_accept(){
+	if (!c_settings::misc_auto_accept_enable) {
 		return;
 	}
 
-	if (engine.clientState->state() != ClientStates::LOBBY) {
+	if (g_engine.client_state->state() != en_client_states::Lobby) {
 		return;
 	}
 
-	callback = client.confirmReservationCallback();
+	callback = g_client.confirm_reservation_callback();
 
 	if (callback){
-		if (prevCallback != callback){
-			prevCallback = callback;
+		if (prev_callback != callback){
+			prev_callback = callback;
 			found = false;
 			accepted = false;
 		}
@@ -150,7 +151,7 @@ void Misc::autoAccept(){
 		}
 		else if (!accepted){
 			accepted = true;
-			mem.createThread(client.hConfirmMatch());
+			g_mem.createThread(g_client.confirm_match());
 			std::cout << "[AUTO ACCEPT]: Math was found. Tried to accept the match." << std::endl;
 		}
 	}

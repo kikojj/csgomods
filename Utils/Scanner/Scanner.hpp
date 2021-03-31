@@ -15,14 +15,14 @@
 #include "../../SDK/Utils/Defines.hpp"
 #include "../Offsets/Offsets.hpp"
 
-class Scanner {
+class c_scanner {
 private:
-  static HMODULE loadLibrary(ProcEx, std::string);
-  static int getOffset(RecvTable*, const char*, const char*);
-  static int getNetVarOffset(const char*, const char*, ClientClass*);
+  static HMODULE load_library(ProcEx, std::string);
+  static int get_offset(c_recv_table*, const char*, const char*);
+  static int get_netvar_offset(const char*, const char*, c_client_class*);
 
 public:
-  static int getAllClassesSignature();
-  static int getSignature(std::string module, std::string comboPattern, std::vector<int> offsets = { 0 }, int extra = 0, bool relative = true, bool read = true);
-  static int getNetvar(std::string name, std::string prop, std::string table, int offset = 0);
+  static int get_all_classes();
+  static int get_signature(std::string module, std::string combo_pattern, std::vector<int> offsets = { 0 }, int extra = 0, bool relative = true, bool read = true);
+  static int get_netvar(std::string name, std::string prop, std::string table, int offset = 0);
 };

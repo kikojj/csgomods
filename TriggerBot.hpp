@@ -14,14 +14,16 @@
 #include "Utils/Offsets/Offsets.hpp"
 #include "Utils/Settings/Settings.hpp"
 
-class TriggerBot {
+class c_trigger_bot {
 private:
-	std::chrono::high_resolution_clock::time_point lastPressTime = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point last_press_time = std::chrono::high_resolution_clock::now();
+
+	void reset_settings();
 
 public:
-	bool shouldShoot = false;
-	bool shouldWait = false;
+	bool should_shoot = false;
+	bool should_wait = false;
 
-	TriggerBot();
+	c_trigger_bot();
 	void loop();
 };

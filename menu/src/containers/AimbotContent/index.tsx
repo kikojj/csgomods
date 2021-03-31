@@ -194,8 +194,8 @@ export const AimbotContent: React.FC = () => {
                   <CheckboxField
                     label="Perfect first"
                     helperText="First bullet will 100% hit the target"
-                    checked={weaponSettings.firstPerfectShoot}
-                    onChange={(v) => changeSettings({ ...weaponSettings, firstPerfectShoot: v })}
+                    checked={weaponSettings.first_perfect_shoot}
+                    onChange={(v) => changeSettings({ ...weaponSettings, first_perfect_shoot: v })}
                   />
                   <RangeField
                     label={`Fov: ${weaponSettings.fov}`}
@@ -213,8 +213,8 @@ export const AimbotContent: React.FC = () => {
                     <CheckboxField
                       label="Change bone"
                       helperText="Change the bone if it is not main(like shoulder, eblow, knee, etc.)"
-                      checked={weaponSettings.changeAfterNearest}
-                      onChange={(v) => changeSettings({ ...weaponSettings, changeAfterNearest: v })}
+                      checked={weaponSettings.change_after_nearest}
+                      onChange={(v) => changeSettings({ ...weaponSettings, change_after_nearest: v })}
                     />
                   ) : (
                     ""
@@ -230,28 +230,28 @@ export const AimbotContent: React.FC = () => {
                   />
                   <CheckboxField
                     label="RCS Enable"
-                    checked={weaponSettings.rcsEnable}
-                    onChange={(v) => changeSettings({ ...weaponSettings, rcsEnable: v })}
+                    checked={weaponSettings.rcs_enable}
+                    onChange={(v) => changeSettings({ ...weaponSettings, rcs_enable: v })}
                   />
-                  {weaponSettings.rcsEnable ? (
+                  {weaponSettings.rcs_enable ? (
                     <React.Fragment>
                       <RangeField
-                        label={`RCS X: ${weaponSettings.rcsScaleX.toString()}%`}
+                        label={`RCS X: ${weaponSettings.rcs_scale_x.toString()}%`}
                         helperText="Horizontal recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={weaponSettings.rcsScaleX}
-                        onChange={(v) => changeSettings({ ...weaponSettings, rcsScaleX: v })}
+                        value={weaponSettings.rcs_scale_x}
+                        onChange={(v) => changeSettings({ ...weaponSettings, rcs_scale_x: v })}
                       />
                       <RangeField
-                        label={`RCS Y: ${weaponSettings.rcsScaleY.toString()}%`}
+                        label={`RCS Y: ${weaponSettings.rcs_scale_y.toString()}%`}
                         helperText="Vertical recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={weaponSettings.rcsScaleY}
-                        onChange={(v) => changeSettings({ ...weaponSettings, rcsScaleY: v })}
+                        value={weaponSettings.rcs_scale_y}
+                        onChange={(v) => changeSettings({ ...weaponSettings, rcs_scale_y: v })}
                       />
                     </React.Fragment>
                   ) : (

@@ -1,7 +1,7 @@
 #pragma once
 
-enum struct KeyEvent : int {
-  KEY_UP = 4,
-  KEY_DOWN = 5,
-  KEY_PRESS = 6
+enum struct en_key_event: int {
+  KeyUp = 4,
+  KeyDown = 5,
+  KeyPress = 6
 };

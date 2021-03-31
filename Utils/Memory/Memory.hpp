@@ -8,76 +8,76 @@
 
 #include "PModule.hpp"
 
-class Memory {
+class c_memory {
 public:
 	HANDLE process;
-	DWORD pID;
+	DWORD proccess_id;
 
-	inline DWORD findProcess(const char* pName) {
+	inline DWORD find_process(const char* name) {
 		HANDLE handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
 
 		PROCESSENTRY32 entry;
 		entry.dwSize = sizeof(entry);
 
 		do {
-			if (!strcmp(_bstr_t(entry.szExeFile), pName)) {
-				DWORD _pID = entry.th32ProcessID;
+			if (!strcmp(_bstr_t(entry.szExeFile), name)) {
+				DWORD id = entry.th32ProcessID;
 				CloseHandle(handle);
-				return _pID;
+				return id;
 			}
 		} while (Process32Next(handle, &entry));
 		return 0;
 	}
 
-	inline void attach(DWORD _pID, DWORD dwAccess) {
-		process = OpenProcess(dwAccess, false, _pID);
-		pID = _pID;
+	inline void attach(DWORD id, DWORD access) {
+		process = OpenProcess(access, false, id);
+		proccess_id = id;
 	}
 
-	inline PModule getModule(const char* pModule) {
-		HANDLE module = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, pID);
+	inline s_pm_module get_module(const char* module) {
+		HANDLE h_module = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, proccess_id);
 		MODULEENTRY32 entry;
 		entry.dwSize = sizeof(entry);
 
 		do {
-			if (!strcmp(_bstr_t(entry.szModule), pModule)) {
-				CloseHandle(module);
-				return PModule{
+			if (!strcmp(_bstr_t(entry.szModule), module)) {
+				CloseHandle(h_module);
+				return s_pm_module{
 					reinterpret_cast<DWORD>(entry.hModule),
 					entry.modBaseSize
 				};
 			}
-		} while (Module32Next(module, &entry));
+		} while (Module32Next(h_module, &entry));
 
-		return PModule{ 0, 0 };
+		return s_pm_module{ 0, 0 };
 	}
 
 	template<class T>
-	T read(const DWORD dwAddress) {
+	T read(const DWORD address) {
 		T _read;
-		ReadProcessMemory(process, LPVOID(dwAddress), &_read, sizeof(T), NULL);
+		ReadProcessMemory(process, LPVOID(address), &_read, sizeof(T), NULL);
 		return _read;
 	}
 
 	template<int size>
-	std::string readStr(const DWORD dwAddress) {
+	std::string read_str(const DWORD address) {
 		char _read[size];
-		ReadProcessMemory(process, LPVOID(dwAddress), _read, sizeof(char[size]), NULL);
+		ReadProcessMemory(process, LPVOID(address), _read, sizeof(char[size]), NULL);
 		return std::string(_read);
 	}
 
 	template<class T>
-	bool write(const DWORD dwAddress, const T& value, SIZE_T size = sizeof(T)) {
-		return WriteProcessMemory(process, LPVOID(dwAddress), &value, size, NULL);
+	bool write(const DWORD address, const T& value, SIZE_T size = sizeof(T)) {
+		return WriteProcessMemory(process, LPVOID(address), &value, size, NULL);
 	}
 
 	inline void createThread(uintptr_t address, LPVOID parameter = 0) {
-		HANDLE hThread = CreateRemoteThread(process, 0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(address), parameter, 0, 0);
-		if (!hThread) {
+		HANDLE h_thread = CreateRemoteThread(process, 0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(address), parameter, 0, 0);
+		if (!h_thread) {
 			return;
 		}
-		WaitForSingleObject(hThread, 5000);
-		CloseHandle(hThread);
+		WaitForSingleObject(h_thread, 5000);
+		CloseHandle(h_thread);
 	}
 
 	void exit() {
@@ -87,22 +87,22 @@ public:
 	//allocator
 	std::map<LPVOID, uintptr_t> allocators;
 
-	LPVOID allocateNewPage(uintptr_t size) {
-		auto address = VirtualAllocEx(process, NULL, (size > 4096 ? size : 4096), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
-		allocators[address] = size;
-		return address;
+	LPVOID allocate_new_page(uintptr_t size) {
+		auto p_address = VirtualAllocEx(process, NULL, (size > 4096 ? size : 4096), MEM_COMMIT | MEM_RESERVE, PAGE_EXECUTE_READWRITE);
+		allocators[p_address] = size;
+		return p_address;
 	}
 
 	LPVOID allocate(uintptr_t size = 4096) {
 		for (auto allocator : allocators) {
-			uintptr_t value = allocator.second + size;
-			if (value < 4096) {
+			uintptr_t ui_value = allocator.second + size;
+			if (ui_value < 4096) {
 				LPVOID currentAddres = LPVOID(uintptr_t(allocator.first) + allocator.second);
-				allocator.second = value;
+				allocator.second = ui_value;
 				return currentAddres;
 			}
 		}
-		return allocateNewPage(size);
+		return allocate_new_page(size);
 	}
 
 	void free() {
@@ -118,4 +118,4 @@ public:
 	}
 };
 
-extern Memory mem;
+extern c_memory g_mem;

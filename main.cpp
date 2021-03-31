@@ -13,7 +13,7 @@
 #include "SDK/Client/Client.hpp"
 #include "SDK/Engine/Engine.hpp"
 #include "SDK/Utils/TeamNum.hpp"
-#include "SDK/Utils/ItemDefinitionIndex.hpp"
+#include "SDK/Utils/Item.hpp"
 
 #include "Utils/GlobalVars.hpp"
 #include "Utils/Helpers/Helpers.hpp"
@@ -22,285 +22,283 @@
 #include "Utils/BspParser/BspParser.hpp"
 #include "Utils/Settings/Settings.hpp"
 #include "Utils/Offsets/Offsets.hpp"
-#include "Utils/VisibleCheck/VisibleCheck.h"
-#include "Utils/ClientCmdUD/ClientCmdUD.hpp"
-#include "Utils/ClientCmdUD/CMDToggle.hpp"
+#include "Utils/VisibleCheck/VisibleCheck.hpp"
+#include "Utils/ClientCmd/ClientCmd.hpp"
+#include "Utils/ClientCmd/CMDToggle.hpp"
 
 using namespace std;
 
 #pragma region Global Vars
-MenuServer menuServer;
+c_menu_server g_menu_server;
 
-Memory mem;
-PModule clientDll;
-PModule engineDll;
+c_memory g_mem;
+s_pm_module g_client_dll;
+s_pm_module g_engine_dll;
 
-Client client;
-Engine engine;
+c_client g_client;
+c_engine g_engine;
 
-rn::bsp_parser bsp_parser;
-CVisibleCheck visibleCheck;
+rn::bsp_parser g_bsp_parser;
+c_visible_check g_visible_check;
 
-map<ItemDefinitionIndex, int> modelIndexes;
-ClientCmdUD clientCmdUD;
-CMDToggle mouseBind("bind mouse1 +attack", "unbind mouse1");
+map<c_item::en_defenition_index, int> g_model_indexes;
+c_client_cmd g_client_cmd;
+
+bool g_b_working = true;
 #pragma endregion
 
-bool isWorking = true;
+CMDToggle mouse_bind("bind mouse1 +attack", "unbind mouse1");
 
-Visuals visuals;
-AimBot aimBot;
-TriggerBot triggetBot;
-Skinchanger skinchanger;
-Misc misc;
+c_visuals visuals;
+c_aim_bot aim_bot;
+c_trigger_bot trigget_bot;
+c_skinchanger skinchanger;
+c_misc misc;
 
 int main() {
 	try {
 		cout << "[Main]: Waiting for process '" << GAME_NAME << "'." << endl;
-		while (!mem.findProcess(GAME_NAME)) {
+		while (!g_mem.find_process(GAME_NAME)) {
 			Sleep(100);
 		}
-		mem.attach(mem.findProcess(GAME_NAME), PROCESS_ALL_ACCESS);
+		g_mem.attach(g_mem.find_process(GAME_NAME), PROCESS_ALL_ACCESS);
 		cout << "[Main]: Attached in process '" << GAME_NAME << "'." << endl;
 
-		clientDll = mem.getModule(CLIENT_DLL_NAME);
-		while (!clientDll.dwBase || !clientDll.dwSize) {
+		g_client_dll = g_mem.get_module(CLIENT_DLL_NAME);
+		while (!g_client_dll.base || !g_client_dll.size) {
 			Sleep(100);
-			clientDll = mem.getModule(CLIENT_DLL_NAME);
+			g_client_dll = g_mem.get_module(CLIENT_DLL_NAME);
 		}
-		cout << "[Main]: Module '" << CLIENT_DLL_NAME << "' loaded. DwBase: " << clientDll.dwBase << endl;
+		cout << "[Main]: Module '" << CLIENT_DLL_NAME << "' loaded. Base: " << g_client_dll.base << endl;
 
-		engineDll = mem.getModule(ENGINE_DLL_NAME);
-		while (!engineDll.dwBase || !engineDll.dwSize) {
+		g_engine_dll = g_mem.get_module(ENGINE_DLL_NAME);
+		while (!g_engine_dll.base || !g_engine_dll.size) {
 			Sleep(100);
-			engineDll = mem.getModule(ENGINE_DLL_NAME);
+			g_engine_dll = g_mem.get_module(ENGINE_DLL_NAME);
 		}
-		cout << "[Main]: Module '" << ENGINE_DLL_NAME << "' loaded. DwBase: " << engineDll.dwBase << endl;
+		cout << "[Main]: Module '" << ENGINE_DLL_NAME << "' loaded. Base: " << g_engine_dll.base << endl;
 
-		Offsets::init();
-		Settings::getFromFile("default.json");
-		clientCmdUD.init();
+		c_offsets::init();
+		c_settings::get_from_file("default.json");
+		g_client_cmd.init();
 
-		clientCmdUD.execute("clear");
-		clientCmdUD.execute("echo [CSGOMODS]: Started.");
-		clientCmdUD.execute(string(string("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:") + to_string(HTTP_SERVER_PORT) + string(")")).c_str());
-		(Settings::aimbot_enable ? mouseBind.off() : mouseBind.on());
-		clientCmdUD.execute("echo [CSGOMODS]: Sorry, I will unbind your mouse1 button when needed. I need it to make my aim bot work better.");
-		clientCmdUD.execute("echo [CSGOMODS]: You can still shoot whenever you want, but you must safely exit the cheat (press exit in the menu) to restore bind automatically, or exit at your own discretion and restore the bind yourself if necessary! Thank:)");
+		g_client_cmd.execute("clear");
+		g_client_cmd.execute("echo [CSGOMODS]: Started.");
+		g_client_cmd.execute(string(string("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:") + to_string(HTTP_SERVER_PORT) + string(")")).c_str());
+		(c_settings::aimbot_enable ? mouse_bind.off() : mouse_bind.on());
+		g_client_cmd.execute("echo [CSGOMODS]: Sorry, I will unbind your mouse1 button when needed. I need it to make my aim bot work better.");
+		g_client_cmd.execute("echo [CSGOMODS]: You can still shoot whenever you want, but you must safely exit the cheat (press exit in the menu) to restore bind automatically, or exit at your own discretion and restore the bind yourself if necessary! Thank:)");
 
 		#pragma region Threads
-		thread thMenuData([]() {
-			int lastActiveWeaponIDI = -1;
-			TeamNum lastTeam = TeamNum::Invalid;
-			while (isWorking) {
-				if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
+		thread th_menu_data([]() {
+			int i_last_active_weapon_item_di = -1;
+			en_team_num last_team = en_team_num::Invalid;
+			while (g_b_working) {
+				if (g_engine.client_state->state() != en_client_states::InGame || g_engine.client_state->delta_tick() == -1) {
 					continue;
 				}
 
 				//Radar Data
-				vector<IRadarData> radarData;
-				for (const auto& entityObject : client.entityList->players()) {
-					BasePlayer player(entityObject.first);
+				vector<s_radar_data> vec_radar_data;
+				for (const auto& entity_object : g_client.entity_list->players()) {
+					c_base_player player(entity_object.first);
 
-					auto playerInfo = player.info();
-					auto position = player.m_vecOrigin();
+					auto player_info = player.info();
+					auto vec3_position = player.m_vec3_origin();
 
-					radarData.push_back({
-							playerInfo.szName,
-							playerInfo.userId,
-							player.teamNum(),
-							playerInfo.fakeplayer,
+					vec_radar_data.push_back({
+							player_info.name,
+							player_info.user_id,
+							player.team_num(),
+							player_info.is_fake_player,
 
 							player.ping(),
-							player.m_iAccount(),
+							player.m_i_account(),
 							player.kills(),
 							player.assists(),
 							player.deaths(),
-							player.MVPs(),
+							player.mvps(),
 							player.score(),
 
-							player.competitiveRanking(),
-							player.competitiveWins(),
+							player.competitive_ranking(),
+							player.competitive_wins(),
 
-							position.x,
-							position.y,
-							position.z
+							vec3_position.x,
+							vec3_position.y,
+							vec3_position.z
 						});
 				}
-				menuServer.getRadarData(radarData);
+				g_menu_server.get_radar_data(vec_radar_data);
 
-				if (client.localPlayer->m_iHealth() <= 0 || client.localPlayer->teamNum() < TeamNum::TERRORIST) {
+				if (g_client.local_player->m_i_health() <= 0 || g_client.local_player->team_num() < en_team_num::Terrorist) {
 					continue;
 				}
 
 				//My active Weapon
-				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-				BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
-				auto activeWeaponIDI = (int)activeWeapon.m_iItemDefinitionIndex();
+				int i_active_weapon_id = g_client.local_player->m_h_active_weapon() & 0xfff;
+				c_base_weapon activeWeapon(g_client.entity_list->get_by_id(i_active_weapon_id - 1));
+				auto i_active_weapon_item_di = (int)activeWeapon.item_di();
 
-				if (activeWeaponIDI != (int)ItemDefinitionIndex::Invalid && activeWeaponIDI != lastActiveWeaponIDI) {
-					lastActiveWeaponIDI = activeWeaponIDI;
-					menuServer.getActiveWeapon(activeWeaponIDI);
+				if (i_active_weapon_item_di != (int)c_item::en_defenition_index::Invalid && i_active_weapon_item_di != i_last_active_weapon_item_di) {
+					i_last_active_weapon_item_di = i_active_weapon_item_di;
+					g_menu_server.get_active_weapon(i_active_weapon_item_di);
 				}
 
 				//My team
-				auto team = client.localPlayer->teamNum();
-				if (lastTeam != team) {
-					lastTeam = team;
-					menuServer.getTeam(team);
+				auto team = g_client.local_player->team_num();
+				if (last_team != team) {
+					last_team = team;
+					g_menu_server.get_team(team);
 				}
 
 				Sleep(500);
 			}
 		});
 
-		thread thMenuServer([]() {
-			menuServer.start();
+		thread th_menu_server([]() {
+			g_menu_server.start();
 		});
 
-		thread thMenuOpen([]() { while (isWorking) {
+		thread th_menu_open([]() { while (g_b_working) {
 			if (GetAsyncKeyState(VK_INSERT)) {
-				Helpers::toggleSteamOverlay();
+				c_helpers::toggle_steam_overlay();
 				Sleep(1000);
 			}
 		}});
 
-		thread thVisuals([]() { while (isWorking) {
+		thread th_visuals([]() { while (g_b_working) {
 			visuals.loop();
 			Sleep(1);
 		}});
 
-		thread thSkinchanger([]() { while (isWorking) {
+		thread th_skinchanger([]() { while (g_b_working) {
 			skinchanger.loop();
 			//Sleep(1);
 		}});		
 
-		thread thMiscRadarHack([]() { while (isWorking) {
-			misc.radarHack();
+		thread th_misc_radar([]() { while (g_b_working) {
+			misc.radar_hack();
 			Sleep(1);
 		}});
 
-		thread thMiscBhop([]() { while (isWorking) {
+		thread th_misc_bhop([]() { while (g_b_working) {
 			misc.bhop();
 			Sleep(1);
 		}});
 
-		thread thMiscAutoAccept([]() { while (isWorking) {
-			misc.autoAccept();
+		thread th_misc_auto_accept([]() { while (g_b_working) {
+			misc.auto_accept();
 			Sleep(1);
 		}});
 
-		thread thMiscAntiFlash([]() { while (isWorking) {
-			misc.antiFlash();
+		thread th_misc_anti_flash([]() { while (g_b_working) {
+			misc.anti_flash();
 			Sleep(1);
 		}});
 
-		thread thMap([]() {
-			auto lastClientState = 0;
-			while (isWorking) {
-				if (engine.clientState->m_nDeltaTick() == -1) {
-					//continue;
-				}
-				auto state = engine.clientState->state();
-				if (state == ClientStates::INGAME && lastClientState != (int)state) {
-					while ((client.localPlayer->teamNum() != TeamNum::TERRORIST && client.localPlayer->teamNum() != TeamNum::COUNTER_TERRORIST) || engine.clientState->m_nDeltaTick() == -1) {
+		thread th_map([]() {
+			auto i_last_client_state = 0;
+			while (g_b_working) {
+				auto state = g_engine.client_state->state();
+				if (state == en_client_states::InGame && i_last_client_state != (int)state) {
+					while (g_client.local_player->team_num() != en_team_num::Terrorist && g_client.local_player->team_num() != en_team_num::CounterTerrorist) {
 						Sleep(100);
 					}
 
 					//for bsp parser
-					auto gameDir = engine.dwGameDir().data();
-					auto mapDir = engine.clientState->mapDirectory().data();
+					auto gameDir = g_engine.game_dir().data();
+					auto mapDir = g_engine.client_state->map_directory().data();
 
 					//bsp now is not in use
 					//bsp_parser.load_map(gameDir, mapDir);
 
-					menuServer.getMapName(string(mapDir));
+					g_menu_server.get_map_name(string(mapDir));
 
 					//for skinchanger
-					Helpers::updateModelIndexes();
+					c_helpers::update_model_indexes();
 				}
-				lastClientState = (int)state;
+				i_last_client_state = (int)state;
 
 				Sleep(1);
 			}
 		});
 
-		thread thVisibleCheck([]() {
-			while (isWorking) {
-				while (!visibleCheck.init()) {}
-				if (engine.clientState->m_nDeltaTick() == -1) {
+		thread th_visible_check([]() {
+			while (g_b_working) {
+				while (!g_visible_check.init()) {}
+				if (g_engine.client_state->delta_tick() == -1 || g_engine.client_state->state() != en_client_states::InGame) {
 					continue;
 				}
-				visibleCheck.updateVisibleStruct();
+				g_visible_check.update_visible_struct();
 			}
 		});
 
-		thread thShoot([]() {
-			bool lastAimState = Settings::aimbot_enable;
-			while (isWorking) {
-				bool shouldShoot = GetAsyncKeyState(VK_LBUTTON) && Helpers::isMouseActive();
+		thread th_shoot([]() {
+			bool b_last_aim_state = c_settings::aimbot_enable;
+			while (g_b_working) {
+				bool b_should_shoot = GetAsyncKeyState(VK_LBUTTON) && c_helpers::is_mouse_active();
 
-				aimBot.loop();
-				triggetBot.loop();
-				misc.autoPistols();
+				aim_bot.loop();
+				trigget_bot.loop();
+				misc.auto_pistols();
 
-				int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-				BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+				int i_active_weapon_id = g_client.local_player->m_h_active_weapon() & 0xfff;
+				c_base_weapon activeWeapon(g_client.entity_list->get_by_id(i_active_weapon_id - 1));
 
-				if (shouldShoot) {
-					if (Settings::aimbot_enable && aimBot.shouldWait && !aimBot.shouldShoot) {
-							client.dwForceAttack(KeyEvent::KEY_UP);
+				if (b_should_shoot) {
+					if (c_settings::aimbot_enable && aim_bot.should_wait && !aim_bot.should_shoot) {
+						g_client.dw_force_attack(en_key_event::KeyUp);
 					}
 					else {
-						if (Settings::misc_autoPistols_enable && (misc.shouldWait || !misc.shouldShoot) && activeWeapon.isPistol()) {
-							client.dwForceAttack(KeyEvent::KEY_UP);
+						if (c_settings::misc_auto_pistols_enable && (misc.should_wait || !misc.should_shoot) && activeWeapon.is_pistol()) {
+							g_client.dw_force_attack(en_key_event::KeyUp);
 						}
 						else {
-							client.dwForceAttack(KeyEvent::KEY_DOWN);
+							g_client.dw_force_attack(en_key_event::KeyDown);
 						}
 					}
 				}
 				else {
-					if (Settings::triggerbot_enable && !triggetBot.shouldWait && triggetBot.shouldShoot) {
-						client.dwForceAttack(KeyEvent::KEY_DOWN);
+					if (c_settings::triggerbot_enable && !trigget_bot.should_wait && trigget_bot.should_shoot) {
+						g_client.dw_force_attack(en_key_event::KeyDown);
 					}
 					else {
-						client.dwForceAttack(KeyEvent::KEY_UP);
+						g_client.dw_force_attack(en_key_event::KeyUp);
 					}
 				}
 
-				if (lastAimState != Settings::aimbot_enable) {
-					(Settings::aimbot_enable ? mouseBind.off() : mouseBind.on());
-					lastAimState = Settings::aimbot_enable;
+				if (b_last_aim_state != c_settings::aimbot_enable) {
+					(c_settings::aimbot_enable ? mouse_bind.off() : mouse_bind.on());
+					b_last_aim_state = c_settings::aimbot_enable;
 				}
 
 				Sleep(1);
 			}
 		});
 
-		thread thWorking([]() {
-			while (mem.findProcess(GAME_NAME)) {
+		thread th_working([]() {
+			while (g_mem.find_process(GAME_NAME)) {
 				Sleep(500);
 			}
-			menuServer.stop();
+			g_menu_server.stop();
 		});
 
-		thMenuServer.join();
-		thMenuData.join();
-		thMenuOpen.join();
-		thVisuals.join();
-		thSkinchanger.join();
-		thMiscRadarHack.join();
-		thMiscBhop.join();
-		thMiscAntiFlash.join();
-		thMap.join();
-		thVisibleCheck.join();
-		thShoot.join();
+		th_menu_server.join();
+		th_menu_data.join();
+		th_menu_open.join();
+		th_visuals.join();
+		th_skinchanger.join();
+		th_misc_radar.join();
+		th_misc_bhop.join();
+		th_misc_anti_flash.join();
+		th_map.join();
+		th_visible_check.join();
+		th_shoot.join();
 		#pragma endregion
 
-		mouseBind.on();
-		clientCmdUD.execute("echo [CSGOMODS]: Mouse1 bind was restored.");
-		Helpers::exit();
+		mouse_bind.on();
+		g_client_cmd.execute("echo [CSGOMODS]: Mouse1 bind was restored.");
+		c_helpers::exit();
 	}
 	catch (const exception& err){
 		cout << "[Main]: Catch. Error: '" << err.what() << endl;

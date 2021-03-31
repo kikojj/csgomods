@@ -28,9 +28,6 @@
     <Filter Include="Utils\BspParser">
       <UniqueIdentifier>{5df33860-ecbe-4402-ac20-befe0b532a4b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Utils\ClientCmdUD">
-      <UniqueIdentifier>{324004af-935a-411f-a326-10924f0eaaa4}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utils\JsonXX">
       <UniqueIdentifier>{5ea19b1a-f49c-4ac0-964a-b708c7153820}</UniqueIdentifier>
     </Filter>
@@ -70,6 +67,9 @@
     <Filter Include="MenuServer">
       <UniqueIdentifier>{61575c0d-5fa9-4e8d-89e4-dcad1eab3e8e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\ClientCmd">
+      <UniqueIdentifier>{324004af-935a-411f-a326-10924f0eaaa4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visuals.hpp">
@@ -101,9 +101,6 @@
     </ClInclude>
     <ClInclude Include="Utils\BspParser\valve_structs.hpp">
       <Filter>Utils\BspParser</Filter>
-    </ClInclude>
-    <ClInclude Include="Utils\ClientCmdUD\ClientCmdUD.hpp">
-      <Filter>Utils\ClientCmdUD</Filter>
     </ClInclude>
     <ClInclude Include="Utils\JsonXX\jsonxx.h">
       <Filter>Utils\JsonXX</Filter>
@@ -171,7 +168,7 @@
     <ClInclude Include="Utils\Math.hpp">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\VisibleCheck\VisibleCheck.h">
+    <ClInclude Include="Utils\VisibleCheck\VisibleCheck.hpp">
       <Filter>Utils\VisibleCheck</Filter>
     </ClInclude>
     <ClInclude Include="Utils\VirtualFunction\VirtualFunction.hpp">
@@ -186,13 +183,13 @@
     <ClInclude Include="SDK\Utils\BoneVector.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\CBaseTrace.hpp">
+    <ClInclude Include="SDK\Utils\BaseTrace.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\CGameTrace.hpp">
+    <ClInclude Include="SDK\Utils\GameTrace.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\CInput.hpp">
+    <ClInclude Include="SDK\Utils\Input.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Utils\ClassID.hpp">
@@ -204,13 +201,13 @@
     <ClInclude Include="SDK\Utils\ColorRGBA.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\CPlane.hpp">
+    <ClInclude Include="SDK\Utils\Plane.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\ISurface.hpp">
+    <ClInclude Include="SDK\Utils\Surface.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\CUserCmd.hpp">
+    <ClInclude Include="SDK\Utils\UserCmd.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Utils\Defines.hpp">
@@ -222,13 +219,13 @@
     <ClInclude Include="SDK\Utils\FlagsState.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\IEngineTrace.hpp">
+    <ClInclude Include="SDK\Utils\EngineTrace.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\IGlowObjectDefinition.hpp">
+    <ClInclude Include="SDK\Utils\GlowObjectDefinition.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Utils\ItemDefinitionIndex.hpp">
+    <ClInclude Include="SDK\Utils\Item.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Utils\KeyEvent.hpp">
@@ -282,17 +279,24 @@
     <ClInclude Include="SDK\Vars.hpp">
       <Filter>SDK</Filter>
     </ClInclude>
-    <ClInclude Include="SDK\Client\BasePlantedC4.hpp">
+    <ClInclude Include="SDK\Client\PlantedC4.hpp">
       <Filter>SDK\Client</Filter>
     </ClInclude>
     <ClInclude Include="SDK\Client\GlobalVars.hpp">
       <Filter>SDK\Client</Filter>
     </ClInclude>
-    <ClInclude Include="Utils\ClientCmdUD\CMDToggle.hpp">
-      <Filter>Utils\ClientCmdUD</Filter>
-    </ClInclude>
-    <ClInclude Include="SDK\Utils\IPlayerInfo.hpp">
+    <ClInclude Include="SDK\Utils\PlayerInfo.hpp">
       <Filter>SDK\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="StyleGuide.hpp" />
+    <ClInclude Include="SDK\Utils\VerifiedUserCmd.hpp">
+      <Filter>SDK\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ClientCmd\ClientCmd.hpp">
+      <Filter>Utils\ClientCmd</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils\ClientCmd\CMDToggle.hpp">
+      <Filter>Utils\ClientCmd</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -314,9 +318,6 @@
     </ClCompile>
     <ClCompile Include="Utils\BspParser\bsp_parser.cpp">
       <Filter>Utils\BspParser</Filter>
-    </ClCompile>
-    <ClCompile Include="Utils\ClientCmdUD\ClientCmdUD.cpp">
-      <Filter>Utils\ClientCmdUD</Filter>
     </ClCompile>
     <ClCompile Include="Utils\JsonXX\jsonxx.cc">
       <Filter>Utils\JsonXX</Filter>
@@ -372,14 +373,14 @@
     <ClCompile Include="Utils\Helpers\Helpers.cpp">
       <Filter>Utils\Helpers</Filter>
     </ClCompile>
-    <ClCompile Include="SDK\Utils\ItemDefinitionIndex.cpp">
-      <Filter>SDK\Utils</Filter>
-    </ClCompile>
     <ClCompile Include="MenuServer.cpp">
       <Filter>MenuServer</Filter>
     </ClCompile>
-    <ClCompile Include="Utils\ClientCmdUD\CMDToggle.cpp">
-      <Filter>Utils\ClientCmdUD</Filter>
+    <ClCompile Include="Utils\ClientCmd\ClientCmd.cpp">
+      <Filter>Utils\ClientCmd</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils\ClientCmd\CMDToggle.cpp">
+      <Filter>Utils\ClientCmd</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,6 @@
 #include "Scanner.hpp"
 
-HMODULE Scanner::loadLibrary(ProcEx proc, std::string name){
+HMODULE c_scanner::load_library(ProcEx proc, std::string name){
 	ModEx mod(name.c_str(), proc);
 	std::filesystem::path p(mod.modEntry.szExePath);
 
@@ -10,39 +10,39 @@ HMODULE Scanner::loadLibrary(ProcEx proc, std::string name){
 	return LoadLibraryEx(mod.modEntry.szExePath, NULL, LOAD_LIBRARY_SEARCH_DEFAULT_DIRS);
 }
 
-int Scanner::getOffset(RecvTable* table, const char* tableName, const char* netvarName)
+int c_scanner::get_offset(c_recv_table* table, const char* table_name, const char* netvar_name)
 {
-	for (int i = 0; i < table->m_nProps; i++)
+	for (int i = 0; i < table->i_props; i++)
 	{
-		RecvProp prop = table->m_pProps[i];
+		c_recv_prop prop = table->p_props[i];
 
-		if (!_stricmp(prop.m_pVarName, netvarName))
+		if (!_stricmp(prop.var_name, netvar_name))
 		{
-			return prop.m_Offset;
+			return prop.offset;
 		}
 
-		if (prop.m_pDataTable)
+		if (prop.data_table)
 		{
-			intptr_t offset = getOffset(prop.m_pDataTable, tableName, netvarName);
+			intptr_t offset = get_offset(prop.data_table, table_name, netvar_name);
 
 			if (offset)
 			{
-				return offset + prop.m_Offset;
+				return offset + prop.offset;
 			}
 		}
 	}
 	return 0;
 }
 
-int Scanner::getNetVarOffset(const char* tableName, const char* netvarName, ClientClass* clientClass)
+int c_scanner::get_netvar_offset(const char* table_name, const char* netvar_name, c_client_class* client_class)
 {
-	ClientClass* currNode = clientClass;
+	c_client_class* p_curr_node = client_class;
 
-	for (auto currNode = clientClass; currNode; currNode = currNode->m_pNext)
+	for (auto p_curr_node = client_class; p_curr_node; p_curr_node = p_curr_node->next)
 	{
-		if (!_stricmp(tableName, currNode->m_pRecvTable->m_pNetTableName))
+		if (!_stricmp(table_name, p_curr_node->recv_table->net_table__name))
 		{
-			return getOffset(currNode->m_pRecvTable, tableName, netvarName);
+			return get_offset(p_curr_node->recv_table, table_name, netvar_name);
 		}
 	}
 
@@ -50,26 +50,26 @@ int Scanner::getNetVarOffset(const char* tableName, const char* netvarName, Clie
 }
 
 
-int Scanner::getAllClassesSignature() {
-	return getSignature(CLIENT_DLL_NAME, "A1 ? ? ? ? C3 CC CC CC CC CC CC CC CC CC CC A1 ? ? ? ? B9", { 1, 0 });
+int c_scanner::get_all_classes() {
+	return get_signature(CLIENT_DLL_NAME, "A1 ? ? ? ? C3 CC CC CC CC CC CC CC CC CC CC A1 ? ? ? ? B9", { 1, 0 });
 }
 
-int Scanner::getSignature(std::string module, std::string comboPattern, std::vector<int> offsets, int extra, bool relative, bool read) {
-	SigData signature{module, comboPattern, offsets, extra, relative, read};
+int c_scanner::get_signature(std::string module, std::string combo_pattern, std::vector<int> offsets, int extra, bool relative, bool read) {
+	SigData signature{module, combo_pattern, offsets, extra, relative, read};
 
 	auto process = ProcEx(TO_WCHAR_T((char*)std::string(GAME_NAME).c_str()));
 	signature.Scan(process);
 	return signature.result;
 }
 
-int Scanner::getNetvar(std::string name, std::string prop, std::string table, int offset){
+int c_scanner::get_netvar(std::string name, std::string prop, std::string table, int offset){
 	NetvarData netvar{name, prop, table, offset};
 
 	auto process = ProcEx(TO_WCHAR_T((char*)std::string(GAME_NAME).c_str()));
-	HMODULE hMod = loadLibrary(process, CLIENT_DLL_NAME);
-	ClientClass* dwGetallClassesAddr = (ClientClass*)((intptr_t)hMod + getAllClassesSignature());
+	HMODULE h_mod = load_library(process, CLIENT_DLL_NAME);
+	c_client_class* p_get_all_classes = (c_client_class*)((intptr_t)h_mod + get_all_classes());
 
-	netvar.result = getNetVarOffset(netvar.table.c_str(), netvar.prop.c_str(), dwGetallClassesAddr);
+	netvar.result = get_netvar_offset(netvar.table.c_str(), netvar.prop.c_str(), p_get_all_classes);
 	if (netvar.offset)
 	{
 		netvar.result += netvar.offset;

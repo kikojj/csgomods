@@ -5,7 +5,7 @@
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
-#include "../../Utils/VisibleCheck/VisibleCheck.h"
+#include "../../Utils/VisibleCheck/VisibleCheck.hpp"
 
 #include "../Utils/Vector.hpp"
 #include "../Utils/Skeleton.hpp"
@@ -15,57 +15,57 @@
 #include "BasePlayer.hpp"
 #include "EntityList.hpp"
 
-class LocalPlayer : public BasePlayer {
+class c_local_player : public c_base_player {
 //main methods
 public:
-	LocalPlayer() {}
+	c_local_player() {}
 
 	virtual int get(){
-		return mem.read<int>(clientDll.dwBase + Offsets::signatures::dwLocalPlayer);
+		return g_mem.read<int>(g_client_dll.base + c_offsets::signatures::dw_local_player);
 	}
 
 //props
 public:
-	PROP(int,		m_iCrosshairId, get())	//entity in crosshair
+	PROP(int,			m_i_crosshair_id, get())	//entity in crosshair
 
-	PROP(Vec3,	m_vecVelocity,	get())	//direction of movement of the player
+	PROP(s_vec3,	m_vec3_velocity,	get())	//direction of movement of the player
 
 //methods
 public:
-	bool canSeePlayer(BasePlayer player, int bone = -1, bool smokeCheck = true) {
-		auto playerID = EntityList::getEntityID(player.get());
-		return canSeePlayer({ player, playerID }, bone, smokeCheck);
+	bool can_see_player(c_base_player player, int bone = -1, bool smoke_check = true) {
+		auto i_player_id = c_entity_list::get_entity_id(player.get());
+		return can_see_player({ player, i_player_id }, bone, smoke_check);
 	}
-	bool canSeePlayer(EntityList::EntityObject entityObject, int bone = -1, bool smokeCheck = true) {
-		auto playerID = entityObject.second;
+	bool can_see_player(c_entity_list::t_entity_object entity_object, int bone = -1, bool smoke_check = true) {
+		auto i_player_id = entity_object.second;
 
-		if (playerID < 0) {
+		if (i_player_id < 0) {
 			return false;
 		}
 
-		bool isVisible = false;
+		bool b_is_visible = false;
 
 		if (bone <= 0) {
-			isVisible = visibleCheck.isVisible(playerID);
+			b_is_visible = g_visible_check.is_visible(i_player_id);
 		}
 		else {
-			isVisible = visibleCheck.isVisible(playerID, bone);
+			b_is_visible = g_visible_check.is_visible(i_player_id, bone);
 		}
 
-		if (smokeCheck && isVisible) {
-			auto myView = (Vector3(m_vecOrigin()) + Vector3(m_vecViewOffset())).toVec3();
+		if (smoke_check && b_is_visible) {
+			auto myView = (c_vector3(m_vec3_origin()) + c_vector3(m_vec3_view_offset())).to_vec3();
 
-			BasePlayer player(entityObject.first);
-			auto playerBonePos = player.getBonePos(bone <= 0 ? Skeleton::CHEST : (Skeleton)bone).toVec3();
+			c_base_player player(entity_object.first);
+			auto playerBonePos = player.get_bone_pos(bone <= 0 ? en_skeleton::Chest : (en_skeleton)bone).to_vec3();
 
-			if (!visibleCheck.lineGoesThroughSmoke(myView, playerBonePos)) {
-				isVisible = true;
+			if (!g_visible_check.line_goes_through_smoke(myView, playerBonePos)) {
+				b_is_visible = true;
 			}
 			else {
-				isVisible = false;
+				b_is_visible = false;
 			}
 		}
 
-		return isVisible;
+		return b_is_visible;
 	}
 };

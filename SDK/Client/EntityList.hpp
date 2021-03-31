@@ -10,70 +10,70 @@
 #include "BaseEntity.hpp"
 #include "GlowObjectManager.hpp"
 
-class EntityList {
+class c_entity_list {
 //types
 public:
-	typedef std::pair<BaseEntity, int> EntityObject;
+	typedef std::pair<c_base_entity, int> t_entity_object;
 
 //main methods
 public:
-	EntityList() {};
+	c_entity_list() {};
 
 	static int get() {
-		return clientDll.dwBase + Offsets::signatures::dwEntityList;
+		return g_client_dll.base + c_offsets::signatures::dw_entity_list;
 	}
 
 //methods
 public:
 	static int size() {
-		auto count = mem.read<int>(get() + 0x24);
+		auto count = g_mem.read<int>(get() + 0x24);
 		return count;
 	}
-	static std::vector<EntityObject> array(int size = size()) {
-		std::vector<EntityObject> entityList;
-
-		for (int i = 0; i <= size; i++) {
-			BaseEntity entity(getByID(i));
-
-			if (entity.get() <= 0 ) {
-				continue;
-			}
-
-			entityList.push_back({ entity, i });
-		}
-
-		return entityList;
-	}
-	static std::vector<EntityObject> players(int size = engine.clientState->maxPlayers()) {
-		std::vector<EntityObject> playerList;
-
-		for (int i = 0; i <= size; i++) {
-			BaseEntity entity(getByID(i));
-
-			if (entity.get() <= 0) {
-				continue;
-			}
-
-			if (entity.classID() != ClassID::CCSPlayer) {
-				continue;
-			}
-
-			playerList.push_back({ entity, i });
-		}
-
-		return playerList;
-	}
-	static BaseEntity getByID(int id) {
-		return BaseEntity(mem.read<int>(clientDll.dwBase + Offsets::signatures::dwEntityList + id * 0x10));
-	}
-	static int getEntityID(int base) {
-		int vecSize = size();
-		for (int i = 0; i < vecSize; i++) {
-			auto entity = getByID(i);
+	static int get_entity_id(int base) {
+		auto i_vec_size = size();
+		for (int i = 0; i < i_vec_size; i++) {
+			auto entity = get_by_id(i);
 			if (entity.get() == base) {
 				return i;
 			}
 		}
 		return -1;
+	}
+	static c_base_entity get_by_id(int id) {
+		return c_base_entity(g_mem.read<int>(get() + id * 0x10));
+	}
+	static std::vector<t_entity_object> array(int size = size()) {
+		std::vector<t_entity_object> vec_entity_list;
+
+		for (int i = 0; i <= size; i++) {
+			c_base_entity entity(get_by_id(i));
+
+			if (entity.get() <= 0 ) {
+				continue;
+			}
+
+			vec_entity_list.push_back({ entity, i });
+		}
+
+		return vec_entity_list;
+	}
+	static std::vector<t_entity_object> players(int size = g_engine.client_state->max_players()) {
+		std::vector<t_entity_object> vec_player_list;
+
+		for (int i = 0; i <= size; i++) {
+			c_base_entity entity(get_by_id(i));
+
+			if (entity.get() <= 0) {
+				continue;
+			}
+
+			if (entity.class_id() != en_class_id::CCSPlayer) {
+				continue;
+			}
+
+			vec_player_list.push_back({ entity, i });
+		}
+
+		return vec_player_list;
 	}
  };

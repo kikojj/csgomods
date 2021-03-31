@@ -82,8 +82,8 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
             />
             <TextField
               placeholder="Custom name"
-              value={props.customName}
-              onChange={(v) => setProps({ ...props, customName: v })}
+              value={props.custom_name}
+              onChange={(v) => setProps({ ...props, custom_name: v })}
             />
           </div>
           <div style={{ width: 280 }}>
@@ -91,14 +91,14 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
             <CheckboxField
               marginTop={43}
               label="StatTrack"
-              checked={props.statTrack >= 0}
-              onChange={(v) => setProps({ ...props, statTrack: v ? 0 : -1 })}
+              checked={props.stat_track >= 0}
+              onChange={(v) => setProps({ ...props, stat_track: v ? 0 : -1 })}
             />
-            {props.statTrack >= 0 ? (
+            {props.stat_track >= 0 ? (
               <TextField
                 placeholder="StatTrack"
-                value={props.statTrack.toString()}
-                onChange={(v) => setProps({ ...props, statTrack: +v })}
+                value={props.stat_track.toString()}
+                onChange={(v) => setProps({ ...props, stat_track: +v })}
               />
             ) : (
               ""

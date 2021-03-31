@@ -23,18 +23,18 @@ export const MiscContent: React.FC = () => {
         <Group marginTop={35} label="Auto pistols">
           <CheckboxField
             label="Enable"
-            checked={settings.misc_autoPistols_enable}
-            onChange={(v) => updateValue("misc_autoPistols_enable", v)}
+            checked={settings.misc_auto_pistols_enable}
+            onChange={(v) => updateValue("misc_auto_pistols_enable", v)}
           />
-          {settings.misc_autoAccept_enable ? (
+          {settings.misc_auto_accept_enable ? (
             <RangeField
-              label={`Delay: ${settings.misc_autoPistols_delay}`}
+              label={`Delay: ${settings.misc_auto_pistols_delay}`}
               helperText="Delay between shoots"
               min={0}
               max={2000}
               step={10}
-              value={settings.misc_autoPistols_delay}
-              onChange={(v) => updateValue("misc_autoPistols_delay", v)}
+              value={settings.misc_auto_pistols_delay}
+              onChange={(v) => updateValue("misc_auto_pistols_delay", v)}
             />
           ) : (
             ""
@@ -43,17 +43,17 @@ export const MiscContent: React.FC = () => {
         <Group marginTop={35} label="Anti flash">
           <CheckboxField
             label="Enable"
-            checked={settings.misc_antiFlash_enable}
-            onChange={(v) => updateValue("misc_antiFlash_enable", v)}
+            checked={settings.misc_anti_flash_enable}
+            onChange={(v) => updateValue("misc_anti_flash_enable", v)}
           />
-          {settings.misc_antiFlash_enable ? (
+          {settings.misc_anti_flash_enable ? (
             <RangeField
-              label={`Max alpha: ${settings.misc_antiFlash_maxAlpha}`}
+              label={`Max alpha: ${settings.misc_anti_flash_max_alpha}`}
               min={0}
               max={255}
               step={1}
-              value={settings.misc_antiFlash_maxAlpha}
-              onChange={(v) => updateValue("misc_antiFlash_maxAlpha", v)}
+              value={settings.misc_anti_flash_max_alpha}
+              onChange={(v) => updateValue("misc_anti_flash_max_alpha", v)}
             />
           ) : (
             ""
@@ -64,15 +64,15 @@ export const MiscContent: React.FC = () => {
         <Group marginLeft={35} label="Auto accept">
           <CheckboxField
             label="Enable"
-            checked={settings.misc_autoAccept_enable}
-            onChange={(v) => updateValue("misc_autoAccept_enable", v)}
+            checked={settings.misc_auto_accept_enable}
+            onChange={(v) => updateValue("misc_auto_accept_enable", v)}
           />
         </Group>
         <Group marginTop={35} marginLeft={35} label="Ingame radar">
           <CheckboxField
             label="Enable"
-            checked={settings.misc_ingameRadar_enable}
-            onChange={(v) => updateValue("misc_ingameRadar_enable", v)}
+            checked={settings.misc_ingame_radar_enable}
+            onChange={(v) => updateValue("misc_ingame_radar_enable", v)}
           />
         </Group>
       </div>

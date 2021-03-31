@@ -1,6 +1,6 @@
 #pragma once
 
-struct BoneVector {
+struct s_bone_vector {
 	float x;
 	char _pad0x04[0xC];
 	float y;

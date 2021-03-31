@@ -1,34 +1,30 @@
 #include "AimBot.hpp"
 
-AimBot::AimBot() {}
+c_aim_bot::c_aim_bot() {}
 
-void AimBot::resetSettings(){
-	closestEnemy.base = 0;
-	closestAngle = 360.0f;
-	shouldShoot = false;
-	shouldWait = false;
+void c_aim_bot::reset_settings(){
+	closest_enemy.base = 0;
+	closest_angle = 360.0f;
+	should_shoot = false;
+	should_wait = false;
 }
 
-Vector3 AimBot::getBonePos(BasePlayer& player, Skeleton bone) {
-	return Vector3(mem.read<BoneVector>(player.m_dwBoneMatrix() + 0x30 * (int)bone + 0x0C));
-}
-
-Vector3 AimBot::calcAngle(Vector3 src, Vector3 dst) {
-	Vector3 angle;
+c_vector3 c_aim_bot::calc_angle(c_vector3 src, c_vector3 dst) {
+	c_vector3 angle;
 
 	auto delta = src - dst;
-	auto hyp = FastSQRT(pow(delta.x, 2) + pow(delta.y, 2));
+	auto hyp = fast_sqrt(pow(delta.x, 2) + pow(delta.y, 2));
 
-	angle.x = (float)(atan(delta.z / hyp) * M_RADPI);
-	angle.y = (float)(atan(delta.y / delta.x) * M_RADPI);
+	angle.x = (float)(atan(delta.z / hyp) * MATH_PI_RAD);
+	angle.y = (float)(atan(delta.y / delta.x) * MATH_PI_RAD);
 	angle.z = 0;
 
 	//RCS for Aimbot
-	if (this->rcsEnable && client.localPlayer->m_iShotsFired() > 1){
-		auto aimPunch = client.localPlayer->m_aimPunchAngle();
+	if (this->rcs_enable && g_client.local_player->m_i_shots_fired() > 1){
+		auto aimPunch = g_client.local_player->m_aim_punch_angle();
 
-		angle.x -= aimPunch.x * (this->rcsScaleX * 0.02f);
-		angle.y -= aimPunch.y * (this->rcsScaleY * 0.02f);
+		angle.x -= aimPunch.x * (this->rcs_scale_x * 0.02f);
+		angle.y -= aimPunch.y * (this->rcs_scale_y * 0.02f);
 	}
 
 	if (delta.x >= 0.0) {
@@ -40,22 +36,22 @@ Vector3 AimBot::calcAngle(Vector3 src, Vector3 dst) {
 	return angle;
 }
 
-float AimBot::getFov(Vector3 currentAngle, Vector2 dstAngle) {
-	return (float)FastSQRT(pow(dstAngle.x - currentAngle.x, 2) + pow(dstAngle.y - currentAngle.y, 2) + pow(0 - currentAngle.z, 2));
+float c_aim_bot::get_fov(c_vector3 currentAngle, c_vector2 dstAngle) {
+	return (float)fast_sqrt(pow(dstAngle.x - currentAngle.x, 2) + pow(dstAngle.y - currentAngle.y, 2) + pow(0 - currentAngle.z, 2));
 }
 
-void AimBot::setAngle(Vector2 dstAngle) {
-	if (client.localPlayer->m_iShotsFired() > 1) {
-		Vector2 viewAngle = Vector2(engine.clientState->dwViewAngles());
+void c_aim_bot::set_angle(c_vector2 dstAngle) {
+	if (g_client.local_player->m_i_shots_fired() > 1) {
+		c_vector2 viewAngle(g_engine.client_state->view_angles());
 
 		auto delta = viewAngle - dstAngle;
 		delta.clamp();
 
 		//skip if delta is so low
 		if (abs(delta.x) > 0.1 || abs(delta.y) > 0.1) {
-			if (this->rcsEnable) {
-				dstAngle.x = viewAngle.x - delta.x / (std::abs(100 - this->rcsScaleX) >= 1 ? std::abs(100 - this->rcsScaleX) : 1);
-				dstAngle.y = viewAngle.y - delta.y / (std::abs(100 - this->rcsScaleY) >= 1 ? std::abs(100 - this->rcsScaleY) : 1);
+			if (this->rcs_enable) {
+				dstAngle.x = viewAngle.x - delta.x / (std::abs(100 - this->rcs_scale_x) >= 1 ? std::abs(100 - this->rcs_scale_x) : 1);
+				dstAngle.y = viewAngle.y - delta.y / (std::abs(100 - this->rcs_scale_y) >= 1 ? std::abs(100 - this->rcs_scale_y) : 1);
 			}
 			else {
 				dstAngle.x = viewAngle.x - delta.x / 100;
@@ -65,7 +61,7 @@ void AimBot::setAngle(Vector2 dstAngle) {
 	}
 	else {
 		if (this->smooth > 0) {
-			Vector2 viewAngle = Vector2(engine.clientState->dwViewAngles());
+			c_vector2 viewAngle(g_engine.client_state->view_angles());
 
 			auto delta = viewAngle - dstAngle;
 			delta.clamp();
@@ -78,27 +74,27 @@ void AimBot::setAngle(Vector2 dstAngle) {
 		}
 	}
 
-	engine.clientState->dwViewAngles(dstAngle.toVec2());
+	g_engine.client_state->view_angles(dstAngle.to_vec2());
 }
 
-void AimBot::applyWeaponSettings(IAimbotSettings settings){
-	this->firstPerfectShoot = settings.firstPerfectShoot;
+void c_aim_bot::apply_weapon_settings(c_settings::s_aimbot_settings settings){
+	this->first_perfect_shoot = settings.first_perfect_shoot;
 	this->fov = settings.fov;
 	this->bone = settings.bone;
-	this->changeAfterNearest = settings.changeAfterNearest;
+	this->change_after_nearest = settings.change_after_nearest;
 	this->smooth = settings.smooth;
-	this->rcsEnable = settings.rcsEnable;
-	this->rcsScaleX = settings.rcsScaleX;
-	this->rcsScaleY = settings.rcsScaleY;
+	this->rcs_enable = settings.rcs_enable;
+	this->rcs_scale_x = settings.rcs_scale_x;
+	this->rcs_scale_y = settings.rcs_scale_y;
 }
 
-bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
-	auto itemDI = weapon.itemDI();
+bool c_aim_bot::apply_weapons_settings(c_base_weapon weapon){
+	auto itemDI = weapon.item_di();
 
 	//weapon settings
-	if (Settings::aimbot_weapons[itemDI].use) {
-		if (Settings::aimbot_weapons[itemDI].enable) {
-			applyWeaponSettings(Settings::aimbot_weapons[itemDI]);
+	if (c_settings::aimbot_weapons[itemDI].use) {
+		if (c_settings::aimbot_weapons[itemDI].enable) {
+			apply_weapon_settings(c_settings::aimbot_weapons[itemDI]);
 			return true;
 		}
 		else {
@@ -107,10 +103,10 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 	}
 
 	//section settings
-	if (weapon.isPistol()) {
-		if (Settings::aimbot_pistols.use) {
-			if (Settings::aimbot_pistols.enable) {
-				applyWeaponSettings(Settings::aimbot_pistols);
+	if (weapon.is_pistol()) {
+		if (c_settings::aimbot_pistols.use) {
+			if (c_settings::aimbot_pistols.enable) {
+				apply_weapon_settings(c_settings::aimbot_pistols);
 				return true;
 			}
 			else {
@@ -118,10 +114,10 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 			}
 		}
 	}
-	else if (weapon.isHeavy()) {
-		if (Settings::aimbot_heavies.use) {
-			if (Settings::aimbot_heavies.enable) {
-				applyWeaponSettings(Settings::aimbot_heavies);
+	else if (weapon.is_heavy()) {
+		if (c_settings::aimbot_heavies.use) {
+			if (c_settings::aimbot_heavies.enable) {
+				apply_weapon_settings(c_settings::aimbot_heavies);
 				return true;
 			}
 			else {
@@ -129,10 +125,10 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 			}
 		}
 	}
-	else if (weapon.isShotgun()) {
-		if (Settings::aimbot_shoutguns.use) {
-			if (Settings::aimbot_shoutguns.enable) {
-				applyWeaponSettings(Settings::aimbot_shoutguns);
+	else if (weapon.is_shotgun()) {
+		if (c_settings::aimbot_shoutguns.use) {
+			if (c_settings::aimbot_shoutguns.enable) {
+				apply_weapon_settings(c_settings::aimbot_shoutguns);
 				return true;
 			}
 			else {
@@ -140,10 +136,10 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 			}
 		}
 	}
-	else if (weapon.isSMG()) {
-		if (Settings::aimbot_smgs.use) {
-			if (Settings::aimbot_smgs.enable) {
-				applyWeaponSettings(Settings::aimbot_smgs);
+	else if (weapon.is_smg()) {
+		if (c_settings::aimbot_smgs.use) {
+			if (c_settings::aimbot_smgs.enable) {
+				apply_weapon_settings(c_settings::aimbot_smgs);
 				return true;
 			}
 			else {
@@ -151,10 +147,10 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 			}
 		}
 	}
-	else if (weapon.isRifle()) {
-		if (Settings::aimbot_rifles.use) {
-			if (Settings::aimbot_rifles.enable) {
-				applyWeaponSettings(Settings::aimbot_rifles);
+	else if (weapon.is_rifle()) {
+		if (c_settings::aimbot_rifles.use) {
+			if (c_settings::aimbot_rifles.enable) {
+				apply_weapon_settings(c_settings::aimbot_rifles);
 				return true;
 			}
 			else {
@@ -162,10 +158,10 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 			}
 		}
 	}
-	else if (weapon.isSnipers()) {
-		if (Settings::aimbot_snipers.use) {
-			if (Settings::aimbot_snipers.enable) {
-				applyWeaponSettings(Settings::aimbot_snipers);
+	else if (weapon.is_snipers()) {
+		if (c_settings::aimbot_snipers.use) {
+			if (c_settings::aimbot_snipers.enable) {
+				apply_weapon_settings(c_settings::aimbot_snipers);
 				return true;
 			}
 			else {
@@ -173,7 +169,7 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 			}
 		}
 	}
-	else if (weapon.isKnife() || weapon.isZeusX27() || weapon.isBomb() || weapon.isGrenade()) {
+	else if (weapon.is_knife() || weapon.is_zeusx27() || weapon.is_bomb() || weapon.is_grenade()) {
 		return false;
 	}
 	else {
@@ -181,164 +177,164 @@ bool AimBot::applyWeaponsSettings(BaseWeapon weapon){
 	}
 
 	//global settings
-	if (Settings::aimbot_global.enable) {
-		applyWeaponSettings(Settings::aimbot_global);
+	if (c_settings::aimbot_global.enable) {
+		apply_weapon_settings(c_settings::aimbot_global);
 		return true;
 	}
 
 	return false;
 }
 
-void AimBot::loop() {
-	if (!Settings::aimbot_enable) {
-		resetSettings();
+void c_aim_bot::loop() {
+	if (!c_settings::aimbot_enable) {
+		reset_settings();
 		return;
 	}
 
 	if (
-		engine.clientState->state() != ClientStates::INGAME ||
-		engine.clientState->m_nDeltaTick() == -1 ||
-		client.localPlayer->m_iHealth() <= 0 ||
-		client.localPlayer->teamNum() < TeamNum::TERRORIST ||
-		client.localPlayer->m_bDormant() ||
-		!Helpers::isMouseActive()
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_engine.client_state->delta_tick() == -1 ||
+		g_client.local_player->m_i_health() <= 0 ||
+		g_client.local_player->team_num() < en_team_num::Terrorist ||
+		g_client.local_player->m_b_dormant() ||
+		!c_helpers::is_mouse_active()
 		) {
-		resetSettings();
+		reset_settings();
 		return;
 	}
 
-	if (Settings::aimbot_flash_check && Helpers::isFlashed(client.localPlayer->m_flFlashAlpha())) {
-		resetSettings();
+	if (c_settings::aimbot_flash_check && c_helpers::is_flashed(g_client.local_player->m_f_flash_alpha())) {
+		reset_settings();
 		return;
 	}
 
-	if (Settings::aimbot_jump_check && !FlagsState::isOnGround(client.localPlayer->m_fFlags())) {
-		resetSettings();
+	if (c_settings::aimbot_jump_check && !c_flags_state::is_on_ground(g_client.local_player->m_f_flags())) {
+		reset_settings();
 		return;
 	}
 
-	if (Settings::aimbot_use_key && !GetAsyncKeyState(Settings::aimbot_key)) {
-		resetSettings();
+	if (c_settings::aimbot_use_key && !GetAsyncKeyState(c_settings::aimbot_key)) {
+		reset_settings();
 		return;
 	}
 
-	int activeWeaponID = client.localPlayer->m_hActiveWeapon() & 0xfff;
-	BaseWeapon activeWeapon(client.entityList->getByID(activeWeaponID - 1));
+	int activeWeaponID = g_client.local_player->m_h_active_weapon() & 0xfff;
+	c_base_weapon activeWeapon(g_client.entity_list->get_by_id(activeWeaponID - 1));
 
-	if (!activeWeapon.get() || !applyWeaponsSettings(activeWeapon)) {
-		resetSettings();
+	if (!activeWeapon.get() || !apply_weapons_settings(activeWeapon)) {
+		reset_settings();
 		return;
 	}
 
-	if (closestEnemy.get() <= 0) {
-		for (const auto& entityObject : client.entityList->players()) {
-			BasePlayer player(entityObject.first);
+	if (closest_enemy.get() <= 0) {
+		for (const auto& entityObject : g_client.entity_list->players()) {
+			c_base_player player(entityObject.first);
 
-			if (!player.get() || player == (*client.localPlayer)) {
+			if (!player.get() || player == (*g_client.local_player)) {
 				continue;
 			}
 
-			if (player.m_iHealth() <= 0) {
+			if (player.m_i_health() <= 0) {
 				continue;
 			}
 
-			if (!Settings::aimbot_friendly_fire && player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
+			if (!c_settings::aimbot_friendly_fire && player.team_num() == g_client.local_player->team_num()) {
 				continue;
 			}
 
-			if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer({entityObject.first, entityObject.second}, (int)bone, Settings::aimbot_smoke_check)) {
+			if (c_settings::aimbot_visible_check && !g_client.local_player->can_see_player({entityObject.first, entityObject.second}, (int)bone, c_settings::aimbot_smoke_check)) {
 				continue;
 			}
 
-			for (auto bone : (this->bone == Skeleton::NEAREST ? ALL_BONES : std::vector<Skeleton>{ this->bone })) {
-				Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
-				auto bonePos = getBonePos(player, bone);
-				if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer({ entityObject.first, entityObject.second }, (int)bone, Settings::aimbot_smoke_check)) {
+			for (auto bone : (this->bone == en_skeleton::Nearest ? ALL_BONES : std::vector<en_skeleton>{ this->bone })) {
+				c_vector3 localPlayerPos = c_vector3(g_client.local_player->m_vec3_origin()) + c_vector3(g_client.local_player->m_vec3_view_offset());
+				auto bonePos = player.get_bone_pos(bone);
+				if (c_settings::aimbot_visible_check && !g_client.local_player->can_see_player({ entityObject.first, entityObject.second }, (int)bone, c_settings::aimbot_smoke_check)) {
 					continue;
 				}
-				auto enemyAngle = calcAngle(localPlayerPos, bonePos);
-				float fov = getFov(enemyAngle, engine.clientState->dwViewAngles());
+				auto enemyAngle = calc_angle(localPlayerPos, bonePos);
+				float fov = get_fov(enemyAngle, g_engine.client_state->view_angles());
 
-				if (fov < this->fov && fov < closestAngle) {
-					closestEnemy.base = player.base;
-					closestAngle = fov;
-					closestBone = bone;
+				if (fov < this->fov && fov < closest_angle) {
+					closest_enemy.base = player.base;
+					closest_angle = fov;
+					closest_bone = bone;
 				}
 			}
 		}
 	}
 
-	if (closestEnemy.get() <= 0) {
-		resetSettings();
+	if (closest_enemy.get() <= 0) {
+		reset_settings();
 		return;
 	}
 
-	if (Settings::aimbot_use_key && !GetAsyncKeyState(Settings::aimbot_key)) {
-		resetSettings();
+	if (c_settings::aimbot_use_key && !GetAsyncKeyState(c_settings::aimbot_key)) {
+		reset_settings();
 		return;
 	}
 
 	if (
-		closestEnemy.m_iHealth() > 0 &&
-		(!Settings::aimbot_visible_check || client.localPlayer->canSeePlayer(closestEnemy, (int)bone, Settings::aimbot_smoke_check))
+		closest_enemy.m_i_health() > 0 &&
+		(!c_settings::aimbot_visible_check || g_client.local_player->can_see_player(closest_enemy, (int)bone, c_settings::aimbot_smoke_check))
 		) {
-		Vector3 localPlayerPos = Vector3(client.localPlayer->m_vecOrigin()) + Vector3(client.localPlayer->m_vecViewOffset());
-		auto enemyAngle = calcAngle(localPlayerPos, getBonePos(closestEnemy, closestBone));
+		c_vector3 localPlayerPos = c_vector3(g_client.local_player->m_vec3_origin()) + c_vector3(g_client.local_player->m_vec3_view_offset());
+		auto enemyAngle = calc_angle(localPlayerPos, closest_enemy.get_bone_pos(closest_bone));
 
-		setAngle(enemyAngle.toVector2());
+		set_angle(enemyAngle.to_vector2());
 
 		//TRY TO DO GOOD SMOOTH(NEED UNBIND MOUSE1 IN GAME)
-		if (getFov(enemyAngle, Vector2(engine.clientState->dwViewAngles())) != 0 && client.localPlayer->m_iShotsFired() == 0) {
-			shouldShoot = false;
-			if (firstPerfectShoot) {
-				shouldWait = true;
+		if (get_fov(enemyAngle, c_vector2(g_engine.client_state->view_angles())) != 0 && g_client.local_player->m_i_shots_fired() == 0) {
+			should_shoot = false;
+			if (first_perfect_shoot) {
+				should_wait = true;
 			}
 			else {
-				shouldWait = false;
+				should_wait = false;
 			}
 		}
 		else {
-			shouldShoot = true;
-			shouldWait = false;
+			should_shoot = true;
+			should_wait = false;
 		}
 
 		//If nearest go to the main bone after closest bone
 		if (
-			bone == Skeleton::NEAREST &&
-			changeAfterNearest &&
-			getFov(enemyAngle, engine.clientState->dwViewAngles()) == 0 &&
-			std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closestBone) == MAIN_BONES.end()
+			bone == en_skeleton::Nearest &&
+			change_after_nearest &&
+			get_fov(enemyAngle, g_engine.client_state->view_angles()) == 0 &&
+			std::find(MAIN_BONES.begin(), MAIN_BONES.end(), closest_bone) == MAIN_BONES.end()
 			) {
-			closestAngle = 360.f;
+			closest_angle = 360.f;
 			for (auto bone : MAIN_BONES) {
-				auto bonePos = getBonePos(closestEnemy, bone);
-				if (Settings::aimbot_visible_check && !client.localPlayer->canSeePlayer(closestEnemy, (int)bone, Settings::aimbot_smoke_check)) {
+				auto bonePos = closest_enemy.get_bone_pos(bone);
+				if (c_settings::aimbot_visible_check && !g_client.local_player->can_see_player(closest_enemy, (int)bone, c_settings::aimbot_smoke_check)) {
 					continue;
 				}
-				auto _enemyAngle = calcAngle(localPlayerPos, bonePos);
-				float fov = getFov(_enemyAngle, engine.clientState->dwViewAngles());
+				auto _enemyAngle = calc_angle(localPlayerPos, bonePos);
+				float fov = get_fov(_enemyAngle, g_engine.client_state->view_angles());
 
-				if (fov < closestAngle) {
-					closestAngle = fov;
-					closestBone = bone;
+				if (fov < closest_angle) {
+					closest_angle = fov;
+					closest_bone = bone;
 				}
 			}
 		}
 	}
 	else {
-		if (!shouldWait) {
-			lastKillTime = std::chrono::high_resolution_clock::now();
+		if (!should_wait) {
+			last_kill_time = std::chrono::high_resolution_clock::now();
 		}
-		if (closestEnemy.m_iHealth() <= 0 || shouldWait) {
+		if (closest_enemy.m_i_health() <= 0 || should_wait) {
 			if (
-				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - lastKillTime).count()
+				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - last_kill_time).count()
 				>
-				(double)((double)Settings::aimbot_delay_enemy / (double)1000)
+				(double)((double)c_settings::aimbot_delay_enemy / (double)1000)
 				) {
-				resetSettings();
+				reset_settings();
 			}
 			else {
-				shouldWait = true;
+				should_wait = true;
 			}
 		}
 	}

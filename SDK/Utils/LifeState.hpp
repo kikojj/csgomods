@@ -1,8 +1,9 @@
 #pragma once
 
-enum struct LifeState : int {
+enum struct en_life_state: int {
   Invalid = -1,
-  LIFESTATE_ALIVE = 0,    // alive
-  LIFESTATE_DYING = 1,    // playing death animation or still falling off of a ledge waiting to hit ground
-  LIFESTATE_DEAD = 2,     // dead. lying still.
+  Alive = 0,    // alive
+  Dying = 1,    // playing death animation or still falling off of a ledge waiting to hit ground
+  Dead = 2,     // dead. lying still.
+  InvalidLast
 };

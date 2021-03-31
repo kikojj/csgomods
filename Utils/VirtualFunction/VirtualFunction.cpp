@@ -1,18 +1,18 @@
 #include "VirtualFunction.hpp"
 
-VirtualFunction::VirtualFunction(DWORD _dwBase):dwBase(_dwBase) {}
+c_virtual_function::c_virtual_function(DWORD base):base(base) {}
 
-DWORD VirtualFunction::getVirtualFunction(int index) {
-	auto table = mem.read<DWORD>(dwBase);
-	return (DWORD)(table + sizeof(DWORD) * index);
+DWORD c_virtual_function::get_virtual_function(int index) {
+	auto dw_table = g_mem.read<DWORD>(base);
+	return (DWORD)(dw_table + sizeof(DWORD) * index);
 }
 
-void VirtualFunction::hook(int index, DWORD hkFunction) {
-	hooks[index] = hkFunction;
+void c_virtual_function::hook(int index, DWORD function) {
+	hooks[index] = function;
 
-	uintptr_t VFunction = getVirtualFunction(index);
-	DWORD dwProtection;
-	VirtualProtectEx(mem.process, (LPVOID)VFunction, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dwProtection);
-	mem.write(VFunction, hkFunction);
-	VirtualProtectEx(mem.process, (LPVOID)VFunction, sizeof(DWORD), dwProtection, &dwProtection);
+	uintptr_t p_function = get_virtual_function(index);
+	DWORD dw_protection;
+	VirtualProtectEx(g_mem.process, (LPVOID)p_function, sizeof(DWORD), PAGE_EXECUTE_READWRITE, &dw_protection);
+	g_mem.write(p_function, function);
+	VirtualProtectEx(g_mem.process, (LPVOID)p_function, sizeof(DWORD), dw_protection, &dw_protection);
 }

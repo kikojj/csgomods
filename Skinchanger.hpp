@@ -5,20 +5,18 @@
 #include "SDK/Engine/Engine.hpp"
 #include "SDK/Client/Client.hpp"
 #include "SDK/Client/BaseWeapon.hpp"
-#include "SDK/Utils/ItemDefinitionIndex.hpp"
+#include "SDK/Utils/Item.hpp"
 
 #include "Utils/Helpers/Helpers.hpp"
 #include "Utils/Offsets/Offsets.hpp"
 #include "Utils/Settings/Settings.hpp"
 
-class Skinchanger {
+class c_skinchanger {
 private:
-  void applyWeaponSettings(BaseWeapon, ISkinchangerWeapon);
-  void applyKnifeSettings(BaseWeapon, ISkinchangerWeapon);
+  void apply_weapon_settings(c_base_weapon, c_settings::s_skinchanger_weapon);
+  void apply_knife_settings(c_base_weapon, c_settings::s_skinchanger_weapon);
 
 public:
-  Skinchanger();
+  c_skinchanger();
   void loop();
 };
-
-extern Skinchanger skinchanger;

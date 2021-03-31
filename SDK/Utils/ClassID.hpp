@@ -1,8 +1,8 @@
 #pragma once
 
-enum struct ClassID : int {
+enum struct en_class_id: int {
 	Invalid = -1,
-	CAI_BaseNPC = 0,
+	CBaseNPC = 0,
 	CAK47,
 	CBaseAnimating,
 	CBaseAnimatingOverlay,
@@ -224,7 +224,7 @@ enum struct ClassID : int {
 	CTESparks,
 	CTESprite,
 	CTESpriteSpray,
-	CTest_ProxyToggle_Networkable,
+	CTestProxyToggleNetworkable,
 	CTestTraceline,
 	CTEWorldDecal,
 	CTriggerPlayerMovement,

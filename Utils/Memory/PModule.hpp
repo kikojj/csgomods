@@ -1,7 +1,6 @@
 #pragma once
-#include <Windows.h>
 
-struct PModule {
-	DWORD dwBase;
-	DWORD dwSize;
+struct s_pm_module {
+	unsigned long base;
+	unsigned long size;
 };

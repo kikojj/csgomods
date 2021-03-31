@@ -9,27 +9,27 @@
 
 #include "ClientState.hpp"
 
-class Engine {
+class c_engine {
 //main variables
 public:
-	ClientState* clientState = nullptr;
+	c_client_state* client_state = nullptr;
 
 //main methods
 public:
-	Engine() {
-		clientState = new ClientState();
+	c_engine() {
+		client_state = new c_client_state();
 	}
 
 //methods
 public:
-	std::array<char, 0x120> dwGameDir() {
-		auto gameDir = mem.read<std::array<char, 0x120>>(engineDll.dwBase + Offsets::signatures::dwGameDir);
-		return gameDir;
+	std::array<char, 0x120> game_dir() {
+		auto arr_game_dir = g_mem.read<std::array<char, 0x120>>(g_engine_dll.base + c_offsets::signatures::dw_game_dir);
+		return arr_game_dir;
 	}
-	bool isOverlayActive() {
-		auto overlayIsActive = mem.read<bool>(engineDll.dwBase + Offsets::signatures::overlayActivated1 + engineDll.dwBase + Offsets::signatures::overlayActivated2);
-		return overlayIsActive;
+	bool is_overlay_active() {
+		auto b_is_overlay_active = g_mem.read<bool>(g_engine_dll.base + c_offsets::signatures::overlay_activated1 + g_engine_dll.base + c_offsets::signatures::overlay_activated2);
+		return b_is_overlay_active;
 	}
 };
 
-extern Engine engine;
+extern c_engine g_engine;

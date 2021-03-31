@@ -53,7 +53,11 @@ export const Average: React.FC<AverageProps> = ({ data }) => {
         <div className={classes.player_rank}>
           {players.length > 0 ? (
             <img
-              src={avgRanks < 1 || avgRanks > 18 ? ranks.Rank_None : ranks[`Rank_${avgRanks}` as keyof typeof ranks]}
+              src={
+                avgRanks < 1 || avgRanks > 18
+                  ? ranks.Rank_None
+                  : ranks[`Rank_${Math.round(avgRanks)}` as keyof typeof ranks]
+              }
               alt=""
             />
           ) : (
@@ -64,7 +68,7 @@ export const Average: React.FC<AverageProps> = ({ data }) => {
           {players.length > 0 ? (
             <React.Fragment>
               <img src={CupIcon} alt="" />
-              {avgWins}
+              {Math.round(avgWins)}
             </React.Fragment>
           ) : (
             ""

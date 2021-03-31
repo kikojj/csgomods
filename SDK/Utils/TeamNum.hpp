@@ -1,9 +1,9 @@
 #pragma once
 
-enum struct TeamNum :int {
+enum struct en_team_num :int {
   Invalid = 0,
-  SPECTATOR = 1,
-  TERRORIST = 2,
-  COUNTER_TERRORIST = 3,
+  Spectator = 1,
+  Terrorist = 2,
+  CounterTerrorist = 3,
   InvalidLast
 };

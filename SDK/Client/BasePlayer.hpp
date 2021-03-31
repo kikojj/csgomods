@@ -12,7 +12,7 @@
 #include "../Utils/Skeleton.hpp"
 #include "../Utils/LifeState.hpp"
 #include "../Utils/ColorRGBA.hpp"
-#include "../Utils/IPlayerInfo.hpp"
+#include "../Utils/PlayerInfo.hpp"
 #include "../Engine/Engine.hpp"
 
 #include "../Vars.hpp"
@@ -20,15 +20,18 @@
 #include "BaseEntity.hpp"
 #include "EntityList.hpp"
 
-class BasePlayer : public BaseEntity {
+class c_base_player : public c_base_entity {
 //main methods
 public:
-	BasePlayer() {}
-	BasePlayer(int _base) {
-		this->base = _base;
+	c_base_player() {}
+	c_base_player(int base) {
+		this->base = base;
 	};
-	BasePlayer(BaseEntity entity) {
+	c_base_player(c_base_entity entity) {
 		this->base = entity.get();
+	}
+	c_base_player(c_base_player& player) {
+		this->base = player.get();
 	}
 
 	virtual int get() {
@@ -37,144 +40,149 @@ public:
 
 //props
 public:
-	PROP(bool,				m_bDormant,							get())
-	PROP(bool,				m_bSpotted,							get())
-	PROP(bool,				m_bHasDefuser,					get())
-	PROP(bool,				m_bIsDefusing,					get())
-	PROP(bool,				m_bIsScoped,						get())
-	PROP(bool,				m_bHasHelmet,						get())
+	PROP(bool,				m_b_dormant,							get())
+	PROP(bool,				m_b_spotted,							get())
+	PROP(bool,				m_b_has_defuser,					get())
+	PROP(bool,				m_b_is_defusing,					get())
+	PROP(bool,				m_b_is_scoped,						get())
+	PROP(bool,				m_b_has_helmet,						get())
 
-	PROP(int,					m_iHealth,							get())
-	PROP(int,					m_ArmorValue,						get())
-	PROP(int,					m_iTeamNum,							get())
-	PROP(int,					m_dwBoneMatrix,					get())	//player matrix of bones: [Bone] [x] [y] [z]
-	PROP(int,					m_hActiveWeapon,				get())
-	PROP(int,					m_iShotsFired,					get())	//how many bullets did player fired
-	PROP(int,					m_fFlags,								get())
-	PROP(int,					m_iCompetitiveWins,			get())
-	PROP(int,					m_hViewModel,						get())
-	PROP(int,					m_iObserverMode,				get())
-	PROP(int,					m_lifeState,						get())
-	PROP(int,					m_bSpottedByMask,				get())
-	PROP(int,					m_nTickBase,						get())
-	PROP(int,					m_iAccount,							get())
+	PROP(int,					m_i_health,								get())
+	PROP(int,					m_armor_value,						get())
+	PROP(int,					m_i_team_num,							get())
+	PROP(int,					m_dw_bone_matrix,					get())	//player matrix of bones: [Bone] [x] [y] [z]
+	PROP(int,					m_h_active_weapon,				get())
+	PROP(int,					m_i_shots_fired,					get())	//how many bullets did player fired
+	PROP(int,					m_f_flags,								get())
+	PROP(int,					m_h_view_model,						get())
+	PROP(int,					m_i_observer_mode,				get())
+	PROP(int,					m_life_state,							get())
+	PROP(int,					m_b_spotted_by_mask,			get())
+	PROP(int,					m_n_tick_base,						get())
+	PROP(int,					m_i_account,							get())
 
-	PROP(float,				m_flFlashDuration,			get())
-	PROP(float,				m_flFlashAlpha,					get())
-	PROP(float,				m_flFlashMaxAlpha,			get())
+	PROP(float,				m_f_flash_duration,				get())
+	PROP(float,				m_f_flash_alpha,					get())
+	PROP(float,				m_f_flash_max_alpha,			get())
 
-	PROP(Vec2,				m_viewPunchAngle,				get())
-	PROP(Vec2,				m_aimPunchAngle,				get())	//shoting angle on screen's plane, only if shooting
-	PROP(Vec3,				m_vecViewOffset,				get())	//player eyes pos offset(must add this to m_vecOrigin to get real eyes pos)
+	PROP(s_vec2,			m_view_punch_angle,				get())
+	PROP(s_vec2,			m_aim_punch_angle,				get())	//shoting angle on screen's plane, only if shooting
+	PROP(s_vec3,			m_vec3_view_offset,				get())	//player eyes pos offset(must add this to m_vecOrigin to get real eyes pos)
 
-	PROP(RenderColor, m_clrRender,						get())
+	PROP(s_render_color, m_clr_render,					get())
 
 //methods
 public:
-	TeamNum teamNum() {
-		auto team = m_iTeamNum();
-		if (team <= int(TeamNum::Invalid) || team >= int(TeamNum::InvalidLast)) {
-			return TeamNum::Invalid;
+	en_team_num team_num() {
+		auto i_team = m_i_team_num();
+		if (i_team <= int(en_team_num::Invalid) || i_team >= int(en_team_num::InvalidLast)) {
+			return en_team_num::Invalid;
 		};
-		return TeamNum(team);
+		return en_team_num(i_team);
 	}
-	LifeState lifeState() {
-		auto lifeState = m_lifeState();
-		if (lifeState <= int(LifeState::Invalid)) {
-			return LifeState::Invalid;
+	en_life_state life_state() {
+		auto i_lifeState = m_life_state();
+		if (i_lifeState <= int(en_life_state::Invalid) || i_lifeState >= int(en_life_state::Invalid)) {
+			return en_life_state::Invalid;
 		}
-		return LifeState(lifeState);
+		return en_life_state(i_lifeState);
 	}
-	bool spottedByMask(int id) {
-		return m_bSpottedByMask() & (1 << id);
+	bool spotted_by_mask(int id) {
+		auto b_spotted = m_b_spotted_by_mask() & (1 << id);
+		return b_spotted;
 	}
-	Vector3 getBonePos(Skeleton bone) {
-		auto bonePos = Vector3(mem.read<BoneVector>(m_dwBoneMatrix() + 0x30 * (int)bone + 0x0C));
-		return bonePos;
+	c_vector3 get_bone_pos(en_skeleton bone) {
+		auto vec_bonePos = c_vector3(g_mem.read<s_bone_vector>(m_dw_bone_matrix() + 0x30 * (int)bone + 0x0C));
+		return vec_bonePos;
 	}
-	void render(colorRGBA color) {
-		RenderColor renderColor{ (BYTE)color.r, (BYTE)color.g, (BYTE)color.b, (BYTE)color.a };
-		m_clrRender(renderColor);
+	void render(s_color_rgba color) {
+		s_render_color renderColor{ (BYTE)color.r, (BYTE)color.g, (BYTE)color.b, (BYTE)color.a };
+		m_clr_render(renderColor);
 	}
-	int myWeaponByID(int id) {
-		return mem.read<int>(get() + Offsets::netvars::m_hMyWeapons + id * 0x4);
+	int my_weapon_by_id(int id) {
+		auto i_weapon_base = g_mem.read<int>(get() + c_offsets::netvars::m_h_my_weapons + id * 0x4);
+		return i_weapon_base;
 	}
-	std::vector<int> myWeapons() {
+	std::vector<int> my_weapons() {
 		std::vector<int> weapons;
 		for (int i = 0; i < 8; i++) {
-			int weaponID = myWeaponByID(i) & 0xfff;
-			weapons.push_back(weaponID);
+			auto i_weapon_id = my_weapon_by_id(i) & 0xfff;
+			weapons.push_back(i_weapon_id);
 		}
 		return weapons;
 	}
-	bool isBspVisibleFrom(Vector3 origin) {
+	bool is_bsp_visible_from(c_vector3 origin) {
 		for (auto bone : ALL_BONES) {
-			if (bsp_parser.is_visible(origin.toMatrix(), getBonePos(bone).toMatrix())) {
+			if (g_bsp_parser.is_visible(origin.toMatrix(), get_bone_pos(bone).toMatrix())) {
 				return true;
 			}
 		}
 		return false;
 	}
-	IPlayerInfo info() {
-		auto items = mem.read<int>(mem.read<int>(engine.clientState->playerInfo() + 0x40) + 0xC);
+	c_player_info info() {
+		auto i_items_base = g_mem.read<int>(g_mem.read<int>(g_engine.client_state->player_info() + 0x40) + 0xC);
 
-		auto _info = mem.read<int>(items + 0x28 + EntityList::getEntityID(get()) * 0x34);
-		auto info = mem.read<IPlayerInfo>(_info);
+		auto _i_player_info = g_mem.read<int>(i_items_base + 0x28 + c_entity_list::get_entity_id(get()) * 0x34);
+		auto player_info = g_mem.read<c_player_info>(_i_player_info);
 
-		return info;
+		return player_info;
 	}
-	int competitiveRanking() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto competitiveRanking = mem.read<int>(playerResource + Offsets::netvars::m_iCompetitiveRanking + (EntityList::getEntityID(get()) + 1) * 4);
-
-		return competitiveRanking;
+	int player_resource() {
+		auto i_player_resource = g_mem.read<int>(g_client_dll.base + c_offsets::signatures::dw_player_resource);
+		return i_player_resource;
 	}
-	int competitiveWins() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto competitiveWins = mem.read<int>(playerResource + Offsets::netvars::m_iCompetitiveWins + (EntityList::getEntityID(get()) + 1) * 4);
+	int competitive_ranking() {
+		auto i_player_resource = player_resource();
+		auto i_competitive_ranking = g_mem.read<int>(player_resource() + c_offsets::netvars::m_i_competitive_ranking + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return competitiveWins;
+		return i_competitive_ranking;
+	}
+	int competitive_wins() {
+		auto i_player_resource = player_resource();
+		auto i_competitive_wins = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_competitive_wins + (c_entity_list::get_entity_id(get()) + 1) * 4);
+
+		return i_competitive_wins;
 	}
 	int ping() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto ping = mem.read<int>(playerResource + Offsets::netvars::m_iPing + (EntityList::getEntityID(get()) + 1) * 4);
+		auto i_player_resource = player_resource();
+		auto ping = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_ping + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
 		return ping;
 	}
 	int kills() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto kills = mem.read<int>(playerResource + Offsets::netvars::m_iKills + (EntityList::getEntityID(get()) + 1) * 4);
+		auto i_player_resource = player_resource();
+		auto i_kills = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_kills + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return kills;
+		return i_kills;
 	}
 	int assists() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto assists = mem.read<int>(playerResource + Offsets::netvars::m_iAssists + (EntityList::getEntityID(get()) + 1) * 4);
+		auto i_player_resource = player_resource();
+		auto i_assists = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_assists + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return assists;
+		return i_assists;
 	}
 	int deaths() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto deaths = mem.read<int>(playerResource + Offsets::netvars::m_iDeaths + (EntityList::getEntityID(get()) + 1) * 4);
+		auto i_player_resource = player_resource();
+		auto i_deaths = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_deaths + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return deaths;
+		return i_deaths;
 	}
 	int score() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto score = mem.read<int>(playerResource + Offsets::netvars::m_iScore + (EntityList::getEntityID(get()) + 1) * 4);
+		auto i_player_resource = player_resource();
+		auto i_score = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_score + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return score;
+		return i_score;
 	}
-	int MVPs() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto MVPs = mem.read<int>(playerResource + Offsets::netvars::m_iMVPs + (EntityList::getEntityID(get()) + 1) * 4);
+	int mvps() {
+		auto i_player_resource = player_resource();
+		auto i_mvps = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_mvps + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return MVPs;
+		return i_mvps;
 	}
 	int clan() {
-		auto playerResource = mem.read<int>(clientDll.dwBase + Offsets::signatures::dwPlayerResource);
-		auto clan = mem.read<int>(playerResource + Offsets::netvars::m_szClan + (EntityList::getEntityID(get()) + 1) * 4);
+		auto i_player_resource = player_resource();
+		auto i_clan = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_sz_clan + (c_entity_list::get_entity_id(get()) + 1) * 4);
 
-		return clan;
+		return i_clan;
 	}
 };

@@ -85,7 +85,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
 
                 if (knifeSettings) {
                   let skin = skins.find(
-                    (s) => +s.paintKit === +knifeSettings.paintKit && +s.weaponDI === +knifeSettings.itemDI
+                    (s) => +s.paintKit === +knifeSettings.paint_kit && +s.weaponDI === +knifeSettings.item_di
                   );
                   if (skin) {
                     image = skin.image;

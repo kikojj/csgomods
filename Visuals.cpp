@@ -1,19 +1,23 @@
 #include "Visuals.hpp"
 
-Visuals::Visuals() {}
+c_visuals::c_visuals() {}
 
-void Visuals::drawEntity(GlowObjectManager::GlowObject glowObject, colorRGBA color, GlowStyle style) {
+void c_visuals::draw_entity(c_glow_object_manager::t_glow_object glowObject, s_color_rgba color, en_glow_style style) {
 	glowObject.first.color(color);
-	glowObject.first.glowStyle = (int)style;
-	glowObject.first.renderWhenOccluded = true;
-	mem.write<IGlowObjectDefinition>(client.glowObjectManager->getObjectBase(glowObject), glowObject.first);
+	glowObject.first.glow_style = (int)style;
+	glowObject.first.render_when_occluded = true;
+	g_mem.write<s_glow_object_definition>(g_client.glow_object_manager->get_object_base(glowObject), glowObject.first);
 }
 
-colorRGBA Visuals::getHpBasedColor(BasePlayer& player){
-	float scale = (float)player.m_iHealth() / 100.f;
-	colorRGBA hp0 = { 255,0,0,255 };
-	colorRGBA hp100 = { 0,255,0,255 };
-	colorRGBA color;
+void c_visuals::reset_render(c_base_player& player) {
+	player.render({ 255, 255, 255, 0 });
+}
+
+s_color_rgba c_visuals::get_hp_based_color(c_base_player& player){
+	float scale = (float)player.m_i_health() / 100.f;
+	s_color_rgba hp0 = { 255,0,0,255 };
+	s_color_rgba hp100 = { 0,255,0,255 };
+	s_color_rgba color;
 	color.r = hp0.r + (hp100.r - hp0.r) * scale;
 	color.g = hp0.g + (hp100.g - hp0.g) * scale;
 	color.b = hp0.b + (hp100.b - hp0.b) * scale;
@@ -21,120 +25,116 @@ colorRGBA Visuals::getHpBasedColor(BasePlayer& player){
 	return color;
 }
 
-void Visuals::resetRender(BasePlayer& player){
-	player.render({ 255, 255, 255, 0 });
-}
-
-void Visuals::loop() {
-	if (engine.clientState->state() != ClientStates::INGAME || engine.clientState->m_nDeltaTick() == -1) {
+void c_visuals::loop() {
+	if (g_engine.client_state->state() != en_client_states::InGame || g_engine.client_state->delta_tick() == -1) {
 		return;
 	}
 
-	for (const auto& glowObject : client.glowObjectManager->array()) {
-		auto entity = BaseEntity(glowObject.first.dwBaseEntity);
-		auto entityClassID = entity.classID();
+	for (const auto& glowObject : g_client.glow_object_manager->array()) {
+		auto entity = c_base_entity(glowObject.first.base_entity);
+		auto entityClassID = entity.class_id();
 
 
-		if (entityClassID == ClassID::CCSPlayer) {
-			BasePlayer player(entity);
+		if (entityClassID == en_class_id::CCSPlayer) {
+			c_base_player player(entity);
 
-			if (!player.get() || player.m_iHealth() <= 0 || player.m_bDormant()) {
+			if (!player.get() || player.m_i_health() <= 0 || player.m_b_dormant()) {
 				continue;
 			}
 
-			resetRender(player);
+			reset_render(player);
 		}
 
-		if (Settings::visuals_glowEsp_enable) {
-			if (entityClassID == ClassID::CC4) {
-				if (Settings::visuals_glowEsp_show_c4) {
-					drawEntity(glowObject, Settings::visuals_glowEsp_c4_color, GlowStyle::GLOW_STYLE_FULL_BODY);
+		if (c_settings::visuals_glow_esp_enable) {
+			if (entityClassID == en_class_id::CC4) {
+				if (c_settings::visuals_glow_esp_show_c4) {
+					draw_entity(glowObject, c_settings::visuals_glow_esp_c4_color, en_glow_style::FullBody);
 				}
 			}
-			else if (entityClassID == ClassID::CPlantedC4) {
-				if (Settings::visuals_glowEsp_show_c4) {
-					drawEntity(glowObject, Settings::visuals_glowEsp_c4_planted_color, GlowStyle::GLOW_STYLE_FULL_BODY);
+			else if (entityClassID == en_class_id::CPlantedC4) {
+				if (c_settings::visuals_glow_esp_show_c4) {
+					draw_entity(glowObject, c_settings::visuals_glow_esp_c4_planted_color, en_glow_style::FullBody);
 				}
 			}
-			else if (entityClassID == ClassID::CCSPlayer) {
-				BasePlayer player(entity);
+			else if (entityClassID == en_class_id::CCSPlayer) {
+				c_base_player player(entity);
 
-				if (!player.get() || player.m_iHealth() <= 0 || player.m_bDormant()) {
+				if (!player.get() || player.m_i_health() <= 0 || player.m_b_dormant()) {
 					continue;
 				}
 
-				if (player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
-					if (Settings::visuals_glowEsp_show_friends) {
-						if (Settings::visuals_glowEsp_mode == VISUALS_GLOWESP_MODE_COLOR) {
-							drawEntity(glowObject, Settings::visuals_glowEsp_friends_color, Settings::visuals_glowEsp_style);
+				if (player.team_num() == g_client.local_player->team_num()) {
+					if (c_settings::visuals_glow_esp_show_friends) {
+						if (c_settings::visuals_glow_esp_mode == c_settings::en_visuals_glow_esp_mode::Color) {
+							draw_entity(glowObject, c_settings::visuals_glow_esp_friends_color, c_settings::visuals_glow_esp_style);
 						}
 						else {
-							drawEntity(glowObject, getHpBasedColor(player), Settings::visuals_glowEsp_style);
+							draw_entity(glowObject, get_hp_based_color(player), c_settings::visuals_glow_esp_style);
 						}
 
-						if (Settings::visuals_glowEsp_show_defusing) {
-							if (player.m_bIsDefusing()) {
-								drawEntity(glowObject, Settings::visuals_glowEsp_defusing_color, Settings::visuals_glowEsp_style);
+						if (c_settings::visuals_glow_esp_show_defusing) {
+							if (player.m_b_is_defusing()) {
+								draw_entity(glowObject, c_settings::visuals_glow_esp_defusing_color, c_settings::visuals_glow_esp_style);
 							}
 						}
 					}
 				}
 				else {
-					if (Settings::visuals_glowEsp_show_enemies) {
-						if (Settings::visuals_glowEsp_mode == VISUALS_GLOWESP_MODE_COLOR) {
-							drawEntity(
+					if (c_settings::visuals_glow_esp_show_enemies) {
+						if (c_settings::visuals_glow_esp_mode == c_settings::en_visuals_glow_esp_mode::Color) {
+							draw_entity(
 								glowObject,
 
 								//visible check
-								client.localPlayer->canSeePlayer(player) ?
-								Settings::visuals_glowEsp_enemy_visible_color :
-								Settings::visuals_glowEsp_enemy_invisible_color,
+								g_client.local_player->can_see_player(player) ?
+								c_settings::visuals_glow_esp_enemy_visible_color :
+								c_settings::visuals_glow_esp_enemy_invisible_color,
 
-								Settings::visuals_glowEsp_style
+								c_settings::visuals_glow_esp_style
 							);
 						}
 						else {
-							drawEntity(glowObject, getHpBasedColor(player), Settings::visuals_glowEsp_style);
+							draw_entity(glowObject, get_hp_based_color(player), c_settings::visuals_glow_esp_style);
 						}
 
-						if (Settings::visuals_glowEsp_show_defusing) {
-							if (player.m_bIsDefusing()) {
-								drawEntity(glowObject, Settings::visuals_glowEsp_defusing_color, Settings::visuals_glowEsp_style);
+						if (c_settings::visuals_glow_esp_show_defusing) {
+							if (player.m_b_is_defusing()) {
+								draw_entity(glowObject, c_settings::visuals_glow_esp_defusing_color, c_settings::visuals_glow_esp_style);
 							}
 						}
 					}
 				}
 			}
 			else if (
-				entityClassID == ClassID::CDecoyGrenade ||
-				entityClassID == ClassID::CHEGrenade ||
-				entityClassID == ClassID::CIncendiaryGrenade ||
-				entityClassID == ClassID::CMolotovGrenade ||
-				entityClassID == ClassID::CSmokeGrenade ||
-				entityClassID == ClassID::CFlashbang
+				entityClassID == en_class_id::CDecoyGrenade ||
+				entityClassID == en_class_id::CHEGrenade ||
+				entityClassID == en_class_id::CIncendiaryGrenade ||
+				entityClassID == en_class_id::CMolotovGrenade ||
+				entityClassID == en_class_id::CSmokeGrenade ||
+				entityClassID == en_class_id::CFlashbang
 				) {
-				if (Settings::visuals_glowEsp_show_grenades) {
-					drawEntity(glowObject, Settings::visuals_glowEsp_grenades_color, GlowStyle::GLOW_STYLE_FULL_BODY);
+				if (c_settings::visuals_glow_esp_show_grenades) {
+					draw_entity(glowObject, c_settings::visuals_glow_esp_grenades_color, en_glow_style::FullBody);
 				}
 			}
 		}
 
-		if (Settings::visuals_chams_enable) {
-			if (entityClassID == ClassID::CCSPlayer) {
-				BasePlayer player(entity);
+		if (c_settings::visuals_chams_enable) {
+			if (entityClassID == en_class_id::CCSPlayer) {
+				c_base_player player(entity);
 
-				if (!player.get() || player.m_iHealth() <= 0 || player.m_bDormant()) {
+				if (!player.get() || player.m_i_health() <= 0 || player.m_b_dormant()) {
 					continue;
 				}
 
-				if (player.m_iTeamNum() == client.localPlayer->m_iTeamNum()) {
-					if (Settings::visuals_chams_show_friends) {
-						player.render(Settings::visuals_chams_friends_color);
+				if (player.team_num() == g_client.local_player->team_num()) {
+					if (c_settings::visuals_chams_show_friends) {
+						player.render(c_settings::visuals_chams_friends_color);
 					}
 				}
 				else {
-					if (Settings::visuals_chams_show_enemies) {
-						player.render(Settings::visuals_chams_enemy_color);
+					if (c_settings::visuals_chams_show_enemies) {
+						player.render(c_settings::visuals_chams_enemy_color);
 					}
 				}
 			}

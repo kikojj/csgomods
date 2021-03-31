@@ -13,27 +13,28 @@
 #include "Utils/Offsets/Offsets.hpp"
 #include "Utils/Settings/Settings.hpp"
 
-class Misc {
+class c_misc {
 public:
-	Misc();
+	c_misc();
 
-	void radarHack();
+	void radar_hack();
 	void bhop();
-	void antiFlash();
+	void anti_flash();
 
 private:
-	std::chrono::high_resolution_clock::time_point lastPressTime = std::chrono::high_resolution_clock::now();
+	std::chrono::high_resolution_clock::time_point last_press_time = std::chrono::high_resolution_clock::now();
+	void reset_settings();
 public:
-	bool shouldShoot = false;
-	bool shouldWait = false;
-	void autoPistols();
+	bool should_shoot = false;
+	bool should_wait = false;
+	void auto_pistols();
 
 private:
 	bool found = false;
 	bool accepted = false;
-	int prevCallback = 0;
+	int prev_callback = 0;
 	int callback = 0;
 
 public:
-	void autoAccept();
+	void auto_accept();
 };
