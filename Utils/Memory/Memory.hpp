@@ -1,5 +1,6 @@
 #pragma once
 
+#include <iostream>
 #include <Windows.h>
 #include <TlHelp32.h>
 #include <comdef.h>
@@ -10,8 +11,9 @@
 
 class c_memory {
 public:
-	HANDLE process;
-	DWORD proccess_id;
+	HANDLE	process;
+	HWND		process_handle;
+	DWORD		process_id;
 
 	inline DWORD find_process(const char* name) {
 		HANDLE handle = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, NULL);
@@ -26,16 +28,55 @@ public:
 				return id;
 			}
 		} while (Process32Next(handle, &entry));
+
 		return 0;
 	}
 
 	inline void attach(DWORD id, DWORD access) {
 		process = OpenProcess(access, false, id);
-		proccess_id = id;
+		process_id = id;
+
+		struct handle_data {
+			unsigned long process_id;
+			HWND window_handle;
+		};
+		handle_data data{ process_id, nullptr };
+		EnumWindows([](HWND handle, LPARAM lparam) {
+			auto& data = *reinterpret_cast<handle_data*>(lparam);
+
+			unsigned long process_id = 0;
+			GetWindowThreadProcessId(handle, &process_id);
+
+			if (data.process_id != process_id) {
+				return TRUE;
+			}
+			data.window_handle = handle;
+			return FALSE;
+		}, reinterpret_cast<LPARAM>(&data));
+		process_handle = data.window_handle;
+	}
+
+	RECT get_process_window_rect() {
+		if (process_handle) {
+			RECT rect;
+			GetWindowRect(process_handle, &rect);
+			return rect;
+		}
+		return { 0,0,0,0 };
+	}
+
+	long get_window_width() {
+		auto rect = get_process_window_rect();
+		return rect.right - rect.left;
+	}
+
+	long get_window_height() {
+		auto rect = get_process_window_rect();
+		return rect.bottom - rect.top;
 	}
 
 	inline s_pm_module get_module(const char* module) {
-		HANDLE h_module = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, proccess_id);
+		HANDLE h_module = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, process_id);
 		MODULEENTRY32 entry;
 		entry.dwSize = sizeof(entry);
 
@@ -71,7 +112,7 @@ public:
 		return WriteProcessMemory(process, LPVOID(address), &value, size, NULL);
 	}
 
-	inline void createThread(uintptr_t address, LPVOID parameter = 0) {
+	inline void create_thread(uintptr_t address, LPVOID parameter = 0) {
 		HANDLE h_thread = CreateRemoteThread(process, 0, 0, reinterpret_cast<LPTHREAD_START_ROUTINE>(address), parameter, 0, 0);
 		if (!h_thread) {
 			return;

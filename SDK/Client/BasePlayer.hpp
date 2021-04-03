@@ -18,6 +18,7 @@
 #include "../Vars.hpp"
 
 #include "BaseEntity.hpp"
+#include "BaseWeapon.hpp"
 #include "EntityList.hpp"
 
 class c_base_player : public c_base_entity {
@@ -98,6 +99,11 @@ public:
 	void render(s_color_rgba color) {
 		s_render_color renderColor{ (BYTE)color.r, (BYTE)color.g, (BYTE)color.b, (BYTE)color.a };
 		m_clr_render(renderColor);
+	}
+	c_base_weapon active_weapon(){
+		int i_active_weapon_id = m_h_active_weapon() & 0xfff;
+		c_base_weapon active_weapon(c_entity_list::get_by_id(i_active_weapon_id - 1));
+		return active_weapon;
 	}
 	int my_weapon_by_id(int id) {
 		auto i_weapon_base = g_mem.read<int>(get() + c_offsets::netvars::m_h_my_weapons + id * 0x4);

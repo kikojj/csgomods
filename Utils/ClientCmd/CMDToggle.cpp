@@ -1,6 +1,6 @@
 #include "CMDToggle.hpp"
 
-CMDToggle::CMDToggle(std::string _toggleOn, std::string _toggleOff) : toggle_on(toggle_on), toggle_off(toggle_off) {}
+CMDToggle::CMDToggle(std::string toggle_on, std::string toggle_off): toggle_on(toggle_on), toggle_off(toggle_off) {}
 
 void CMDToggle::toogle() {
 	if (state) {

@@ -10,6 +10,6 @@ export type TGetActiveWeaponInput = {
 export type TGetActiveWeaponResponse = {
   type: "get_active_weapon";
   message: {
-    activeWeapon: ItemDefinitionIndex;
+    active_weapon: ItemDefinitionIndex;
   };
 };

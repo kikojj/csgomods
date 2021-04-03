@@ -30,11 +30,10 @@ public:
 	void auto_pistols();
 
 private:
-	bool found = false;
-	bool accepted = false;
-	int prev_callback = 0;
-	int callback = 0;
-
+	bool	found = false;
+	bool	accepted = false;
+	int		prev_callback = 0;
+	int		callback = 0;
 public:
 	void auto_accept();
 };

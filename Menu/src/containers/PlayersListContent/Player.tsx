@@ -11,37 +11,33 @@ export const Player: React.FC<PlayerProps> = ({ playerData }) => {
   const classes = useStyles();
 
   return (
-    <div
-      className={classes.player}
-      onContextMenu={(e) => {
-        e.preventDefault();
-        console.log("context");
-      }}
-    >
+    <div className={classes.player}>
       <div className={classes.player_info}>
-        <div className={classes.player_stat}>{playerData.isFakePlayer ? "BOT" : playerData.ping}</div>
-        <div className={classes.player_name}>{`${playerData.isFakePlayer ? "BOT " : ""}${playerData.name}`}</div>
+        <div className={classes.player_stat}>{playerData.is_fake_player ? "BOT" : playerData.ping}</div>
+        <div className={classes.player_name}>{`${playerData.is_fake_player ? "BOT " : ""}${playerData.name}`}</div>
         <div className={classes.player_rank}>
-          {playerData.isFakePlayer ? (
+          {playerData.is_fake_player ? (
             ""
           ) : (
             <img
               src={
-                playerData.competitiveRanking < 1 || playerData.competitiveRanking > 18
+                playerData.competitive_ranking < 1 || playerData.competitive_ranking > 18
                   ? ranks.Rank_None
-                  : ranks[`Rank_${playerData.competitiveRanking}` as keyof typeof ranks]
+                  : ranks[`Rank_${playerData.competitive_ranking}` as keyof typeof ranks]
               }
               alt=""
             />
           )}
         </div>
         <div className={classes.player_wins}>
-          {playerData.isFakePlayer ? (
+          {playerData.is_fake_player ? (
             ""
           ) : (
             <React.Fragment>
               <img src={CupIcon} alt="" />
-              {playerData.competitiveWins < 0 || playerData.competitiveWins > 100000 ? 0 : playerData.competitiveWins}
+              {playerData.competitive_wins < 0 || playerData.competitive_wins > 100000
+                ? 0
+                : playerData.competitive_wins}
             </React.Fragment>
           )}
         </div>
@@ -53,7 +49,7 @@ export const Player: React.FC<PlayerProps> = ({ playerData }) => {
         <div className={classes.player_stat}>{playerData.deaths}</div>
         <div className={classes.player_mvps}>
           <img src={StarIcon} alt="" />
-          <span>{playerData.MVPs}</span>
+          <span>{playerData.mvps}</span>
         </div>
         <div className={classes.player_stat} style={{ marginRight: 0 }}>
           {playerData.score}

@@ -181,6 +181,7 @@
     <ClInclude Include="SDK\Utils\TeamNum.hpp" />
     <ClInclude Include="SDK\Utils\Vector.hpp" />
     <ClInclude Include="SDK\Utils\VerifiedUserCmd.hpp" />
+    <ClInclude Include="SDK\Utils\ViewMatrix.hpp" />
     <ClInclude Include="SDK\Vars.hpp" />
     <ClInclude Include="StyleGuide.hpp" />
     <ClInclude Include="Utils\BspParser\BspParser.hpp" />

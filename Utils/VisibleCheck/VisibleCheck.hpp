@@ -8,6 +8,7 @@
 #include "../Offsets/Offsets.hpp"
 #include "../VirtualFunction/VirtualFunction.hpp"
 
+#include "../../SDK/Engine/Engine.hpp"
 #include "../../SDK/Utils/Vector.hpp"
 #include "../../SDK/Utils/EngineTrace.hpp"
 #include "../../SDK/Utils/GameTrace.hpp"
@@ -18,8 +19,8 @@
 class c_visible_check {
 public:
 	struct s_visible {
-		bool player[64];
-		bool player_bones[64][80];
+		bool player[120];
+		bool player_bones[120][80];
 	};
 	struct s_create_move_vars {
 		//offsets

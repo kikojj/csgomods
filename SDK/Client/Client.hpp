@@ -10,6 +10,7 @@
 #include "../Utils/GlowObjectDefinition.hpp"
 #include "../Utils/Input.hpp"
 #include "../Utils/KeyEvent.hpp"
+#include "../Utils/ViewMatrix.hpp"
 
 #include "../Vars.hpp"
 
@@ -44,6 +45,8 @@ public:
 
 	C_PROP_PTR(en_key_event,	dw_force_jump)
 	C_PROP_PTR(en_key_event,	dw_force_attack)
+
+	C_PROP_PTR(s_view_matrix, dw_view_matrix)
 
 //methods
 public:

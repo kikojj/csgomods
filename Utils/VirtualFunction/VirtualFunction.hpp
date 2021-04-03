@@ -7,7 +7,7 @@
 
 class c_virtual_function {
 private:
-  DWORD base;
+  DWORD                 base;
   std::map <int, DWORD> hooks;
 
   DWORD get_virtual_function(int);

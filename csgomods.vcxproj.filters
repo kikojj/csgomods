@@ -298,6 +298,9 @@
     <ClInclude Include="Utils\ClientCmd\CMDToggle.hpp">
       <Filter>Utils\ClientCmd</Filter>
     </ClInclude>
+    <ClInclude Include="SDK\Utils\ViewMatrix.hpp">
+      <Filter>SDK\Utils</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Visuals.cpp">

@@ -5,7 +5,6 @@ import { Group, List } from "@components";
 import { Player } from "./Player";
 import { Average } from "./Average";
 
-import { IRadarData } from "@ts/requests";
 import { TeamNum } from "@utils";
 
 import { useStyles } from "./styles";
@@ -41,8 +40,8 @@ export const PlayersListContent: React.FC = () => {
 
   const [selectedPlayer, setSelectedPlayer] = React.useState<number>(-1);
 
-  const Ts = radarData.filter((d) => d.teamNum === TeamNum.TERRORIST).sort((d1, d2) => d2.score - d1.score);
-  const CTs = radarData.filter((d) => d.teamNum === TeamNum.COUNTER_TERRORIST).sort((d1, d2) => d2.score - d1.score);
+  const Ts = radarData.filter((d) => d.team_num === TeamNum.TERRORIST).sort((d1, d2) => d2.score - d1.score);
+  const CTs = radarData.filter((d) => d.team_num === TeamNum.COUNTER_TERRORIST).sort((d1, d2) => d2.score - d1.score);
 
   const TList: React.FC = React.useCallback(() => {
     return (
@@ -54,8 +53,8 @@ export const PlayersListContent: React.FC = () => {
           ...Ts.map((data) => {
             return {
               content: <Player playerData={data} />,
-              onClick: () => setSelectedPlayer(data.userID),
-              selected: selectedPlayer === data.userID,
+              onClick: () => setSelectedPlayer(data.user_id),
+              selected: selectedPlayer === data.user_id,
             };
           }),
           {
@@ -76,8 +75,8 @@ export const PlayersListContent: React.FC = () => {
           ...CTs.map((data) => {
             return {
               content: <Player playerData={data} />,
-              onClick: () => setSelectedPlayer(data.userID),
-              selected: selectedPlayer === data.userID,
+              onClick: () => setSelectedPlayer(data.user_id),
+              selected: selectedPlayer === data.user_id,
             };
           }),
           {

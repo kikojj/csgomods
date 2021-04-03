@@ -32,11 +32,11 @@ public:
 
 //methods
 public:
-	bool can_see_player(c_base_player player, int bone = -1, bool smoke_check = true) {
+	bool can_see_player(c_base_player player, int bone = -1, bool smoke_check = false) {
 		auto i_player_id = c_entity_list::get_entity_id(player.get());
 		return can_see_player({ player, i_player_id }, bone, smoke_check);
 	}
-	bool can_see_player(c_entity_list::t_entity_object entity_object, int bone = -1, bool smoke_check = true) {
+	bool can_see_player(c_entity_list::t_entity_object entity_object, int bone = -1, bool smoke_check = false) {
 		auto i_player_id = entity_object.second;
 
 		if (i_player_id < 0) {

@@ -37,7 +37,7 @@ bool WINAPI hkCreateMove(float input_sample_time, c_user_cmd* cmd) {
 		}
 
 		bool b_life_state = *(bool*)(p_entity + vars->dw_life_state);
-		bool b_dormant = *(bool*)(p_entity + vars->dw_origin);
+		bool b_dormant = *(bool*)(p_entity + vars->dw_dormant);
 		int i_health = *(int*)(p_entity + vars->dw_health);
 
 		if (b_life_state || b_dormant || i_health <= 0) {
@@ -209,10 +209,10 @@ bool c_visible_check::is_visible(int entity_id){
 		return false;
 	}
 
-	if (entity_id >= 64) {
+	if (entity_id > g_engine.client_state->max_players()) {
 		return false;
 	}
-	
+
 	return visible_struct.player[entity_id];
 }
 
@@ -277,7 +277,7 @@ bool c_visible_check::line_goes_through_smoke(s_vec3 start, s_vec3 end) {
 	g_mem.write((DWORD)p_shellcode, lgts_shellcode);
 
 	// Run the shellcode
-	g_mem.createThread((uintptr_t)p_shellcode);
+	g_mem.create_thread((uintptr_t)p_shellcode);
 
 	// Get our return value
 	bool b_return = g_mem.read<bool>(dw_return);

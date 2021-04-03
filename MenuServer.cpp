@@ -1,11 +1,9 @@
 #include "MenuServer.hpp"
 
 void c_menu_server::stop(){
-  using namespace curlpp;
-
-  Cleanup my_cleanup;
+  curlpp::Cleanup my_cleanup;
   std::ostringstream os;
-  os << options::Url(std::string("http://localhost:") + std::to_string(HTTP_SERVER_PORT) + std::string("/exit"));
+  os << curlpp::options::Url(std::string("http://localhost:") + std::to_string(HTTP_SERVER_PORT) + std::string("/exit"));
 
   server.stop_listening();
   server.stop();
@@ -33,24 +31,23 @@ void c_menu_server::get_active_weapon(websocketpp::connection_hdl hdl){
     g_engine.client_state->state() != en_client_states::InGame ||
     g_client.local_player->m_i_health() <= 0 ||
     g_client.local_player->team_num() == en_team_num::Invalid
-    ) {
+   ) {
     return;
   }
 
-  int i_active_weapon_id = g_client.local_player->m_h_active_weapon() & 0xfff;
-  c_base_weapon activeWeapon = c_base_weapon(g_client.entity_list->get_by_id(i_active_weapon_id - 1));
-  auto active_weapon_item_di = (int)activeWeapon.m_i_item_definition_index();
+  c_base_weapon active_weapon = c_base_weapon(g_client.local_player->active_weapon());
+  auto active_weapon_item_di = active_weapon.m_i_item_definition_index();
 
   if (active_weapon_item_di == (int)c_item::en_defenition_index::Invalid) {
     return;
   }
 
-  get_active_weapon(active_weapon_item_di);
+  get_active_weapon((int)active_weapon_item_di);
 }
 
 void c_menu_server::get_active_weapon(int active_weapon){
   jsonxx::Object js_obj;
-  js_obj << "activeWeapon" << active_weapon;
+  js_obj << "active_weapon" << active_weapon;
   send_message_all(WEBSOCKET_GET_ACTIVE_WEAPON, js_obj);
 }
 
@@ -84,18 +81,18 @@ void c_menu_server::get_radar_data(std::vector<s_radar_data> radar_data){
     jsonxx::Object js_obj;
     js_obj
       << "name" << data.name
-      << "userID" << data.user_id
-      << "teamNum" << (int)data.team_num
-      << "isFakePlayer" << data.is_fake_player
+      << "user_id" << data.user_id
+      << "team_num" << (int)data.team_num
+      << "is_fake_player" << data.is_fake_player
       << "ping" << data.ping
       << "money" << data.money
       << "kills" << data.kills
       << "assists" << data.assists
       << "deaths" << data.deaths
-      << "MVPs" << data.mvps
+      << "mvps" << data.mvps
       << "score" << data.score
-      << "competitiveRanking" << data.competitive_ranking
-      << "competitiveWins" << data.competitive_wins
+      << "competitive_ranking" << data.competitive_ranking
+      << "competitive_wins" << data.competitive_wins
       << "x" << data.x
       << "y" << data.y
       << "z" << data.z;
@@ -116,18 +113,18 @@ void c_menu_server::update_settings(websocketpp::connection_hdl hdl, jsonxx::Obj
 }
 
 void c_menu_server::load_config(websocketpp::connection_hdl hdl, jsonxx::Object message){
-  auto fileName = message.get<jsonxx::String>("fileName");
+  auto fileName = message.get<jsonxx::String>("file_name");
   c_settings::get_from_file(fileName);
 }
 
 void c_menu_server::save_config(websocketpp::connection_hdl hdl, jsonxx::Object message){
-  auto fileName = message.get<jsonxx::String>("fileName");
-  c_settings::save_to_file(fileName + ".json");
+  auto file_name = message.get<jsonxx::String>("file_name");
+  c_settings::save_to_file(file_name + ".json");
 }
 
 void c_menu_server::delete_config(websocketpp::connection_hdl hdl, jsonxx::Object message){
-  auto fileName = message.get<jsonxx::String>("fileName");
-  c_settings::delete_file(fileName);
+  auto file_name = message.get<jsonxx::String>("file_name");
+  c_settings::delete_file(file_name);
 }
 
 void c_menu_server::game_full_force_update(websocketpp::connection_hdl){
@@ -135,11 +132,11 @@ void c_menu_server::game_full_force_update(websocketpp::connection_hdl){
 }
 
 void c_menu_server::get_all_skins(websocketpp::connection_hdl hdl){
-  std::fstream skinsJson("Utils/skins.json");
-  std::string skinsBuffer((std::istreambuf_iterator<char>(skinsJson)), std::istreambuf_iterator<char>());
-  jsonxx::Object skins;
-  skins.parse(skinsBuffer);
-  send_message(hdl, WEBSOCKET_GET_ALL_SKINS, skins);
+  std::fstream skins_json("Utils/skins.json");
+  std::string skins_buffer((std::istreambuf_iterator<char>(skins_json)), std::istreambuf_iterator<char>());
+  jsonxx::Object js_obj_skins;
+  js_obj_skins.parse(skins_buffer);
+  send_message(hdl, WEBSOCKET_GET_ALL_SKINS, js_obj_skins);
 }
 
 
@@ -216,7 +213,7 @@ void c_menu_server::on_open(websocketpp::connection_hdl hdl) {
     get_map_name(hdl);
   }
   catch (const std::exception& e) {
-    log("onOpen error: " + (std::string)e.what());
+    log("on_open error: " + (std::string)e.what());
   }
 }
 
@@ -225,7 +222,7 @@ void c_menu_server::on_close(websocketpp::connection_hdl hdl) {
     connections.erase(hdl);
   }
   catch (const std::exception& e) {
-    log("onClose error: " + (std::string)e.what());
+    log("on_close error: " + (std::string)e.what());
   }
 }
 
@@ -253,19 +250,19 @@ c_menu_server::c_menu_server(){
 
 void c_menu_server::start() {
   try {
-    std::thread thSocketServer([this]() {
+    std::thread th_socket_server([this]() {
       server.listen(WEBSOCKET_PORT);
       server.start_accept();
       server.run();
     });
 
-    std::thread thHttpSrver([]() {
+    std::thread th_http_server([]() {
       std::string command = "node ./menu/server.js port=" + std::to_string(HTTP_SERVER_PORT) + " dir=\"" + HTTP_SERVER_DIRECTORY + "\"";
       system(command.c_str());
     });
 
-    thSocketServer.join();
-    thHttpSrver.join();
+    th_socket_server.join();
+    th_http_server.join();
   }
   catch (const std::exception& e) {
     log("start error: " + (std::string)e.what());
@@ -280,7 +277,7 @@ void c_menu_server::send_message(websocketpp::connection_hdl hdl, std::string ty
     server.send(hdl, req.json(), websocketpp::frame::opcode::text);
   }
   catch (websocketpp::exception const& e) {
-    log("sendMessage error: " + (std::string)e.what());
+    log("send_message error: " + (std::string)e.what());
   }
 }
 
@@ -291,6 +288,6 @@ void c_menu_server::send_message_all(std::string type, jsonxx::Value message){
     }
   }
   catch (websocketpp::exception const& e) {
-    log("sendMessageAll error: " + (std::string)e.what());
+    log("send_message_all error: " + (std::string)e.what());
   }
 }

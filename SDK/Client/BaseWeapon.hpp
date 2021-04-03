@@ -23,6 +23,9 @@ public:
 	c_base_weapon(c_base_entity entity) {
 		this->base = entity.get();
 	}
+	c_base_weapon(c_base_weapon& weapon) {
+		this->base = weapon.get();
+	}
 
 //props
 public:

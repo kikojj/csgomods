@@ -47,13 +47,13 @@ c_client_cmd g_client_cmd;
 bool g_b_working = true;
 #pragma endregion
 
-CMDToggle mouse_bind("bind mouse1 +attack", "unbind mouse1");
-
 c_visuals visuals;
 c_aim_bot aim_bot;
 c_trigger_bot trigget_bot;
 c_skinchanger skinchanger;
 c_misc misc;
+
+CMDToggle mouse_bind("bind mouse1 +attack", "unbind mouse1");
 
 int main() {
 	try {
@@ -61,6 +61,9 @@ int main() {
 		while (!g_mem.find_process(GAME_NAME)) {
 			Sleep(100);
 		}
+		cout << "[Main]: Process '" << GAME_NAME << "' was found. Starting..." << endl;
+		Sleep(5000);
+
 		g_mem.attach(g_mem.find_process(GAME_NAME), PROCESS_ALL_ACCESS);
 		cout << "[Main]: Attached in process '" << GAME_NAME << "'." << endl;
 
@@ -85,9 +88,9 @@ int main() {
 		g_client_cmd.execute("clear");
 		g_client_cmd.execute("echo [CSGOMODS]: Started.");
 		g_client_cmd.execute(string(string("echo [CSGOMODS]: You can open menu, using steam overlay(localhost:") + to_string(HTTP_SERVER_PORT) + string(")")).c_str());
-		(c_settings::aimbot_enable ? mouse_bind.off() : mouse_bind.on());
 		g_client_cmd.execute("echo [CSGOMODS]: Sorry, I will unbind your mouse1 button when needed. I need it to make my aim bot work better.");
 		g_client_cmd.execute("echo [CSGOMODS]: You can still shoot whenever you want, but you must safely exit the cheat (press exit in the menu) to restore bind automatically, or exit at your own discretion and restore the bind yourself if necessary! Thank:)");
+		(c_settings::aimbot_enable ? mouse_bind.off() : mouse_bind.on());
 
 		#pragma region Threads
 		thread th_menu_data([]() {
@@ -277,10 +280,12 @@ int main() {
 		});
 
 		thread th_working([]() {
-			while (g_mem.find_process(GAME_NAME)) {
-				Sleep(500);
+			while (g_b_working) {
+				while (g_mem.find_process(GAME_NAME)) {
+					Sleep(500);
+				}
+				g_menu_server.stop();
 			}
-			g_menu_server.stop();
 		});
 
 		th_menu_server.join();
@@ -294,10 +299,13 @@ int main() {
 		th_map.join();
 		th_visible_check.join();
 		th_shoot.join();
+		th_working.join();
 		#pragma endregion
 
-		mouse_bind.on();
-		g_client_cmd.execute("echo [CSGOMODS]: Mouse1 bind was restored.");
+		if (g_mem.find_process(GAME_NAME)) {
+			mouse_bind.on();
+			g_client_cmd.execute("echo [CSGOMODS]: Mouse1 bind was restored.");
+		}
 		c_helpers::exit();
 	}
 	catch (const exception& err){

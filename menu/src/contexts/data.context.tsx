@@ -35,7 +35,7 @@ const Data = () => {
   }, []);
 
   const onGetActiveWeapon = React.useCallback((message: TGetActiveWeaponResponse["message"]) => {
-    setActiveWeapon(new Weapon({ itemDI: message.activeWeapon }));
+    setActiveWeapon(new Weapon({ itemDI: message.active_weapon }));
   }, []);
 
   const getActiveWeapon = React.useCallback(() => {
@@ -68,7 +68,7 @@ const Data = () => {
       let wasChanged = false;
       message.forEach((d) => {
         const dataUser = radarData.find((d_) => {
-          return d_.userID === d.userID;
+          return d_.user_id === d.user_id;
         });
         if (dataUser && !isObjectsEqual(dataUser, d)) {
           wasChanged = true;

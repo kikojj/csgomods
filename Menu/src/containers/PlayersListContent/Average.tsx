@@ -10,7 +10,7 @@ export type AverageProps = { data: IRadarData[] };
 export const Average: React.FC<AverageProps> = ({ data }) => {
   const classes = useStyles();
 
-  const players = data.filter((p) => !p.isFakePlayer);
+  const players = data.filter((p) => !p.is_fake_player);
 
   let avgMoney = 0;
   let avgKills = 0;
@@ -31,17 +31,17 @@ export const Average: React.FC<AverageProps> = ({ data }) => {
 
     avgDeaths = data.map((p) => p.deaths).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
 
-    avgMVPs = data.map((p) => p.MVPs).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
+    avgMVPs = data.map((p) => p.mvps).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
 
     avgScore = data.map((p) => p.score).reduce((prevValue, currentValue) => prevValue + currentValue) / data.length;
   }
 
   if (players.length > 0) {
     avgRanks =
-      players.map((p) => p.competitiveRanking).reduce((prevValue, currentValue) => prevValue + currentValue) /
+      players.map((p) => p.competitive_ranking).reduce((prevValue, currentValue) => prevValue + currentValue) /
       players.length;
     avgWins =
-      players.map((p) => p.competitiveWins).reduce((prevValue, currentValue) => prevValue + currentValue) /
+      players.map((p) => p.competitive_wins).reduce((prevValue, currentValue) => prevValue + currentValue) /
       players.length;
   }
 

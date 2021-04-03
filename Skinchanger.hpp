@@ -13,8 +13,8 @@
 
 class c_skinchanger {
 private:
-  void apply_weapon_settings(c_base_weapon, c_settings::s_skinchanger_weapon);
-  void apply_knife_settings(c_base_weapon, c_settings::s_skinchanger_weapon);
+  void apply_weapon_settings(c_base_weapon weapon, c_settings::s_skinchanger_weapon settings);
+  void apply_knife_settings(c_base_weapon knife, c_settings::s_skinchanger_weapon settings);
 
 public:
   c_skinchanger();

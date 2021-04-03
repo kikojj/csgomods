@@ -14,11 +14,10 @@ void c_trigger_bot::loop() {
 	}
 
 	if (
-		g_engine.client_state->state() != en_client_states::InGame ||
 		g_engine.client_state->delta_tick() == -1 ||
-		g_client.local_player->m_i_health() <= 0 ||
-		g_client.local_player->team_num() == en_team_num::Invalid ||
+		g_engine.client_state->state() != en_client_states::InGame ||
 		g_client.local_player->m_b_dormant() ||
+		g_client.local_player->m_i_health() <= 0 ||
 		!c_helpers::is_mouse_active()
 		) {
 		reset_settings();
@@ -40,63 +39,62 @@ void c_trigger_bot::loop() {
 		return;
 	}
 
-	int activeWeaponID = g_client.local_player->m_h_active_weapon() & 0xfff;
-	c_base_weapon activeWeapon(g_client.entity_list->get_by_id(activeWeaponID - 1));
+	c_base_weapon active_weapon(g_client.local_player->active_weapon());
 
-	if (activeWeapon.is_pistol()) {
+	if (active_weapon.is_pistol()) {
 		if (!c_settings::triggerbot_pistols_enable) {
 			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.is_heavy()) {
+	else if (active_weapon.is_heavy()) {
 		if (!c_settings::triggerbot_heavies_enable) {
 			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.is_shotgun()) {
+	else if (active_weapon.is_shotgun()) {
 		if (!c_settings::triggerbot_shoutguns_enable) {
 			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.is_smg()) {
+	else if (active_weapon.is_smg()) {
 		if (!c_settings::triggerbot_smgs_enable) {
 			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.is_rifle()) {
+	else if (active_weapon.is_rifle()) {
 		if (!c_settings::triggerbot_rifles_enable) {
 			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.is_snipers()) {
+	else if (active_weapon.is_snipers()) {
 		if (!c_settings::triggerbot_snipers_enable) {
 			reset_settings();
 			return;
 		}
 	}
-	else if (activeWeapon.is_knife()) {
+	else if (active_weapon.is_knife()) {
 		reset_settings();
 		return;
 	}
-	else if (activeWeapon.is_bomb()) {
+	else if (active_weapon.is_bomb()) {
 		reset_settings();
 		return;
 	}
-	else if (activeWeapon.is_grenade()) {
+	else if (active_weapon.is_grenade()) {
 		reset_settings();
 		return;
 	}
-	else if (activeWeapon.is_zeusx27()) {
+	else if (active_weapon.is_zeusx27()) {
 		reset_settings();
 		return;
 	}
 	else {
-		std::cout << "[Trigger]: Undefined weapon ID = " << (int)activeWeapon.item_di() << std::endl;
+		std::cout << "[Trigger]: Undefined weapon ID = " << (int)active_weapon.item_di() << std::endl;
 		reset_settings();
 		return;
 	}
@@ -118,14 +116,14 @@ void c_trigger_bot::loop() {
 		should_shoot = true;
 	}
 	else if (!should_wait) {
-		if (activeWeapon.is_pistol()) {
+		if (active_weapon.is_pistol()) {
 			should_shoot = false;
 		}
 	}
 
 	if (
 		std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - last_press_time).count() >
-		(double)((double)c_settings::triggerbot_delay_before_shoot / (double)1000)
+		((double)c_settings::triggerbot_delay_before_shoot / (double)1000)
 		) {
 		should_wait = false;
 	}

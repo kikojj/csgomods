@@ -117,12 +117,16 @@ export const AimbotContent: React.FC = () => {
                   checked={settings.aimbot_visible_check}
                   onChange={(v) => updateValue("aimbot_visible_check", v)}
                 />
-                <CheckboxField
-                  label="Smoke check"
-                  helperText="Check if player is behind the smoke"
-                  checked={settings.aimbot_smoke_check}
-                  onChange={(v) => updateValue("aimbot_smoke_check", v)}
-                />
+                {settings.aimbot_visible_check ? (
+                  <CheckboxField
+                    label="Smoke check"
+                    helperText="Check if player is behind the smoke"
+                    checked={settings.aimbot_smoke_check}
+                    onChange={(v) => updateValue("aimbot_smoke_check", v)}
+                  />
+                ) : (
+                  ""
+                )}
                 <CheckboxField
                   label="Flash check"
                   helperText="Check if you are blinded"

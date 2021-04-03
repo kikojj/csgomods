@@ -16,9 +16,8 @@ bool c_client_cmd::execute(const char* command){
 		return false;
 	}
 
-	WriteProcessMemory(g_mem.process, LPVOID((DWORD)address + 15), command, strlen(command) + 1, NULL);
-	//g_mem.write(address + 15, command, strlen(command) + 1);
-	g_mem.createThread(address);
+	g_mem.write((DWORD)address + 15, *command, strlen(command) + 1);
+	g_mem.create_thread(address);
 
 	return true;
 }

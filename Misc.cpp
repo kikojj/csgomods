@@ -7,18 +7,18 @@ void c_misc::radar_hack(){
 		return;
 	}
 
-	if (g_engine.client_state->state() != en_client_states::InGame || g_engine.client_state->delta_tick() == -1) {
+	if (g_engine.client_state->delta_tick() == -1 || g_engine.client_state->state() != en_client_states::InGame) {
 		return;
 	}
 
-	for (const auto& entityObject : g_client.entity_list->players()) {
+	for (const auto& entityObject: g_client.entity_list->players()) {
 		c_base_player player(entityObject.first);
 
-		if (player.team_num() == g_client.local_player->team_num()) {
+		if (player.m_i_health() <= 0 || player.m_b_dormant()) {
 			continue;
 		}
 
-		if (player.m_i_health() <= 0) {
+		if (player.team_num() == g_client.local_player->team_num()) {
 			continue;
 		}
 
@@ -34,10 +34,10 @@ void c_misc::bhop() {
 	}
 
 	if (
-		g_engine.client_state->state() != en_client_states::InGame ||
-		g_client.local_player->m_i_health() <= 0 ||
-		g_client.local_player->team_num() == en_team_num::Invalid ||
 		g_engine.client_state->delta_tick() == -1 ||
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_client.local_player->m_b_dormant() <= 0 ||
+		g_client.local_player->m_i_health() <= 0 ||
 		!c_helpers::is_mouse_active()
 		) {
 		return;
@@ -71,10 +71,10 @@ void c_misc::auto_pistols(){
 	}
 
 	if (
-		g_engine.client_state->state() != en_client_states::InGame ||
-		g_client.local_player->m_i_health() <= 0 ||
-		g_client.local_player->team_num() == en_team_num::Invalid ||
 		g_engine.client_state->delta_tick() == -1 ||
+		g_engine.client_state->state() != en_client_states::InGame ||
+		g_client.local_player->m_b_dormant() ||
+		g_client.local_player->m_i_health() <= 0 ||
 		!c_helpers::is_mouse_active()
 		) {
 		reset_settings();
@@ -86,10 +86,9 @@ void c_misc::auto_pistols(){
 		return;
 	}
 
-	int activeWeaponID = g_client.local_player->m_h_active_weapon() & 0xfff;
-	c_base_weapon activeWeapon(g_client.entity_list->get_by_id(activeWeaponID - 1));
+	c_base_weapon active_weapon(g_client.local_player->active_weapon());
 
-	if (activeWeapon.is_pistol() && activeWeapon.item_di() != c_item::en_defenition_index::WeaponR8Revolver && activeWeapon.item_di() != c_item::en_defenition_index::WeaponCZ75Auto) {
+	if (active_weapon.is_pistol() && active_weapon.item_di() != c_item::en_defenition_index::WeaponR8Revolver && active_weapon.item_di() != c_item::en_defenition_index::WeaponCZ75Auto) {
 		if (!should_shoot) {
 			last_press_time = std::chrono::high_resolution_clock::now();
 			should_shoot = true;
@@ -97,7 +96,7 @@ void c_misc::auto_pistols(){
 		else {
 			if (
 				std::chrono::duration_cast<std::chrono::duration<double>>(std::chrono::high_resolution_clock::now() - last_press_time).count() >
-				(double)((double)c_settings::misc_auto_pistols_delay / (double)1000)
+				((double)c_settings::misc_auto_pistols_delay / (double)1000)
 				) {
 				reset_settings();
 			}
@@ -114,10 +113,10 @@ void c_misc::anti_flash(){
 	}
 
 	if (
+		g_engine.client_state->delta_tick() == -1 ||
 		g_engine.client_state->state() != en_client_states::InGame ||
-		g_client.local_player->m_i_health() <= 0 ||
-		g_client.local_player->team_num() == en_team_num::Invalid ||
-		g_engine.client_state->delta_tick() == -1
+		g_client.local_player->m_b_dormant() ||
+		g_client.local_player->m_i_health() <= 0
 		) {
 		return;
 	}
@@ -151,7 +150,7 @@ void c_misc::auto_accept(){
 		}
 		else if (!accepted){
 			accepted = true;
-			g_mem.createThread(g_client.confirm_match());
+			g_mem.create_thread(g_client.confirm_match());
 			std::cout << "[AUTO ACCEPT]: Math was found. Tried to accept the match." << std::endl;
 		}
 	}

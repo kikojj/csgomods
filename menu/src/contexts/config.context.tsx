@@ -20,15 +20,15 @@ const Config = () => {
   }, []);
 
   const loadConfig = React.useCallback((fileName: string) => {
-    socket.send(LOAD_CONFIG, { fileName });
+    socket.send(LOAD_CONFIG, { file_name: fileName });
   }, []);
 
   const saveConfig = React.useCallback((fileName: string) => {
-    socket.send(SAVE_CONFIG, { fileName: fileName.split(".")[0] });
+    socket.send(SAVE_CONFIG, { file_name: fileName.split(".")[0] });
   }, []);
 
   const deleteConfig = React.useCallback((fileName: string) => {
-    socket.send(DELETE_CONFIG, { fileName });
+    socket.send(DELETE_CONFIG, { file_name: fileName });
   }, []);
 
   return {

@@ -4,20 +4,20 @@ export const GET_RADAR_DATA = "get_radar_data";
 
 export interface IRadarData {
   name: string;
-  userID: number;
-  teamNum: TeamNum;
-  isFakePlayer: boolean;
+  user_id: number;
+  team_num: TeamNum;
+  is_fake_player: boolean;
 
   ping: number;
   money: number;
   kills: number;
   assists: number;
   deaths: number;
-  MVPs: number;
+  mvps: number;
   score: number;
 
-  competitiveRanking: number;
-  competitiveWins: number;
+  competitive_ranking: number;
+  competitive_wins: number;
 
   x: number;
   y: number;
