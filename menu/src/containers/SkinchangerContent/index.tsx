@@ -36,7 +36,7 @@ export const SkinchangerContent: React.FC = () => {
       setActiveWeapon(new Weapon({ itemDI: gameActiveWeapon.itemDI }));
 
       if (gameActiveWeapon.isKnife()) {
-        if (gameActiveTeam === TeamNum.TERRORIST || gameActiveTeam === TeamNum.COUNTER_TERRORIST) {
+        if (gameActiveTeam === TeamNum.Terrorist || gameActiveTeam === TeamNum.CounterTerrorist) {
           setActiveTeam(gameActiveTeam);
         }
       } else {

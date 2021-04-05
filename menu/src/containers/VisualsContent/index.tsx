@@ -4,6 +4,8 @@ import { SettingsContext } from "@contexts";
 import { Group, CheckboxField, FiltersField, SelectField, SelectItem, ColorPickerField } from "@components";
 
 import { useStyles } from "./styles";
+import { GlowStyle } from "./GlowStyle";
+import { GlowMode } from "./GlowMode";
 
 export const VisualsContent: React.FC = () => {
   const classes = useStyles();
@@ -11,68 +13,68 @@ export const VisualsContent: React.FC = () => {
   const { settings, updateValue } = React.useContext(SettingsContext);
 
   const glowFilters: string[] = [];
-  if (settings.visuals_glow_esp_show_friends) {
+  if (settings.visuals_glow_esp_friends.enable) {
     glowFilters.push("Teammates");
   }
-  if (settings.visuals_glow_esp_show_enemies) {
+  if (settings.visuals_glow_esp_enemies.enable) {
     glowFilters.push("Enemies");
   }
-  if (settings.visuals_glow_esp_show_c4) {
+  if (settings.visuals_glow_esp_c4.enable) {
     glowFilters.push("C4");
   }
-  if (settings.visuals_glow_esp_show_defusing) {
+  if (settings.visuals_glow_esp_defusing.enable) {
     glowFilters.push("Defusing");
   }
-  if (settings.visuals_glow_esp_show_grenades) {
+  if (settings.visuals_glow_esp_grenades.enable) {
     glowFilters.push("Grenades");
   }
 
   function changeGlowFiltersHandler(v: string[]) {
     if (!glowFilters.includes("Teammates") && v.includes("Teammates")) {
-      updateValue("visuals_glow_esp_show_friends", true);
+      updateValue("visuals_glow_esp_friends", { ...settings.visuals_glow_esp_friends, enable: true });
     } else if (glowFilters.includes("Teammates") && !v.includes("Teammates")) {
-      updateValue("visuals_glow_esp_show_friends", false);
+      updateValue("visuals_glow_esp_friends", { ...settings.visuals_glow_esp_friends, enable: false });
     }
     if (!glowFilters.includes("Enemies") && v.includes("Enemies")) {
-      updateValue("visuals_glow_esp_show_enemies", true);
+      updateValue("visuals_glow_esp_enemies", { ...settings.visuals_glow_esp_enemies, enable: true });
     } else if (glowFilters.includes("Enemies") && !v.includes("Enemies")) {
-      updateValue("visuals_glow_esp_show_enemies", false);
+      updateValue("visuals_glow_esp_enemies", { ...settings.visuals_glow_esp_enemies, enable: false });
     }
     if (!glowFilters.includes("C4") && v.includes("C4")) {
-      updateValue("visuals_glow_esp_show_c4", true);
+      updateValue("visuals_glow_esp_c4", { ...settings.visuals_glow_esp_c4, enable: true });
     } else if (glowFilters.includes("C4") && !v.includes("C4")) {
-      updateValue("visuals_glow_esp_show_c4", false);
+      updateValue("visuals_glow_esp_c4", { ...settings.visuals_glow_esp_c4, enable: false });
     }
     if (!glowFilters.includes("Defusing") && v.includes("Defusing")) {
-      updateValue("visuals_glow_esp_show_defusing", true);
+      updateValue("visuals_glow_esp_defusing", { ...settings.visuals_glow_esp_defusing, enable: true });
     } else if (glowFilters.includes("Defusing") && !v.includes("Defusing")) {
-      updateValue("visuals_glow_esp_show_defusing", false);
+      updateValue("visuals_glow_esp_defusing", { ...settings.visuals_glow_esp_defusing, enable: false });
     }
     if (!glowFilters.includes("Grenades") && v.includes("Grenades")) {
-      updateValue("visuals_glow_esp_show_grenades", true);
+      updateValue("visuals_glow_esp_grenades", { ...settings.visuals_glow_esp_grenades, enable: true });
     } else if (glowFilters.includes("Grenades") && !v.includes("Grenades")) {
-      updateValue("visuals_glow_esp_show_grenades", false);
+      updateValue("visuals_glow_esp_grenades", { ...settings.visuals_glow_esp_grenades, enable: false });
     }
   }
 
   const chamsFilters: string[] = [];
-  if (settings.visuals_chams_show_friends) {
+  if (settings.visuals_chams_friends.enable) {
     chamsFilters.push("Teammates");
   }
-  if (settings.visuals_chams_show_enemies) {
+  if (settings.visuals_chams_enemies.enable) {
     chamsFilters.push("Enemies");
   }
 
   function changeChamsFiltersHandler(v: string[]) {
     if (!chamsFilters.includes("Teammates") && v.includes("Teammates")) {
-      updateValue("visuals_chams_show_friends", true);
+      updateValue("visuals_chams_friends", { ...settings.visuals_chams_friends, enable: true });
     } else if (chamsFilters.includes("Teammates") && !v.includes("Teammates")) {
-      updateValue("visuals_chams_show_friends", false);
+      updateValue("visuals_chams_friends", { ...settings.visuals_chams_friends, enable: false });
     }
     if (!chamsFilters.includes("Enemies") && v.includes("Enemies")) {
-      updateValue("visuals_chams_show_enemies", true);
+      updateValue("visuals_chams_enemies", { ...settings.visuals_chams_enemies, enable: true });
     } else if (chamsFilters.includes("Enemies") && !v.includes("Enemies")) {
-      updateValue("visuals_chams_show_enemies", false);
+      updateValue("visuals_chams_enemies", { ...settings.visuals_chams_enemies, enable: false });
     }
   }
 
@@ -94,118 +96,192 @@ export const VisualsContent: React.FC = () => {
                 values={glowFilters}
                 onChange={changeGlowFiltersHandler}
               />
-              <SelectField
-                placeholder="Style"
-                helperText={
-                  settings.visuals_glow_esp_style === 0
-                    ? "Outline full body(works through the walls)"
-                    : settings.visuals_glow_esp_style === 1
-                    ? "All body contours and flicker of glow"
-                    : settings.visuals_glow_esp_style === 2
-                    ? "All body contours"
-                    : "Flicker of glow"
-                }
-                value={settings.visuals_glow_esp_style.toString()}
-                onChange={(v) => updateValue("visuals_glow_esp_style", +v)}
-              >
-                <SelectItem value="0">Full body</SelectItem>
-                <SelectItem value="2">Inline</SelectItem>
-                <SelectItem value="3">Flicker</SelectItem>
-                <SelectItem value="1">Inline flicker</SelectItem>
-              </SelectField>
-              <SelectField
-                placeholder="Mode"
-                helperText={settings.visuals_glow_esp_mode === 0 ? "Use color for glow" : "Show health in color"}
-                value={settings.visuals_glow_esp_mode.toString()}
-                onChange={(v) => updateValue("visuals_glow_esp_mode", +v)}
-              >
-                <SelectItem value="0">Color</SelectItem>
-                <SelectItem value="1">HP based</SelectItem>
-              </SelectField>
             </React.Fragment>
           ) : (
             ""
           )}
         </Group>
-        {settings.visuals_glow_esp_enable &&
-        (settings.visuals_glow_esp_show_enemies ||
-          settings.visuals_glow_esp_show_friends ||
-          settings.visuals_glow_esp_show_c4 ||
-          settings.visuals_glow_esp_show_defusing ||
-          settings.visuals_glow_esp_show_grenades) ? (
-          <React.Fragment>
-            <Group marginTop={35} label="Glow colors">
-              {settings.visuals_glow_esp_mode === 0 ? (
-                <React.Fragment>
-                  {settings.visuals_glow_esp_show_friends ? (
-                    <ColorPickerField
-                      label="Teammates"
-                      color={settings.visuals_glow_esp_friends_color}
-                      onChnage={(c) => updateValue("visuals_glow_esp_friends_color", c)}
-                    />
-                  ) : (
-                    ""
-                  )}
-                  {settings.visuals_glow_esp_show_enemies ? (
-                    <React.Fragment>
-                      <ColorPickerField
-                        label="Enemies visible"
-                        color={settings.visuals_glow_esp_enemy_visible_color}
-                        onChnage={(c) => updateValue("visuals_glow_esp_enemy_visible_color", c)}
-                      />
-                      <ColorPickerField
-                        label="Enemies invisible"
-                        color={settings.visuals_glow_esp_enemy_invisible_color}
-                        onChnage={(c) => updateValue("visuals_glow_esp_enemy_invisible_color", c)}
-                      />
-                    </React.Fragment>
-                  ) : (
-                    ""
-                  )}
-                </React.Fragment>
-              ) : (
-                <React.Fragment>
-                  <ColorPickerField
-                    label="0 hp"
-                    color={settings.visuals_glow_esp_hp_based_0hp_color}
-                    onChnage={(c) => updateValue("visuals_glow_esp_hp_based_0hp_color", c)}
-                  />
-                  <ColorPickerField
-                    label="100 hp"
-                    color={settings.visuals_glow_esp_hp_based_100hp_color}
-                    onChnage={(c) => updateValue("visuals_glow_esp_hp_based_100hp_color", c)}
-                  />
-                </React.Fragment>
-              )}
-              {settings.visuals_glow_esp_show_c4 ? (
+        {settings.visuals_glow_esp_enable && settings.visuals_glow_esp_friends.enable ? (
+          <Group marginTop={35} label="Teammates">
+            <GlowStyle
+              value={settings.visuals_glow_esp_friends.style.toString()}
+              onChange={(v) =>
+                updateValue("visuals_glow_esp_friends", { ...settings.visuals_glow_esp_friends, style: +v })
+              }
+            />
+            <GlowMode
+              value={settings.visuals_glow_esp_friends.mode.toString()}
+              onChange={(v) =>
+                updateValue("visuals_glow_esp_friends", { ...settings.visuals_glow_esp_friends, mode: +v })
+              }
+            />
+            {settings.visuals_glow_esp_friends.mode === 0 ? (
+              <React.Fragment key={0}>
                 <ColorPickerField
-                  label="C4"
-                  color={settings.visuals_glow_esp_c4_color}
-                  onChnage={(c) => updateValue("visuals_glow_esp_c4_color", c)}
+                  label="Color"
+                  color={settings.visuals_glow_esp_friends.visible_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_friends", {
+                      ...settings.visuals_glow_esp_friends,
+                      visible_color: v,
+                    })
+                  }
                 />
-              ) : (
-                ""
-              )}
-              {settings.visuals_glow_esp_show_defusing ? (
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={1}>
                 <ColorPickerField
-                  label="Defusing"
-                  color={settings.visuals_glow_esp_defusing_color}
-                  onChnage={(c) => updateValue("visuals_glow_esp_defusing_color", c)}
+                  label="0hp color"
+                  color={settings.visuals_glow_esp_friends.hp_based_0hp_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_friends", {
+                      ...settings.visuals_glow_esp_friends,
+                      hp_based_0hp_color: v,
+                    })
+                  }
                 />
-              ) : (
-                ""
-              )}
-              {settings.visuals_glow_esp_show_grenades ? (
                 <ColorPickerField
-                  label="Grenades"
-                  color={settings.visuals_glow_esp_grenades_color}
-                  onChnage={(c) => updateValue("visuals_glow_esp_grenades_color", c)}
+                  label="100hp color"
+                  color={settings.visuals_glow_esp_friends.hp_based_100hp_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_friends", {
+                      ...settings.visuals_glow_esp_friends,
+                      hp_based_100hp_color: v,
+                    })
+                  }
                 />
-              ) : (
-                ""
-              )}
-            </Group>
-          </React.Fragment>
+              </React.Fragment>
+            )}
+          </Group>
+        ) : (
+          ""
+        )}
+        {settings.visuals_glow_esp_enable && settings.visuals_glow_esp_enemies.enable ? (
+          <Group marginTop={35} label="Enemies">
+            <GlowStyle
+              value={settings.visuals_glow_esp_enemies.style.toString()}
+              onChange={(v) =>
+                updateValue("visuals_glow_esp_enemies", { ...settings.visuals_glow_esp_enemies, style: +v })
+              }
+            />
+            <GlowMode
+              value={settings.visuals_glow_esp_enemies.mode.toString()}
+              onChange={(v) =>
+                updateValue("visuals_glow_esp_enemies", { ...settings.visuals_glow_esp_enemies, mode: +v })
+              }
+            />
+            {settings.visuals_glow_esp_enemies.mode === 0 ? (
+              <React.Fragment key={0}>
+                <ColorPickerField
+                  label="Visible color"
+                  color={settings.visuals_glow_esp_enemies.visible_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_enemies", {
+                      ...settings.visuals_glow_esp_enemies,
+                      visible_color: v,
+                    })
+                  }
+                />
+                <ColorPickerField
+                  label="Invisible color"
+                  color={settings.visuals_glow_esp_enemies.invisible_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_enemies", {
+                      ...settings.visuals_glow_esp_enemies,
+                      invisible_color: v,
+                    })
+                  }
+                />
+              </React.Fragment>
+            ) : (
+              <React.Fragment key={1}>
+                <ColorPickerField
+                  label="0hp color"
+                  color={settings.visuals_glow_esp_enemies.hp_based_0hp_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_enemies", {
+                      ...settings.visuals_glow_esp_enemies,
+                      hp_based_0hp_color: v,
+                    })
+                  }
+                />
+                <ColorPickerField
+                  label="100hp color"
+                  color={settings.visuals_glow_esp_enemies.hp_based_100hp_color}
+                  onChnage={(v) =>
+                    updateValue("visuals_glow_esp_enemies", {
+                      ...settings.visuals_glow_esp_enemies,
+                      hp_based_100hp_color: v,
+                    })
+                  }
+                />
+              </React.Fragment>
+            )}
+          </Group>
+        ) : (
+          ""
+        )}
+        {settings.visuals_glow_esp_enable && settings.visuals_glow_esp_c4.enable ? (
+          <Group marginTop={35} label="C4">
+            <GlowStyle
+              value={settings.visuals_glow_esp_c4.style.toString()}
+              onChange={(v) => updateValue("visuals_glow_esp_c4", { ...settings.visuals_glow_esp_c4, style: +v })}
+            />
+            <ColorPickerField
+              label="Color"
+              color={settings.visuals_glow_esp_c4.visible_color}
+              onChnage={(v) =>
+                updateValue("visuals_glow_esp_c4", {
+                  ...settings.visuals_glow_esp_c4,
+                  visible_color: v,
+                })
+              }
+            />
+          </Group>
+        ) : (
+          ""
+        )}
+        {settings.visuals_glow_esp_enable && settings.visuals_glow_esp_defusing.enable ? (
+          <Group marginTop={35} label="Defusing">
+            <GlowStyle
+              value={settings.visuals_glow_esp_defusing.style.toString()}
+              onChange={(v) =>
+                updateValue("visuals_glow_esp_defusing", { ...settings.visuals_glow_esp_defusing, style: +v })
+              }
+            />
+            <ColorPickerField
+              label="Color"
+              color={settings.visuals_glow_esp_defusing.visible_color}
+              onChnage={(v) =>
+                updateValue("visuals_glow_esp_defusing", {
+                  ...settings.visuals_glow_esp_defusing,
+                  visible_color: v,
+                })
+              }
+            />
+          </Group>
+        ) : (
+          ""
+        )}
+        {settings.visuals_glow_esp_enable && settings.visuals_glow_esp_grenades.enable ? (
+          <Group marginTop={35} label="Grenades">
+            <GlowStyle
+              value={settings.visuals_glow_esp_grenades.style.toString()}
+              onChange={(v) =>
+                updateValue("visuals_glow_esp_grenades", { ...settings.visuals_glow_esp_grenades, style: +v })
+              }
+            />
+            <ColorPickerField
+              label="Color"
+              color={settings.visuals_glow_esp_grenades.visible_color}
+              onChnage={(v) =>
+                updateValue("visuals_glow_esp_grenades", {
+                  ...settings.visuals_glow_esp_grenades,
+                  visible_color: v,
+                })
+              }
+            />
+          </Group>
         ) : (
           ""
         )}
@@ -229,32 +305,35 @@ export const VisualsContent: React.FC = () => {
             ""
           )}
         </Group>
-        {settings.visuals_chams_enable &&
-        (settings.visuals_chams_show_enemies || settings.visuals_chams_show_friends) ? (
-          <React.Fragment>
-            <Group marginTop={35} marginLeft={35} label="Chams colors">
-              {settings.visuals_chams_show_friends ? (
-                <ColorPickerField
-                  label="Teammates"
-                  color={settings.visuals_chams_friends_color}
-                  onChnage={(c) => updateValue("visuals_chams_friends_color", c)}
-                />
-              ) : (
-                ""
-              )}
-              {settings.visuals_chams_show_enemies ? (
-                <React.Fragment>
-                  <ColorPickerField
-                    label="Enemies"
-                    color={settings.visuals_chams_enemy_color}
-                    onChnage={(c) => updateValue("visuals_chams_enemy_color", c)}
-                  />
-                </React.Fragment>
-              ) : (
-                ""
-              )}
-            </Group>
-          </React.Fragment>
+        {settings.visuals_chams_enable && settings.visuals_chams_friends.enable ? (
+          <Group marginTop={35} marginLeft={35} label="Teammates">
+            <ColorPickerField
+              label="Color"
+              color={settings.visuals_chams_friends.color}
+              onChnage={(v) =>
+                updateValue("visuals_chams_friends", {
+                  ...settings.visuals_chams_friends,
+                  color: v,
+                })
+              }
+            />
+          </Group>
+        ) : (
+          ""
+        )}
+        {settings.visuals_chams_enable && settings.visuals_chams_enemies.enable ? (
+          <Group marginTop={35} marginLeft={35} label="Enemies">
+            <ColorPickerField
+              label="Color"
+              color={settings.visuals_chams_enemies.color}
+              onChnage={(v) =>
+                updateValue("visuals_chams_enemies", {
+                  ...settings.visuals_chams_enemies,
+                  color: v,
+                })
+              }
+            />
+          </Group>
         ) : (
           ""
         )}

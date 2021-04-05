@@ -29,25 +29,25 @@ public:
 
 //props
 public:
-	PROP(bool,					m_b_in_reload,							get())
+	PROP(bool,					m_b_in_reload,							get());
 
-	PROP(short,					m_i_item_definition_index,	get())
-	PROP(int,						m_i_clip1,									get())	//the number of remaining bullets in the clip
-	PROP(int,						m_original_owner_xuid_low,	get())
-	PROP(int,						m_n_fallback_seed,					get())
-	PROP(int,						m_n_fallback_stat_trak,			get())
-	PROP(int,						m_i_account_id,							get())
-	PROP(int,						m_i_item_id_high,						get())
-	PROP(int,						m_h_weapon_world_model,			get())
-	PROP(int,						m_i_entity_quality,					get())
-	PROP(unsigned long, m_i_view_model_index,				get())
-	PROP(unsigned long, m_n_model_index,						get())
-	PROP(unsigned long, m_n_fallback_paint_kit,			get())
+	PROP(short,					m_i_item_definition_index,	get());
+	PROP(int,						m_i_clip1,									get());	//the number of remaining bullets in the clip
+	PROP(int,						m_original_owner_xuid_low,	get());
+	PROP(int,						m_n_fallback_seed,					get());
+	PROP(int,						m_n_fallback_stat_trak,			get());
+	PROP(int,						m_i_account_id,							get());
+	PROP(int,						m_i_item_id_high,						get());
+	PROP(int,						m_h_weapon_world_model,			get());
+	PROP(int,						m_i_entity_quality,					get());
+	PROP(unsigned long, m_i_view_model_index,				get());
+	PROP(unsigned long, m_n_model_index,						get());
+	PROP(unsigned long, m_n_fallback_paint_kit,			get());
 
-	PROP(float,					m_f_fallback_wear,					get())
-	PROP(float,					m_f_next_primary_attack,		get())	//next weapon attack in ticks
+	PROP(float,					m_f_fallback_wear,					get());
+	PROP(float,					m_f_next_primary_attack,		get());	//next weapon attack in ticks
 
-	PROP(std::string,		m_sz_custom_name,						get())
+	PROP(std::string,		m_sz_custom_name,						get());
 
 //methods
 public:
@@ -60,7 +60,7 @@ public:
 		return (en_entity_quality)entity_quality;
 	}
 	void entity_quality(en_entity_quality value) {
-		m_i_entity_quality((int)value);
+		m_i_entity_quality = (int)value;
 	}
 	c_item::en_defenition_index item_di() {
 		auto di = m_i_item_definition_index();
@@ -71,7 +71,7 @@ public:
 		return (c_item::en_defenition_index)di;
 	}
 	void item_di(c_item::en_defenition_index value) {
-		m_i_item_definition_index((int)value);
+		m_i_item_definition_index = (int)value;
 	}
 
 	bool is_pistol() {

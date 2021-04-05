@@ -20,7 +20,7 @@ const Data = () => {
   const socket = React.useContext(SocketContext);
 
   const [activeWeapon, setActiveWeapon] = React.useState<Weapon>(new Weapon());
-  const [team, setTeam] = React.useState<TeamNum>(TeamNum.NO_TEAM);
+  const [team, setTeam] = React.useState<TeamNum>(TeamNum.Invalid);
   const [skins, setSkins] = React.useState<Skin[]>([]);
   const [defaultSkins, setDefaultSkins] = React.useState<TGetAllSkinsResponse["message"]["default"]>({});
   const [radarData, setRadarData] = React.useState<IRadarData[]>([]);
@@ -108,7 +108,7 @@ const defaultValue: ReturnType<typeof Data> = {
   skins: [],
   getAllSkins: () => 0,
   defaultSkins: {},
-  team: TeamNum.NO_TEAM,
+  team: TeamNum.Invalid,
   getTeam: () => 0,
   radarData: [],
 };

@@ -17,7 +17,7 @@ void c_menu_server::close_menu(websocketpp::connection_hdl){
 }
 
 void c_menu_server::get_all_settings(websocketpp::connection_hdl hdl){
-  send_message(hdl, WEBSOCKET_GET_ALL_SETTINGS, c_settings::to_jsonxx_object());
+  send_message(hdl, WEBSOCKET_GET_ALL_SETTINGS, c_settings::to_jsonxx_object(false));
 }
 
 void c_menu_server::get_configs_list(websocketpp::connection_hdl hdl){
@@ -108,7 +108,7 @@ void c_menu_server::get_map_name(std::string name){
 
 void c_menu_server::update_settings(websocketpp::connection_hdl hdl, jsonxx::Object message){
   for (auto prop : message.kv_map()) {
-    c_settings::set_value(prop.first, prop.second);
+    c_settings::set_value(prop.first, prop.second, false);
   }
 }
 
@@ -180,17 +180,17 @@ void c_menu_server::on_message(websocketpp::connection_hdl hdl, t_server::messag
           update_settings(hdl, message);
           return;
         }
-        else if (type == WEBSOCKET_LOAD_CONFIG && message.has<jsonxx::String>("fileName")) {
+        else if (type == WEBSOCKET_LOAD_CONFIG && message.has<jsonxx::String>("file_name")) {
           load_config(hdl, message);
           get_all_settings(hdl);
           return;
         }
-        else if (type == WEBSOCKET_SAVE_CONFIG && message.has<jsonxx::String>("fileName")) {
+        else if (type == WEBSOCKET_SAVE_CONFIG && message.has<jsonxx::String>("file_name")) {
           save_config(hdl, message);
           get_configs_list(hdl);
           return;
         }
-        else if (type == WEBSOCKET_DELETE_CONFIG && message.has<jsonxx::String>("fileName")) {
+        else if (type == WEBSOCKET_DELETE_CONFIG && message.has<jsonxx::String>("file_name")) {
           delete_config(hdl, message);
           get_configs_list(hdl);
           return;

@@ -14,9 +14,9 @@
 
 class c_visuals {
 private:
-	void draw_entity(c_glow_object_manager::t_glow_object, s_color_rgba, en_glow_style);
+	void draw_entity(c_glow_object_manager::t_glow_object, s_color_rgba, en_glow_style&);
 	void reset_render(c_base_player&);
-	s_color_rgba get_hp_based_color(c_base_player&);
+	s_color_rgba get_hp_based_color(c_base_player&, c_settings::s_glow_esp_settings&);
 
 public:
 	c_visuals();

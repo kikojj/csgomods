@@ -3,17 +3,18 @@ import { SelectField, SelectItem } from "@components";
 import { EntityQuality } from "@utils";
 
 const qualities: { [T in EntityQuality]: string } = {
-  [EntityQuality.QUALITY_NORMAL]: "Default",
-  [EntityQuality.QUALITY_GENUINE]: "Genuine",
-  [EntityQuality.QUALITY_VINTAGE]: "Vintage",
-  [EntityQuality.QUALITY_UNUSUAL]: "Unusual",
-  [EntityQuality.QUALITY_COMMUNITY]: "Community",
-  [EntityQuality.QUALITY_DEVELOPER]: "Developer",
-  [EntityQuality.QUALITY_SELF_MADE]: "Self made",
-  [EntityQuality.QUALITY_CUSTOMIZED]: "Customized",
-  [EntityQuality.QUALITY_STRANGE]: "Strange",
-  [EntityQuality.QUALITY_COMPLETED]: "Completed",
-  [EntityQuality.QUALITY_TOURNAMENT]: "Tournament",
+  [EntityQuality.Invalid]: "Invalid",
+  [EntityQuality.Normal]: "Default",
+  [EntityQuality.Genuine]: "Genuine",
+  [EntityQuality.Vintage]: "Vintage",
+  [EntityQuality.Unusual]: "Unusual",
+  [EntityQuality.Community]: "Community",
+  [EntityQuality.Developer]: "Developer",
+  [EntityQuality.SelftMade]: "Self made",
+  [EntityQuality.Customized]: "Customized",
+  [EntityQuality.Strange]: "Strange",
+  [EntityQuality.Completed]: "Completed",
+  [EntityQuality.Tournament]: "Tournament",
 };
 
 export type QualitySelectProps = {

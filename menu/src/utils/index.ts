@@ -9,6 +9,12 @@ export {
   EntityQuality,
   IAimbotSettings,
   DEFAULT_AIMBOT_SETTINGS,
+  DEFAULT_CHAMS_SETTINGS,
+  DEFAULT_GLOW_ESP_SETTINGS,
+  IChamsSettings,
+  IGlowESPSettings,
+  IPersonalSettings,
+  DEFAULT_PERSONAL_SETTINGS,
 } from "./settings";
 export { TMargin } from "./margin";
 export { ActiveTab } from "./activeTab";

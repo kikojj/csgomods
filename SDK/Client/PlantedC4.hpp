@@ -24,10 +24,10 @@ public:
 
 //props
 public:
-		PROP(int,		m_n_bomb_site,					get())
+		PROP(int,		m_n_bomb_site,					get());
 
-		PROP(float, m_f_c4_blow,						get())
-		PROP(float, m_f_timer_length,				get())
-		PROP(float, m_f_defuse_length,			get())
-		PROP(float, m_f_defuse_count_down,	get())
+		PROP(float, m_f_c4_blow,						get());
+		PROP(float, m_f_timer_length,				get());
+		PROP(float, m_f_defuse_length,			get());
+		PROP(float, m_f_defuse_count_down,	get());
 };

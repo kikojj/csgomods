@@ -7,9 +7,9 @@ void c_helpers::shoot() {
 }
 
 void c_helpers::jump(){
-	g_client.dw_force_jump(en_key_event::KeyDown);
+	g_client.dw_force_jump = en_key_event::KeyDown;
 	Sleep(10);
-	g_client.dw_force_jump(en_key_event::KeyUp);
+	g_client.dw_force_jump = en_key_event::KeyUp;
 }
 
 void c_helpers::keyboard_press_key(int key){
@@ -140,5 +140,5 @@ void c_helpers::update_model_indexes(){
 }
 
 void c_helpers::full_force_update(){
-	g_engine.client_state->delta_tick(-1);
+	g_engine.client_state->delta_tick = -1;
 }

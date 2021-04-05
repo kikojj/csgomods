@@ -34,7 +34,7 @@ export const SkinSelect: React.FC<SkinSelectProps> = ({ activeTeam, activeWeapon
 
   function applyPaintKit(paintKit: number) {
     if (activeWeapon.isKnife()) {
-      if (activeTeam && (activeTeam === TeamNum.TERRORIST || activeTeam === TeamNum.COUNTER_TERRORIST)) {
+      if (activeTeam && (activeTeam === TeamNum.Terrorist || activeTeam === TeamNum.CounterTerrorist)) {
         setSettings({
           ...settings,
           skinchanger_knives: {

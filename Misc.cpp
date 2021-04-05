@@ -23,7 +23,7 @@ void c_misc::radar_hack(){
 		}
 
 		if (!player.m_b_spotted()) {
-			player.m_b_spotted(true);
+			player.m_b_spotted = true;
 		}
 	}
 }
@@ -36,7 +36,7 @@ void c_misc::bhop() {
 	if (
 		g_engine.client_state->delta_tick() == -1 ||
 		g_engine.client_state->state() != en_client_states::InGame ||
-		g_client.local_player->m_b_dormant() <= 0 ||
+		g_client.local_player->m_b_dormant() ||
 		g_client.local_player->m_i_health() <= 0 ||
 		!c_helpers::is_mouse_active()
 		) {
@@ -52,10 +52,10 @@ void c_misc::bhop() {
 	}
 
 	if (c_flags_state::is_on_ground(g_client.local_player->m_f_flags())) {
-		g_client.dw_force_jump(en_key_event::KeyDown);
+		g_client.dw_force_jump = en_key_event::KeyDown;
 	}
 	else {
-		g_client.dw_force_jump(en_key_event::KeyUp);
+		g_client.dw_force_jump = en_key_event::KeyUp;
 	}
 }
 
@@ -122,7 +122,7 @@ void c_misc::anti_flash(){
 	}
 
 	if (g_client.local_player->m_f_flash_max_alpha() != c_settings::misc_anti_flash_max_alpha) {
-		g_client.local_player->m_f_flash_max_alpha((float)c_settings::misc_anti_flash_max_alpha);
+		g_client.local_player->m_f_flash_max_alpha = (float)c_settings::misc_anti_flash_max_alpha;
 	}
 }
 

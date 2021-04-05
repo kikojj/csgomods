@@ -35,7 +35,7 @@ export class Skin {
   collections: string[] = [];
   collectionsImage: string[] = [];
   weapon: Weapon = new Weapon();
-  weaponDI: ItemDefinitionIndex = ItemDefinitionIndex.INVALID_ITEM_DI;
+  weaponDI: ItemDefinitionIndex = ItemDefinitionIndex.Invalid;
   name: string = "";
   paintKit: number = 0;
   image: string = "";
@@ -118,7 +118,7 @@ export const SKIN: TSkin = {
   collections: [],
   collectionsImage: [],
   weapon: "",
-  weaponDI: ItemDefinitionIndex.INVALID_ITEM_DI,
+  weaponDI: ItemDefinitionIndex.Invalid,
   name: "",
   paintKit: -1,
   image: "",

@@ -4,8 +4,7 @@ import { SocketContext } from "@contexts";
 import { Menu as CMenu } from "@components";
 
 import { ActiveTab } from "@utils";
-import { SERVER_PORT } from "@utils/constants";
-import { AimbotIcon, ConfigsIcon, MiscellaneousIcon, SkinchangerIcon, VisualsIcon, PlayersIcon } from "./images";
+import * as icons from "./images";
 
 export type MenuProps = {
   activeTab: ActiveTab;
@@ -20,49 +19,49 @@ export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => {
         {
           title: "Visuals",
           subtitle: "Glow ESP, Chams",
-          iconUrl: VisualsIcon,
+          iconUrl: icons.VisualsIcon,
           active: activeTab === ActiveTab.TAB_VISUALS,
           onClick: () => setActiveTab(ActiveTab.TAB_VISUALS),
         },
         {
           title: "Aimbot",
           subtitle: "Legit, Weapon settings, Recoil control",
-          iconUrl: AimbotIcon,
+          iconUrl: icons.MouseIcon,
           active: activeTab === ActiveTab.TAB_AIMBOT,
           onClick: () => setActiveTab(ActiveTab.TAB_AIMBOT),
         },
         {
           title: "Triggerbot",
           subtitle: "Triggerbot, Weapon settings",
-          iconUrl: AimbotIcon,
+          iconUrl: icons.AimIcon,
           active: activeTab === ActiveTab.TAB_TRIGGER,
           onClick: () => setActiveTab(ActiveTab.TAB_TRIGGER),
         },
         {
           title: "Skinchanger",
           subtitle: "Skins, knives",
-          iconUrl: SkinchangerIcon,
+          iconUrl: icons.SkinchangerIcon,
           active: activeTab === ActiveTab.TAB_SKINCHANGER,
           onClick: () => setActiveTab(ActiveTab.TAB_SKINCHANGER),
         },
         {
           title: "Miscellaneous",
           subtitle: "Bhop, Auto pistols, Auto accept, Rank reveal",
-          iconUrl: MiscellaneousIcon,
+          iconUrl: icons.MiscellaneousIcon,
           active: activeTab === ActiveTab.TAB_MISC,
           onClick: () => setActiveTab(ActiveTab.TAB_MISC),
         },
         {
           title: "Players List",
           subtitle: "Statistics, Ranks, Personal settings",
-          iconUrl: PlayersIcon,
+          iconUrl: icons.PlayersIcon,
           active: activeTab === ActiveTab.TAB_PLAYERSLIST,
           onClick: () => setActiveTab(ActiveTab.TAB_PLAYERSLIST),
         },
         {
           title: "Configs",
           subtitle: "Configs list",
-          iconUrl: ConfigsIcon,
+          iconUrl: icons.ConfigsIcon,
           active: activeTab === ActiveTab.TAB_CONFIG,
           onClick: () => setActiveTab(ActiveTab.TAB_CONFIG),
         },

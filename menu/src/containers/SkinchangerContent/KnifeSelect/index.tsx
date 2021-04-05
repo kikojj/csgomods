@@ -19,7 +19,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
   const { settings, setSettings } = React.useContext(SettingsContext);
   const { defaultSkins, skins, fullForceUpdate } = React.useContext(DataContext);
 
-  const knifes = [ItemDefinitionIndex.WEAPON_KnifeT, ItemDefinitionIndex.WEAPON_KnifeCT2];
+  const knifes = [ItemDefinitionIndex.WeaponKnifeT, ItemDefinitionIndex.WeaponKnifeCT2];
 
   const models = Object.keys(defaultSkins)
     .filter((k) => {
@@ -29,17 +29,17 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
       return (
         itemDI !== NaN &&
         weapon.isKnife() &&
-        weapon.itemDI !== ItemDefinitionIndex.WEAPON_KnifeCT2 &&
-        weapon.itemDI !== ItemDefinitionIndex.WEAPON_KnifeT &&
-        (activeTeam === TeamNum.TERRORIST
-          ? itemDI !== ItemDefinitionIndex.WEAPON_KnifeCT2
-          : itemDI !== ItemDefinitionIndex.WEAPON_KnifeT)
+        weapon.itemDI !== ItemDefinitionIndex.WeaponKnifeCT2 &&
+        weapon.itemDI !== ItemDefinitionIndex.WeaponKnifeT &&
+        (activeTeam === TeamNum.Terrorist
+          ? itemDI !== ItemDefinitionIndex.WeaponKnifeCT2
+          : itemDI !== ItemDefinitionIndex.WeaponKnifeT)
       );
     })
     .map((k) => parseInt(k));
 
   function applyModel(itemDI: ItemDefinitionIndex) {
-    if (activeTeam && (activeTeam === TeamNum.TERRORIST || activeTeam === TeamNum.COUNTER_TERRORIST)) {
+    if (activeTeam && (activeTeam === TeamNum.Terrorist || activeTeam === TeamNum.CounterTerrorist)) {
       setSettings({
         ...settings,
         skinchanger_knives: {
@@ -80,7 +80,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
 
                 const knifeSettings: ISkinchangerWeapon | undefined =
                   settings.skinchanger_knives[
-                    itemDI === ItemDefinitionIndex.WEAPON_KnifeT ? TeamNum.TERRORIST : TeamNum.COUNTER_TERRORIST
+                    itemDI === ItemDefinitionIndex.WeaponKnifeT ? TeamNum.Terrorist : TeamNum.CounterTerrorist
                   ];
 
                 if (knifeSettings) {
@@ -96,11 +96,11 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
                   <SkinchangerItem
                     key={key}
                     image={image}
-                    name={knife.itemDI === ItemDefinitionIndex.WEAPON_KnifeCT2 ? "Knife CT" : "Knife T"}
+                    name={knife.itemDI === ItemDefinitionIndex.WeaponKnifeCT2 ? "Knife CT" : "Knife T"}
                     rarity={SkinRarity.RARITY_ANCIENT}
                     onClick={() =>
                       setActiveTeam(
-                        itemDI === ItemDefinitionIndex.WEAPON_KnifeT ? TeamNum.TERRORIST : TeamNum.COUNTER_TERRORIST
+                        itemDI === ItemDefinitionIndex.WeaponKnifeT ? TeamNum.Terrorist : TeamNum.CounterTerrorist
                       )
                     }
                   />
@@ -109,7 +109,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
           </React.Fragment>
         ) : (
           [
-            activeTeam === TeamNum.TERRORIST ? ItemDefinitionIndex.WEAPON_KnifeT : ItemDefinitionIndex.WEAPON_KnifeCT2,
+            activeTeam === TeamNum.Terrorist ? ItemDefinitionIndex.WeaponKnifeT : ItemDefinitionIndex.WeaponKnifeCT2,
             ...models.sort((m1, m2) => (getWeaponName(m1) > getWeaponName(m2) ? 1 : -1)),
           ].map((itemDI, key) => {
             const model: Weapon = new Weapon({ itemDI });
@@ -118,8 +118,8 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
               <SkinchangerItem
                 key={key}
                 name={
-                  model.itemDI === ItemDefinitionIndex.WEAPON_KnifeT ||
-                  model.itemDI === ItemDefinitionIndex.WEAPON_KnifeCT2
+                  model.itemDI === ItemDefinitionIndex.WeaponKnifeT ||
+                  model.itemDI === ItemDefinitionIndex.WeaponKnifeCT2
                     ? "Default"
                     : model.name
                 }
@@ -127,8 +127,8 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
                 rarity={SkinRarity.RARITY_ANCIENT}
                 onClick={() => {
                   if (
-                    model.itemDI !== ItemDefinitionIndex.WEAPON_KnifeT &&
-                    model.itemDI !== ItemDefinitionIndex.WEAPON_KnifeCT2
+                    model.itemDI !== ItemDefinitionIndex.WeaponKnifeT &&
+                    model.itemDI !== ItemDefinitionIndex.WeaponKnifeCT2
                   ) {
                     setActiveWeapon(new Weapon({ itemDI: model.itemDI }));
                     applyModel(model.itemDI);

@@ -41,36 +41,36 @@ public:
 
 //props
 public:
-	PROP(bool,				m_b_dormant,							get())
-	PROP(bool,				m_b_spotted,							get())
-	PROP(bool,				m_b_has_defuser,					get())
-	PROP(bool,				m_b_is_defusing,					get())
-	PROP(bool,				m_b_is_scoped,						get())
-	PROP(bool,				m_b_has_helmet,						get())
+	PROP(bool,						m_b_dormant,					get());
+	PROP(bool,						m_b_spotted,					get());
+	PROP(bool,						m_b_has_defuser,			get());
+	PROP(bool,						m_b_is_defusing,			get());
+	PROP(bool,						m_b_is_scoped,				get());
+	PROP(bool,						m_b_has_helmet,				get());
 
-	PROP(int,					m_i_health,								get())
-	PROP(int,					m_armor_value,						get())
-	PROP(int,					m_i_team_num,							get())
-	PROP(int,					m_dw_bone_matrix,					get())	//player matrix of bones: [Bone] [x] [y] [z]
-	PROP(int,					m_h_active_weapon,				get())
-	PROP(int,					m_i_shots_fired,					get())	//how many bullets did player fired
-	PROP(int,					m_f_flags,								get())
-	PROP(int,					m_h_view_model,						get())
-	PROP(int,					m_i_observer_mode,				get())
-	PROP(int,					m_life_state,							get())
-	PROP(int,					m_b_spotted_by_mask,			get())
-	PROP(int,					m_n_tick_base,						get())
-	PROP(int,					m_i_account,							get())
+	PROP(int,							m_i_health,						get());
+	PROP(int,							m_armor_value,				get());
+	PROP(int,							m_i_team_num,					get());
+	PROP(int,							m_dw_bone_matrix,			get());	//player matrix of bones: [Bone] [x] [y] [z]
+	PROP(int,							m_h_active_weapon,		get());
+	PROP(int,							m_i_shots_fired,			get());	//how many bullets did player fired
+	PROP(int,							m_f_flags,						get());
+	PROP(int,							m_h_view_model,				get());
+	PROP(int,							m_i_observer_mode,		get());
+	PROP(int,							m_life_state,					get());
+	PROP(int,							m_b_spotted_by_mask,	get());
+	PROP(int,							m_n_tick_base,				get());
+	PROP(int,							m_i_account,					get());
 
-	PROP(float,				m_f_flash_duration,				get())
-	PROP(float,				m_f_flash_alpha,					get())
-	PROP(float,				m_f_flash_max_alpha,			get())
+	PROP(float,						m_f_flash_duration,		get());
+	PROP(float,						m_f_flash_alpha,			get());
+	PROP(float,						m_f_flash_max_alpha,	get());
 
-	PROP(s_vec2,			m_view_punch_angle,				get())
-	PROP(s_vec2,			m_aim_punch_angle,				get())	//shoting angle on screen's plane, only if shooting
-	PROP(s_vec3,			m_vec3_view_offset,				get())	//player eyes pos offset(must add this to m_vecOrigin to get real eyes pos)
+	PROP(s_vec2,					m_view_punch_angle,		get());
+	PROP(s_vec2,					m_aim_punch_angle,		get());	//shoting angle on screen's plane, only if shooting
+	PROP(s_vec3,					m_vec3_view_offset,		get());	//player eyes pos offset(must add this to m_vecOrigin to get real eyes pos)
 
-	PROP(s_render_color, m_clr_render,					get())
+	PROP(s_render_color,	m_clr_render, get());
 
 //methods
 public:
@@ -98,7 +98,7 @@ public:
 	}
 	void render(s_color_rgba color) {
 		s_render_color renderColor{ (BYTE)color.r, (BYTE)color.g, (BYTE)color.b, (BYTE)color.a };
-		m_clr_render(renderColor);
+		m_clr_render = renderColor;
 	}
 	c_base_weapon active_weapon(){
 		int i_active_weapon_id = m_h_active_weapon() & 0xfff;

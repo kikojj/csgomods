@@ -1,12 +1,12 @@
 #include "Skinchanger.hpp"
 
 void c_skinchanger::apply_weapon_settings(c_base_weapon weapon, c_settings::s_skinchanger_weapon settings){
-	weapon.m_i_item_id_high(-1);
-	weapon.m_i_account_id(weapon.m_original_owner_xuid_low());
+	weapon.m_i_item_id_high = -1;
+	weapon.m_i_account_id = weapon.m_original_owner_xuid_low();
 
-	weapon.m_n_fallback_paint_kit(settings.paint_kit);
+	weapon.m_n_fallback_paint_kit = settings.paint_kit;
 
-	weapon.m_f_fallback_wear(settings.wear);
+	weapon.m_f_fallback_wear = settings.wear;
 
 	if (settings.quality != en_entity_quality::Invalid) {
 		weapon.entity_quality(settings.quality);
@@ -16,16 +16,16 @@ void c_skinchanger::apply_weapon_settings(c_base_weapon weapon, c_settings::s_sk
 	}
 
 	if (settings.custom_name != "") {
-		weapon.m_sz_custom_name(settings.custom_name);
+		weapon.m_sz_custom_name = settings.custom_name;
 	}
 	if (settings.stat_track >= 0) {
 		if (settings.quality == en_entity_quality::Invalid || settings.quality == en_entity_quality::Normal) {
 			weapon.entity_quality(en_entity_quality::Strange);
 		}
-		weapon.m_n_fallback_stat_trak(settings.stat_track);
+		weapon.m_n_fallback_stat_trak = settings.stat_track;
 	}
 	if (settings.seed > 0) {
-		weapon.m_n_fallback_seed(settings.seed);
+		weapon.m_n_fallback_seed = settings.seed;
 	}
 }
 
@@ -33,8 +33,8 @@ void c_skinchanger::apply_knife_settings(c_base_weapon knife, c_settings::s_skin
 	auto weapon_model = g_model_indexes[settings.item_di];
 
 	knife.item_di(settings.item_di);
-	knife.m_n_model_index(weapon_model);
-	knife.m_i_view_model_index(weapon_model);
+	knife.m_n_model_index = weapon_model;
+	knife.m_i_view_model_index = weapon_model;
 
 	apply_weapon_settings(knife, settings);
 }
@@ -92,6 +92,6 @@ void c_skinchanger::loop() {
 		return;
 	}
 
-	knife.m_n_model_index(i_knife_model);
-	knife.m_h_weapon_world_model(i_knife_model + 1);
+	knife.m_n_model_index = i_knife_model;
+	knife.m_h_weapon_world_model = i_knife_model + 1;
 }
