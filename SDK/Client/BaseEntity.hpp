@@ -31,15 +31,15 @@ public:
 
 //props
 public:
-	PROP(int,			m_i_glow_index,		get());
-	PROP_(int,		m_i_class_id,			g_mem.read<int>(
-																		g_mem.read<int>(
-																			g_mem.read<int>(get() + 0x8)	//IClientNetworkable
-																			+ 0x8)												//GetClientClass
-																		+ 0x1),													//ClientClass
-																	0x14, 0);
+	PROP(int, m_i_glow_index, get())
+	PROP_(int, m_i_class_id,	g_mem.read<int>(
+															g_mem.read<int>(
+																g_mem.read<int>(get() + 0x8)	//IClientNetworkable
+																+ 0x8)												//GetClientClass
+															+ 0x1),														//ClientClass
+														0x14, int, value)
 
-	PROP(s_vec3,	m_vec3_origin,		get());														//entity position
+	PROP(s_vec3, m_vec3_origin, get())
 
 //methods
 public:
@@ -52,6 +52,6 @@ public:
 		return en_class_id(i_id);
 	}
 	void class_id(en_class_id value) {
-		m_i_class_id = (int)value;
+		m_i_class_id((int)value);
 	}
 };

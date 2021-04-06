@@ -1,7 +1,5 @@
 #pragma once
 
-#include <iostream>
-
 #include "../../Utils/Memory/Memory.hpp"
 #include "../../Utils/Memory/Modules.hpp"
 #include "../../Utils/Offsets/Offsets.hpp"
@@ -26,9 +24,9 @@ public:
 
 //props
 public:
-	PROP(int,			m_i_crosshair_id, get());	//entity in crosshair
+	PROP(int,			m_i_crosshair_id, get())	//entity in crosshair
 
-	PROP(s_vec3,	m_vec3_velocity,	get());	//direction of movement of the player
+	PROP(s_vec3,	m_vec3_velocity,	get())	//direction of movement of the player
 
 //methods
 public:

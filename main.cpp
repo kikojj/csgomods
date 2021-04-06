@@ -250,23 +250,23 @@ int main() {
 
 				if (b_should_shoot) {
 					if (c_settings::aimbot_enable && aim_bot.should_wait && !aim_bot.should_shoot) {
-						g_client.dw_force_attack = en_key_event::KeyUp;
+						g_client.dw_force_attack(en_key_event::KeyUp);
 					}
 					else {
 						if (c_settings::misc_auto_pistols_enable && (misc.should_wait || !misc.should_shoot) && activeWeapon.is_pistol()) {
-							g_client.dw_force_attack = en_key_event::KeyUp;
+							g_client.dw_force_attack(en_key_event::KeyUp);
 						}
 						else {
-							g_client.dw_force_attack = en_key_event::KeyDown;
+							g_client.dw_force_attack(en_key_event::KeyDown);
 						}
 					}
 				}
 				else {
 					if (c_settings::triggerbot_enable && !trigget_bot.should_wait && trigget_bot.should_shoot) {
-						g_client.dw_force_attack = en_key_event::KeyDown;
+						g_client.dw_force_attack(en_key_event::KeyDown);
 					}
 					else {
-						g_client.dw_force_attack = en_key_event::KeyUp;
+						g_client.dw_force_attack(en_key_event::KeyUp);
 					}
 				}
 
