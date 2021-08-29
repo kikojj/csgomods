@@ -36,7 +36,7 @@ public:
 															g_mem.read<int>(
 																g_mem.read<int>(get() + 0x8)	//IClientNetworkable
 																+ 0x8)												//GetClientClass
-															+ 0x1),														//ClientClass
+															+ 0x1),													//ClientClass
 														0x14, int, value)
 
 	PROP(s_vec3, m_vec3_origin, get())

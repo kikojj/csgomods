@@ -79,7 +79,7 @@ std::vector<std::string> c_settings::get_files_list() {
 
 	auto iter_directory = std::filesystem::directory_iterator(get_config_directory_path());
 	for (auto entry: iter_directory) {
-		if (!entry.is_directory()) {
+		if (!entry.is_directory() && entry.path().has_extension() && entry.path().extension().string() == std::string(".json")) {
 			vec_files_list.push_back(entry.path().filename().string());
 		}
 	}

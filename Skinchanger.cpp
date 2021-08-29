@@ -43,6 +43,7 @@ c_skinchanger::c_skinchanger(){}
 
 void c_skinchanger::loop() {
 	if (!c_settings::skinchanger_enable) {
+		Sleep(5);
 		return;
 	}
 

@@ -62,7 +62,7 @@ module.exports = {
   plugins: [
     new CleanWebpackPlugin({
       cleanOnceBeforeBuildPatterns: "./dist/*",
-      cleanAfterEveryBuildPatterns: ["./dist/*", "!./dist/assets", "!./dist/index.html"],
+      cleanAfterEveryBuildPatterns: ["./dist/*", "!*assets", "!*index.html"],
     }),
     new HtmlWebpackPlugin({
       template: "./src/public/index.html",

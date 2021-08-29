@@ -34,49 +34,5 @@ export {
 } from "./skin";
 export { unique } from "./unique";
 export { capitalizeFirstLetter } from "./capitalizeFirstLetter";
-import {
-  Rank_None,
-  Rank_Expired,
-  Rank_1,
-  Rank_2,
-  Rank_3,
-  Rank_4,
-  Rank_5,
-  Rank_6,
-  Rank_7,
-  Rank_8,
-  Rank_9,
-  Rank_10,
-  Rank_11,
-  Rank_12,
-  Rank_13,
-  Rank_14,
-  Rank_15,
-  Rank_16,
-  Rank_17,
-  Rank_18,
-} from "./ranks";
-export const ranks = {
-  Rank_None,
-  Rank_Expired,
-  Rank_1,
-  Rank_2,
-  Rank_3,
-  Rank_4,
-  Rank_5,
-  Rank_6,
-  Rank_7,
-  Rank_8,
-  Rank_9,
-  Rank_10,
-  Rank_11,
-  Rank_12,
-  Rank_13,
-  Rank_14,
-  Rank_15,
-  Rank_16,
-  Rank_17,
-  Rank_18,
-};
-
+export * as ranks from "./ranks";
 export { isObjectsEqual } from "./isObjectsEqual";

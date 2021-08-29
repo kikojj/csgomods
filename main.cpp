@@ -176,7 +176,6 @@ int main() {
 
 		thread th_skinchanger([]() { while (g_b_working) {
 			skinchanger.loop();
-			//Sleep(1);
 		}});		
 
 		thread th_misc_radar([]() { while (g_b_working) {
@@ -226,15 +225,14 @@ int main() {
 			}
 		});
 
-		thread th_visible_check([]() {
-			while (g_b_working) {
-				while (!g_visible_check.init()) {}
-				if (g_engine.client_state->delta_tick() == -1 || g_engine.client_state->state() != en_client_states::InGame) {
-					continue;
-				}
-				g_visible_check.update_visible_struct();
+		thread th_visible_check([]() { while (g_b_working) {
+			while (!g_visible_check.init()) {}
+			if (g_engine.client_state->state() != en_client_states::InGame) {
+				continue;
 			}
-		});
+			g_visible_check.update_visible_struct();
+			//Sleep(1);
+		}});
 
 		thread th_shoot([]() {
 			bool b_last_aim_state = c_settings::aimbot_enable;
@@ -242,6 +240,7 @@ int main() {
 				bool b_should_shoot = GetAsyncKeyState(VK_LBUTTON) && c_helpers::is_mouse_active();
 
 				aim_bot.loop();
+				//Sleep(1);
 				trigget_bot.loop();
 				misc.auto_pistols();
 
@@ -279,14 +278,12 @@ int main() {
 			}
 		});
 
-		thread th_working([]() {
-			while (g_b_working) {
-				Sleep(500);
-				if(!g_mem.find_process(GAME_NAME)) {
-					g_menu_server.stop();
-				}
+		thread th_working([]() { while (g_b_working) {
+			Sleep(500);
+			if(!g_mem.find_process(GAME_NAME)) {
+				g_menu_server.stop();
 			}
-		});
+		}});
 
 		th_menu_server.join();
 		th_menu_data.join();

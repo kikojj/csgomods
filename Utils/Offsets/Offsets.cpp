@@ -371,7 +371,7 @@ void c_offsets::init_signatures(){
   c_offsets::signatures::dw_cs_max_player                       = c_scanner::get_signature(ENGINE_DLL_NAME, "A1 ? ? ? ? 8B 80 ? ? ? ? C3 CC CC CC CC 55 8B EC 8A 45 08", { 7 }, 0, false);
   c_offsets::signatures::dw_cs_player_info                      = c_scanner::get_signature(ENGINE_DLL_NAME, "8B 89 ? ? ? ? 85 C9 0F 84 ? ? ? ? 8B 01", { 2 }, 0, false);
   c_offsets::signatures::dw_cs_state                            = c_scanner::get_signature(ENGINE_DLL_NAME, "83 B8 ? ? ? ? ? 0F 94 C0 C3", { 2 }, 0, false);
-  c_offsets::signatures::dw_cs_view_angles                      = c_scanner::get_signature(ENGINE_DLL_NAME, "F3 0F 11 80 ? ? ? ? D9 46 04 D9 05", { 4 }, 0, false);
+  c_offsets::signatures::dw_cs_view_angles                      = c_scanner::get_signature(ENGINE_DLL_NAME, "F3 0F 11 80 ? ? ? ? F3 0F 10 44 24 38", { 4 }, 0, false);
   c_offsets::signatures::dw_cs_delta_ticks                      = c_scanner::get_signature(ENGINE_DLL_NAME, "C7 87 ? ? ? ? ? ? ? ? FF 15 ? ? ? ? 83 C4 08", { 2 }, 0, false);
   c_offsets::signatures::dw_cs_last_outgoing_command            = c_scanner::get_signature(ENGINE_DLL_NAME, "8B 8F ? ? ? ? 8B 87 ? ? ? ? 41", { 2 }, 0, false);
   c_offsets::signatures::dw_cs_choked_commands                  = c_scanner::get_signature(ENGINE_DLL_NAME, "8B 87 ? ? ? ? 41", { 2 }, 0, false);

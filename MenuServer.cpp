@@ -257,7 +257,13 @@ void c_menu_server::start() {
     });
 
     std::thread th_http_server([]() {
-      std::string command = "node ./menu/server.js port=" + std::to_string(HTTP_SERVER_PORT) + " dir=\"" + HTTP_SERVER_DIRECTORY + "\"";
+      /*
+        " port=" + std::to_string(HTTP_SERVER_PORT) +
+        " dir=\"" + (std::filesystem::temp_directory_path() / "csgomods" / "menu").string() + "\"";
+      */
+      std::string command = std::string("node ./menu/server.js") +
+                            std::string(" port=") + std::to_string(HTTP_SERVER_PORT) +
+                            std::string(" dir=\"") + std::string(HTTP_SERVER_DIRECTORY) + std::string("\"");
       system(command.c_str());
     });
 

@@ -133,62 +133,48 @@ public:
 
 		return player_info;
 	}
+
 	int player_resource() {
 		auto i_player_resource = g_mem.read<int>(g_client_dll.base + c_offsets::signatures::dw_player_resource);
 		return i_player_resource;
 	}
+	int player_resource_base() {
+		return player_resource() + (c_entity_list::get_entity_id(get()) + 1) * 4;
+	}
 	int competitive_ranking() {
-		auto i_player_resource = player_resource();
-		auto i_competitive_ranking = g_mem.read<int>(player_resource() + c_offsets::netvars::m_i_competitive_ranking + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_competitive_ranking = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_competitive_ranking);
 		return i_competitive_ranking;
 	}
 	int competitive_wins() {
-		auto i_player_resource = player_resource();
-		auto i_competitive_wins = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_competitive_wins + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_competitive_wins = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_competitive_wins);
 		return i_competitive_wins;
 	}
 	int ping() {
-		auto i_player_resource = player_resource();
-		auto ping = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_ping + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto ping = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_ping);
 		return ping;
 	}
 	int kills() {
-		auto i_player_resource = player_resource();
-		auto i_kills = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_kills + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_kills = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_kills);
 		return i_kills;
 	}
 	int assists() {
-		auto i_player_resource = player_resource();
-		auto i_assists = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_assists + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_assists = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_assists);
 		return i_assists;
 	}
 	int deaths() {
-		auto i_player_resource = player_resource();
-		auto i_deaths = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_deaths + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_deaths = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_deaths);
 		return i_deaths;
 	}
 	int score() {
-		auto i_player_resource = player_resource();
-		auto i_score = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_score + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_score = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_score);
 		return i_score;
 	}
 	int mvps() {
-		auto i_player_resource = player_resource();
-		auto i_mvps = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_i_mvps + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_mvps = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_i_mvps);
 		return i_mvps;
 	}
 	int clan() {
-		auto i_player_resource = player_resource();
-		auto i_clan = g_mem.read<int>(i_player_resource + c_offsets::netvars::m_sz_clan + (c_entity_list::get_entity_id(get()) + 1) * 4);
-
+		auto i_clan = g_mem.read<int>(player_resource_base() + c_offsets::netvars::m_sz_clan);
 		return i_clan;
 	}
 };

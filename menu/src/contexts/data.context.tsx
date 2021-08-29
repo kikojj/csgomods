@@ -47,8 +47,10 @@ const Data = () => {
   }, []);
 
   const onGetAllSkins = React.useCallback((message: TGetAllSkinsResponse["message"]) => {
-    setSkins(message.skins.map((s) => new Skin(s)));
-    setDefaultSkins(message.default);
+    if (message && message.skins) {
+      setSkins(message?.skins?.map((s) => new Skin(s)));
+      setDefaultSkins(message.default);
+    }
   }, []);
 
   const getAllSkins = React.useCallback(() => {

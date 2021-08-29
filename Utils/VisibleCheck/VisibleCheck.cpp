@@ -116,7 +116,7 @@ bool c_visible_check::init() {
 	create_move_vars.dw_client_state = g_mem.read<DWORD>(g_engine_dll.base + c_offsets::signatures::dw_client_state);
 	create_move_vars.dw_entity_list = g_client_dll.base + c_offsets::signatures::dw_entity_list;
 	create_move_vars.dw_local_player = g_client_dll.base + c_offsets::signatures::dw_local_player;
-	create_move_vars.dw_delta_tick = g_mem.read<DWORD>(g_engine_dll.base + c_offsets::signatures::dw_cs_delta_ticks);
+	create_move_vars.dw_delta_tick = c_offsets::signatures::dw_cs_delta_ticks;
 	create_move_vars.dw_bone_matrix = c_offsets::netvars::m_dw_bone_matrix;
 	create_move_vars.dw_view_offset = c_offsets::netvars::m_vec3_view_offset;
 	create_move_vars.dw_origin = c_offsets::netvars::m_vec3_origin;
