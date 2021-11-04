@@ -8,6 +8,7 @@
 #include "TriggerBot.hpp"
 #include "Skinchanger.hpp"
 #include "Misc.hpp"
+#include "Overlay.hpp"
 
 #include "SDK/Utils/Defines.hpp"
 #include "SDK/Client/Client.hpp"
@@ -55,7 +56,35 @@ c_misc misc;
 
 CMDToggle mouse_bind("bind mouse1 +attack", "unbind mouse1");
 
-int main() {
+//for overlay
+int screen_width = 800;
+int screen_height = 600;
+const MARGINS margins = { 0, 0, screen_width, screen_height };
+__w64 long __stdcall overlay_procedure(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam){
+	switch (message){
+	case WM_CREATE:
+		DwmExtendFrameIntoClientArea(hWnd, &margins);
+		return 0;
+		break;
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		TerminateProcess(GetCurrentProcess(), 0);
+		return 0;
+
+	case WM_CLOSE:
+		PostQuitMessage(0);
+		TerminateProcess(GetCurrentProcess(), 0);
+		return 0;
+
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+
+	return 0;
+}
+
+int main(){
 	try {
 		cout << "[Main]: Waiting for process '" << GAME_NAME << "'." << endl;
 		while (!g_mem.find_process(GAME_NAME)) {
@@ -285,6 +314,16 @@ int main() {
 			}
 		}});
 
+		thread th_overlay([]() {
+			c_overlay overlay(screen_width, screen_height, overlay_procedure);
+
+			overlay.add_render([](c_overlay* o, c_render* r) { visuals.render(o, r); });
+
+			while (g_b_working){
+				overlay.loop();
+			}
+		});
+
 		th_menu_server.join();
 		th_menu_data.join();
 		th_menu_open.join();
@@ -297,6 +336,7 @@ int main() {
 		th_visible_check.join();
 		th_shoot.join();
 		th_working.join();
+		th_overlay.join();
 		#pragma endregion
 
 		if (g_mem.find_process(GAME_NAME)) {

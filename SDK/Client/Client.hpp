@@ -36,15 +36,21 @@ public:
 
 //props
 public:
-	C_PROP_PTR(short,					dw_mouse_enable)
-	PROP_			(int,						confirm_reservation_callback, g_mem.read<int>(g_client_dll.base + c_offsets::signatures::h_confirm_match + 0x7), 0, int, value)
+	C_PROP_PTR(short, dw_mouse_enable)
+	PROP_(int, confirm_reservation_callback, g_mem.read<int>(g_client_dll.base + c_offsets::signatures::h_confirm_match + 0x7), 0, int, value)
 
-	C_PROP_PTR(c_input,				dw_input)
+	C_PROP_PTR(c_input, dw_input)
 
-	C_PROP_PTR(en_key_event,	dw_force_jump)
-	C_PROP_PTR(en_key_event,	dw_force_attack)
+	C_PROP_PTR(en_key_event, dw_force_jump)
+	C_PROP_PTR(en_key_event, dw_force_attack)
 
 	C_PROP_PTR(s_view_matrix, dw_view_matrix)
+
+	enum class en_enemy_info : unsigned short {
+		Show = 0x9090,
+		Hide = 0xC63B,
+	};
+	PROP_PTR(en_enemy_info, dw_enemy_info, g_client_dll.base + 5)
 
 //methods
 public:

@@ -166,12 +166,12 @@ export const getSkin = (skinUrl: string) => {
 };
 
 export const getAllSkins = async (weaponUrl: string) => {
-  console.log(`[PARSER]: Started.`);
+  // console.log(`[PARSER]: Started.`);
   const result: TSkin[] = [];
 
-  console.log(`[PARSER]: Getting all skin's urls.`);
+  // console.log(`[PARSER]: Getting all skin's urls.`);
   const skinsUrls = await getAllSkinForWeapon(weaponUrl);
-  console.log(`[PARSER]: Got.`);
+  // console.log(`[PARSER]: Got.`);
   if (!skinsUrls) {
     return undefined;
   }
@@ -179,7 +179,7 @@ export const getAllSkins = async (weaponUrl: string) => {
     const skin = await getSkin(skinsUrls[i]);
     if (skin) {
       result.push(...skin);
-      console.log(`[PARSER]: Parsing... [${i}/${skinsUrls.length}]`);
+      // console.log(`[PARSER]: Parsing... [${i}/${skinsUrls.length}]`);
     }
   }
   return result;

@@ -70,6 +70,12 @@
     <Filter Include="Utils\ClientCmd">
       <UniqueIdentifier>{324004af-935a-411f-a326-10924f0eaaa4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Overlay">
+      <UniqueIdentifier>{d3a6a9bb-8825-4c60-89fd-d6df4763e923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Overlay\Render">
+      <UniqueIdentifier>{7dbe08e2-72c7-4f9c-b87e-d240eed55bdc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Visuals.hpp">
@@ -301,6 +307,12 @@
     <ClInclude Include="SDK\Utils\ViewMatrix.hpp">
       <Filter>SDK\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Overlay.hpp">
+      <Filter>Overlay</Filter>
+    </ClInclude>
+    <ClInclude Include="Render.hpp">
+      <Filter>Overlay\Render</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Visuals.cpp">
@@ -384,6 +396,12 @@
     </ClCompile>
     <ClCompile Include="Utils\ClientCmd\CMDToggle.cpp">
       <Filter>Utils\ClientCmd</Filter>
+    </ClCompile>
+    <ClCompile Include="Overlay.cpp">
+      <Filter>Overlay</Filter>
+    </ClCompile>
+    <ClCompile Include="Render.cpp">
+      <Filter>Overlay\Render</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

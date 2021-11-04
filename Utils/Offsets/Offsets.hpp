@@ -189,6 +189,9 @@ namespace c_offsets {
 
     //global vars
     static int dw_global_vars;
+
+    //enemy info
+    static int dw_enemy_info;
   } signatures;
   void init_signatures();
 

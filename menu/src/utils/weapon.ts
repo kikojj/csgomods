@@ -77,7 +77,7 @@ export enum ItemDefinitionIndex {
   WeaponKarambit = 507,
   WeaponM9Bayonet = 508,
   WeaponHuntsmanKnife = 509,
-  WeaponFlachionKnife = 512,
+  WeaponFalchionKnife = 512,
   WeaponBowieKnife = 514,
   WeaponButterflyKnife = 515,
   WeaponShadowDaggers = 516,
@@ -94,7 +94,7 @@ export enum ItemDefinitionIndex {
 export const weaponNames = [
   { idi: ItemDefinitionIndex.WeaponDesertEagle, name: "Desert Eagle" },
   { idi: ItemDefinitionIndex.WeaponDualBerettas, name: "Dual Berettas" },
-  { idi: ItemDefinitionIndex.WeaponFiveSeven, name: "Five-Seven" },
+  { idi: ItemDefinitionIndex.WeaponFiveSeven, name: "Five-SeveN" },
   { idi: ItemDefinitionIndex.WeaponGlock18, name: "Glock-18" },
   { idi: ItemDefinitionIndex.WeaponAK47, name: "AK-47" },
   { idi: ItemDefinitionIndex.WeaponAUG, name: "AUG" },
@@ -154,7 +154,7 @@ export const weaponNames = [
   { idi: ItemDefinitionIndex.WeaponKarambit, name: "Karambit" },
   { idi: ItemDefinitionIndex.WeaponM9Bayonet, name: "M9 Bayonet" },
   { idi: ItemDefinitionIndex.WeaponHuntsmanKnife, name: "Huntsman Knife" },
-  { idi: ItemDefinitionIndex.WeaponFlachionKnife, name: "Flachion Knife" },
+  { idi: ItemDefinitionIndex.WeaponFalchionKnife, name: "Falchion Knife" },
   { idi: ItemDefinitionIndex.WeaponBowieKnife, name: "Bowie Knife" },
   { idi: ItemDefinitionIndex.WeaponButterflyKnife, name: "Butterfly Knife" },
   { idi: ItemDefinitionIndex.WeaponShadowDaggers, name: "Shadow Daggers" },
@@ -302,7 +302,7 @@ export class Weapon {
       this.itemDI == ItemDefinitionIndex.WeaponKarambit ||
       this.itemDI == ItemDefinitionIndex.WeaponM9Bayonet ||
       this.itemDI == ItemDefinitionIndex.WeaponHuntsmanKnife ||
-      this.itemDI == ItemDefinitionIndex.WeaponFlachionKnife ||
+      this.itemDI == ItemDefinitionIndex.WeaponFalchionKnife ||
       this.itemDI == ItemDefinitionIndex.WeaponBowieKnife ||
       this.itemDI == ItemDefinitionIndex.WeaponButterflyKnife ||
       this.itemDI == ItemDefinitionIndex.WeaponShadowDaggers ||

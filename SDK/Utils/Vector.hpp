@@ -1,5 +1,7 @@
 #pragma once
 
+#include <d3d9.h>
+#include <d3dx9.h>
 #include <iostream>
 
 #include "BoneVector.hpp"
@@ -27,6 +29,10 @@ public:
     this->y = vec.y;
   }
   c_vector2(s_bone_vector vec) {
+    this->x = vec.x;
+    this->y = vec.y;
+  }
+  c_vector2(D3DXVECTOR2 vec) {
     this->x = vec.x;
     this->y = vec.y;
   }
@@ -62,6 +68,10 @@ public:
   //type cast
   s_vec2 to_vec2() {
     return s_vec2{ this->x, this->y };
+  }
+
+  D3DXVECTOR2 to_d3dx_vec2() {
+    return D3DXVECTOR2{ this->x, this->y };
   }
 
   //features
@@ -136,6 +146,11 @@ public:
     this->y = vec.y;
     this->z = vec.z;
   }
+  c_vector3(D3DXVECTOR3 vec) {
+    this->x = vec.x;
+    this->y = vec.y;
+    this->z = vec.z;
+  }
 
   //operators
   float operator[](int xyz) {
@@ -172,6 +187,12 @@ public:
   }
   c_vector2 to_vector2() {
     return c_vector2(this->x, this->y);
+  }
+  D3DXVECTOR3 to_d3dx_vec3() {
+    return D3DXVECTOR3{ this->x, this->y, this->z };
+  }
+  D3DXVECTOR2 to_d3dx_vec2() {
+    return D3DXVECTOR2{ this->x, this->y };
   }
 
   rn::detail::matrix_t<3, 1> toMatrix() {

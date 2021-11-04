@@ -2,6 +2,8 @@
 
 #include <algorithm>
 
+#include "Overlay.hpp"
+#include "Render.hpp"
 #include "SDK/Client/Client.hpp"
 #include "SDK/Client/BaseEntity.hpp"
 #include "SDK/Client/BasePlayer.hpp"
@@ -11,6 +13,7 @@
 
 #include "Utils/VisibleCheck/VisibleCheck.hpp"
 #include "Utils/Settings/Settings.hpp"
+#include "Utils/Helpers/Helpers.hpp"
 
 class c_visuals {
 private:
@@ -23,4 +26,14 @@ private:
 public:
 	c_visuals();
 	void loop();
+	
+	void render(c_overlay*, c_render*);
+
+private:
+	struct s_draw_player_options {
+	
+	};
+
+public:
+	void draw_player_box(s_draw_player_options);
 };

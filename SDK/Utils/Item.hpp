@@ -97,6 +97,15 @@ public:
     WeaponStilettoKnife = 522,
     WeaponTalonKnife = 523,
     WeaponSkeletonKnife = 525,
+    GloveStuddedBloodhound = 5027,
+    GloveT = 5028,
+    GloveCT = 5029,
+    GloveSporty = 5030,
+    GloveSlick = 5031,
+    GloveLeatherWeap= 5032,
+    GloveMotorcycle = 5033,
+    GloveSpecialist = 5034,
+    GloveHydra = 5035,
     InvalidLast
   };
 
@@ -195,10 +204,8 @@ public:
     };
   }
   static std::vector<en_defenition_index> knifes() {
-    using namespace std;
-
-    vector<en_defenition_index> all_items = all();
-    vector<en_defenition_index> knifes;
+    std::vector<en_defenition_index> all_items = all();
+    std::vector<en_defenition_index> knifes;
 
     copy_if(all_items.begin(), all_items.end(), std::back_inserter(knifes), [](en_defenition_index& di) {
       return is_knife(di);

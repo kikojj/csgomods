@@ -25,4 +25,5 @@ public:
   static int get_model_index(c_item::en_defenition_index);
   static void update_model_indexes();
   static void full_force_update();
+  static bool world_to_screen(const D3DXVECTOR3, D3DXVECTOR2&, const RECT, const float[16]);
 };

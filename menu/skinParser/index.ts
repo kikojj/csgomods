@@ -1,4 +1,5 @@
 import fs from "fs";
+import CliProgress from "cli-progress"
 import { getAllSkins, getDefaultSkin } from "./parser";
 import { ItemDefinitionIndex } from "../src/utils/weapon";
 
@@ -64,6 +65,9 @@ const weaponsUrls = [
 ];
 
 async function main() {
+  const progress = new CliProgress.SingleBar({  }, CliProgress.Presets.shades_classic);
+  progress.start(weaponsUrls.length, 0);
+
   const defaultSkins: { [T in ItemDefinitionIndex | string]?: string } = {};
 
   const writeStream = fs.createWriteStream("skins.json");
@@ -71,7 +75,7 @@ async function main() {
   writeStream.write(`"skins": [`, "utf8");
 
   for (let i = 0; i < weaponsUrls.length; i++) {
-    console.log(`[MAIN]: Parse [${i}/${weaponsUrls.length}]`);
+    // console.log(`[MAIN]: Parse [${i}/${weaponsUrls.length}]`);
 
     const data = await getAllSkins(weaponsUrls[i]);
     if (!data) {
@@ -97,6 +101,8 @@ async function main() {
     if (i !== weaponsUrls.length - 1) {
       writeStream.write(",", "utf8");
     }
+
+    progress.update(i + 1);
   }
 
   writeStream.write("],", "utf8");
@@ -104,6 +110,9 @@ async function main() {
   writeStream.write(JSON.stringify(defaultSkins), "utf8");
   writeStream.write("}", "utf8");
   writeStream.end();
+
+  progress.stop();
+
   return 0;
 }
 

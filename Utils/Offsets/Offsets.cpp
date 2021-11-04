@@ -171,6 +171,7 @@ int c_offsets::signatures::dw_trace_line;
 int c_offsets::signatures::dw_line_through_smoke;
 int c_offsets::signatures::dw_client_cmd;
 int c_offsets::signatures::dw_global_vars;
+int c_offsets::signatures::dw_enemy_info;
 #pragma endregion
 
 void c_offsets::init_netvars(){
@@ -359,6 +360,7 @@ void c_offsets::init_signatures(){
   c_offsets::signatures::dw_trace_line                    = c_scanner::get_signature(CLIENT_DLL_NAME, "55 8B EC 83 E4 F0 83 EC 7C 56 52", {0}, 0, false, false);
   c_offsets::signatures::dw_line_through_smoke            = c_scanner::get_signature(CLIENT_DLL_NAME, "55 8B EC 83 EC 08 8B 15 ? ? ? ? 0F 57 C0", {0}, 0, false, false);
   c_offsets::signatures::dw_global_vars                   = c_scanner::get_signature(CLIENT_DLL_NAME, "A1 ? ? ? ? 8B 4D FC 8B 40 10", { 1 }, 0, true, false);
+  c_offsets::signatures::dw_enemy_info                    = c_scanner::get_signature(CLIENT_DLL_NAME, "E8 ? ? ? ? 3B C6 5E 5F", {}, 0, true, false);
   //c_offsets::signatures::dwRankReveal                   = c_scanner::get_signature(CLIENT_DLL_NAME, "8D 4E 74 8B C4 C7 40 04 ? ? ? ? C7 00", { 14 }, 0, false, true);
 
   //ENGINE_DLL_NAME

@@ -40,6 +40,7 @@ public:
 														0x14, int, value)
 
 	PROP(s_vec3, m_vec3_origin, get())
+	PROP(int, m_n_model_index, get())
 
 //methods
 public:
