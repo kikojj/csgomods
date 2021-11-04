@@ -1,0 +1,5 @@
+D:\Documents\VSProjects\csgomods\Release\csgomods.vcxproj.CopyComplete
+D:\Documents\VSProjects\csgomods\Release\csgomods.exe
+D:\Documents\VSProjects\csgomods\Release\curlpp.dll
+D:\Documents\VSProjects\csgomods\Release\libcurl.dll
+D:\Documents\VSProjects\csgomods\Release\zlib1.dll
