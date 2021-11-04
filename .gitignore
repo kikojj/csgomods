@@ -1,5 +1,5 @@
 .vs
 Debug
 Release
-menu/node_modules
-menu/dist
+Menu/node_modules
+Menu/dist
