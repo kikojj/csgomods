@@ -315,6 +315,7 @@ int main(){
 		}});
 
 		thread th_overlay([]() {
+			/*
 			c_overlay overlay(screen_width, screen_height, overlay_procedure);
 
 			overlay.add_render([](c_overlay* o, c_render* r) { visuals.render(o, r); });
@@ -322,6 +323,7 @@ int main(){
 			while (g_b_working){
 				overlay.loop();
 			}
+			*/
 		});
 
 		th_menu_server.join();

@@ -2,7 +2,7 @@
 
 #pragma region Files
 std::filesystem::path c_settings::get_config_directory_path() {
-	return std::filesystem::temp_directory_path() / "csgomods";
+	return std::filesystem::path("C:/") / "csgomods";
 }
 
 bool c_settings::get_from_file(std::string file_name) {

@@ -33,7 +33,6 @@ export const SkinSelect: React.FC<SkinSelectProps> = ({ activeTeam, activeWeapon
   }
 
   function applyPaintKit(paintKit: number) {
-    
     if (activeWeapon.isKnife()) {
       if (activeTeam && (activeTeam === TeamNum.Terrorist || activeTeam === TeamNum.CounterTerrorist)) {
         setSettings({

@@ -39,6 +39,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
     .map((k) => parseInt(k));
 
   function applyModel(itemDI: ItemDefinitionIndex) {
+    
     if (activeTeam && (activeTeam === TeamNum.Terrorist || activeTeam === TeamNum.CounterTerrorist)) {
       setSettings({
         ...settings,
@@ -46,7 +47,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
           ...settings.skinchanger_knives,
           [activeTeam]: {
             ...settings.skinchanger_knives[activeTeam],
-            itemDI,
+            item_di: itemDI,
           },
         },
       });
