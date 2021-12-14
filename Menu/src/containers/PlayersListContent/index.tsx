@@ -1,16 +1,17 @@
 import React from "react";
-
-import { DataContext, SettingsContext } from "@contexts";
+import { selectRadarData, selectSettings, selectTeam, updateValue, useDataSelector, useSettingsSelector } from "@services";
 import { CheckboxField, ColorPickerField, Group, List } from "@components";
-import { Player } from "./Player";
-import { Average } from "./Average";
-
-import { DEFAULT_PERSONAL_SETTINGS, IGlowESPSettings, IPersonalSettings, TeamNum } from "@utils";
-
-import { useStyles } from "./styles";
-import { IRadarData } from "@ts/requests";
 import { GlowStyle } from "@containers/VisualsContent/GlowStyle";
 import { GlowMode } from "@containers/VisualsContent/GlowMode";
+import {
+  DEFAULT_PERSONAL_SETTINGS,
+  IPersonalSettings,
+  TeamNum,
+} from "@utils";
+import { IRadarData } from "@ts/requests";
+import { Player } from "./Player";
+import { Average } from "./Average";
+import { useStyles } from "./styles";
 
 const Header: React.FC = () => {
   const classes = useStyles();
@@ -37,18 +38,25 @@ const Header: React.FC = () => {
 };
 
 export const PlayersListContent: React.FC = () => {
-  const classes = useStyles();
+  const myTeam = useDataSelector(selectTeam);
+  const radarData = useDataSelector(selectRadarData);
+  const settings = useSettingsSelector(selectSettings);
 
-  const { radarData, team: myTeam } = React.useContext(DataContext);
-  const { settings, updateValue } = React.useContext(SettingsContext);
+  const [selectedPlayer, setSelectedPlayer] = React.useState<
+    IRadarData | undefined
+  >(undefined);
 
-  const [selectedPlayer, setSelectedPlayer] = React.useState<IRadarData | undefined>(undefined);
-
-  const Ts = radarData.filter((d) => d.team_num === TeamNum.Terrorist).sort((d1, d2) => d2.score - d1.score);
-  const CTs = radarData.filter((d) => d.team_num === TeamNum.CounterTerrorist).sort((d1, d2) => d2.score - d1.score);
+  const Ts = radarData
+    .filter((d) => d.team_num === TeamNum.Terrorist)
+    .sort((d1, d2) => d2.score - d1.score);
+  const CTs = radarData
+    .filter((d) => d.team_num === TeamNum.CounterTerrorist)
+    .sort((d1, d2) => d2.score - d1.score);
 
   const personalSettings = selectedPlayer
-    ? settings.personal_settings[selectedPlayer.user_id] || { ...DEFAULT_PERSONAL_SETTINGS }
+    ? settings.personal_settings[selectedPlayer.user_id] || {
+        ...DEFAULT_PERSONAL_SETTINGS,
+      }
     : { ...DEFAULT_PERSONAL_SETTINGS };
 
   const TList: React.FC = React.useCallback(() => {
@@ -95,15 +103,18 @@ export const PlayersListContent: React.FC = () => {
     );
   }, [CTs]);
 
-  function updatePersonalSettings(field: keyof IPersonalSettings, value: IPersonalSettings[keyof IPersonalSettings]) {
+  function updatePersonalSettings(
+    field: keyof IPersonalSettings,
+    value: IPersonalSettings[keyof IPersonalSettings]
+  ) {
     if (selectedPlayer) {
-      updateValue("personal_settings", {
+      updateValue({name: "personal_settings", value: {
         ...settings.personal_settings,
         [selectedPlayer.user_id]: {
           ...personalSettings,
           [field]: value,
         },
-      });
+      }});
     }
   }
 
@@ -112,7 +123,10 @@ export const PlayersListContent: React.FC = () => {
     value: IPersonalSettings["glow_settings"][keyof IPersonalSettings["glow_settings"]]
   ) {
     if (selectedPlayer) {
-      updatePersonalSettings("glow_settings", { ...personalSettings.glow_settings, [field]: value });
+      updatePersonalSettings("glow_settings", {
+        ...personalSettings.glow_settings,
+        [field]: value,
+      });
     }
   }
 
@@ -124,7 +138,10 @@ export const PlayersListContent: React.FC = () => {
           <CTList />
         </Group>
         {selectedPlayer ? (
-          <Group marginTop={35} label={`Personal settings for ${selectedPlayer.name}`}>
+          <Group
+            marginTop={35}
+            label={`Personal settings for ${selectedPlayer.name}`}
+          >
             <CheckboxField
               label="Enable"
               checked={personalSettings.enable}
@@ -152,7 +169,9 @@ export const PlayersListContent: React.FC = () => {
                     <ColorPickerField
                       label="Color"
                       color={personalSettings.glow_settings.visible_color}
-                      onChnage={(v) => updatePersonalGlowSettings("visible_color", v)}
+                      onChnage={(v) =>
+                        updatePersonalGlowSettings("visible_color", v)
+                      }
                     />
                   </React.Fragment>
                 ) : (
@@ -166,25 +185,40 @@ export const PlayersListContent: React.FC = () => {
                         <ColorPickerField
                           label="Visible color"
                           color={personalSettings.glow_settings.visible_color}
-                          onChnage={(v) => updatePersonalGlowSettings("visible_color", v)}
+                          onChnage={(v) =>
+                            updatePersonalGlowSettings("visible_color", v)
+                          }
                         />
                         <ColorPickerField
                           label="Invisible color"
                           color={personalSettings.glow_settings.invisible_color}
-                          onChnage={(v) => updatePersonalGlowSettings("invisible_color", v)}
+                          onChnage={(v) =>
+                            updatePersonalGlowSettings("invisible_color", v)
+                          }
                         />
                       </React.Fragment>
                     ) : (
                       <React.Fragment key={1}>
                         <ColorPickerField
                           label="0hp color"
-                          color={personalSettings.glow_settings.hp_based_0hp_color}
-                          onChnage={(v) => updatePersonalGlowSettings("hp_based_0hp_color", v)}
+                          color={
+                            personalSettings.glow_settings.hp_based_0hp_color
+                          }
+                          onChnage={(v) =>
+                            updatePersonalGlowSettings("hp_based_0hp_color", v)
+                          }
                         />
                         <ColorPickerField
                           label="100hp color"
-                          color={personalSettings.glow_settings.hp_based_100hp_color}
-                          onChnage={(v) => updatePersonalGlowSettings("hp_based_100hp_color", v)}
+                          color={
+                            personalSettings.glow_settings.hp_based_100hp_color
+                          }
+                          onChnage={(v) =>
+                            updatePersonalGlowSettings(
+                              "hp_based_100hp_color",
+                              v
+                            )
+                          }
                         />
                       </React.Fragment>
                     )}

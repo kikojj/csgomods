@@ -1,6 +1,5 @@
 import React from "react";
-
-import { DataContext, SocketContext } from "@contexts";
+import { selectConnected, useSocketSelector } from "@services";
 import {
   Menu,
   VisualsContent,
@@ -12,7 +11,6 @@ import {
   TriggerbotContent,
   PlayersListContent,
 } from "@containers";
-
 import { ActiveTab } from "@utils";
 import { useStyles } from "./styles";
 
@@ -21,8 +19,7 @@ const LS_ACTIVE_TAB = "csgomods_active_tab";
 export const Window = () => {
   const classes = useStyles();
 
-  const { connected } = React.useContext(SocketContext);
-  const { skins } = React.useContext(DataContext);
+  const connected = useSocketSelector(selectConnected);
 
   const [activeTab, _setActiveTab] = React.useState<ActiveTab>(
     localStorage.getItem(LS_ACTIVE_TAB) ? parseInt(localStorage.getItem(LS_ACTIVE_TAB)!) : ActiveTab.TAB_VISUALS

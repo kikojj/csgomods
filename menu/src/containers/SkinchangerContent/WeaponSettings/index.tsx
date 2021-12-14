@@ -1,18 +1,34 @@
 import React from "react";
-
-import { DataContext, SettingsContext } from "@contexts";
+import {
+  fullForceUpdate,
+  selectSettings,
+  useSettingsSelector,
+  updateValue,
+} from "@services";
 import { QualitySelect } from "@containers";
-import { Group, CheckboxField, RangeField, TextField, Button } from "@components";
-
-import { DEFAULT_WEAPON_SETTINGS, ISkinchangerWeapon, TeamNum, Weapon } from "@utils";
+import {
+  Group,
+  CheckboxField,
+  RangeField,
+  TextField,
+  Button,
+} from "@components";
+import {
+  DEFAULT_WEAPON_SETTINGS,
+  ISkinchangerWeapon,
+  TeamNum,
+  Weapon,
+} from "@utils";
 
 export type WeaponSettingsProps = {
   activeTeam?: TeamNum;
   activeWeapon?: Weapon;
 };
-export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, activeWeapon }) => {
-  const { settings, updateValue } = React.useContext(SettingsContext);
-  const { fullForceUpdate } = React.useContext(DataContext);
+export const WeaponSettings: React.FC<WeaponSettingsProps> = ({
+  activeTeam,
+  activeWeapon,
+}) => {
+  const settings = useSettingsSelector(selectSettings);
 
   let weaponSettings: ISkinchangerWeapon | undefined = undefined;
   if (activeTeam) {
@@ -24,7 +40,10 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
     }
   }
 
-  const [props, setProps] = React.useState<ISkinchangerWeapon>({ ...DEFAULT_WEAPON_SETTINGS, ...weaponSettings });
+  const [props, setProps] = React.useState<ISkinchangerWeapon>({
+    ...DEFAULT_WEAPON_SETTINGS,
+    ...weaponSettings,
+  });
 
   React.useEffect(() => {
     setProps({ ...DEFAULT_WEAPON_SETTINGS, ...weaponSettings });
@@ -33,20 +52,26 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
   function applyHandler() {
     if (activeWeapon) {
       if (activeWeapon.isKnife() && activeTeam) {
-        updateValue("skinchanger_knives", {
-          ...settings.skinchanger_knives,
-          [activeTeam]: {
-            ...weaponSettings,
-            ...props,
+        updateValue({
+          name: "skinchanger_knives",
+          value: {
+            ...settings.skinchanger_knives,
+            [activeTeam]: {
+              ...weaponSettings,
+              ...props,
+            },
           },
         });
         fullForceUpdate();
       } else if (!activeWeapon.isKnife()) {
-        updateValue("skinchanger_weapons", {
-          ...settings.skinchanger_weapons,
-          [activeWeapon.itemDI]: {
-            ...weaponSettings,
-            ...props,
+        updateValue({
+          name: "skinchanger_weapons",
+          value: {
+            ...settings.skinchanger_weapons,
+            [activeWeapon.itemDI]: {
+              ...weaponSettings,
+              ...props,
+            },
           },
         });
         fullForceUpdate();
@@ -60,7 +85,11 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
 
   return (
     <Group width="100%" label="Weapon settings">
-      <CheckboxField label="Enable" checked={props.enable} onChange={(v) => setProps({ ...props, enable: v })} />
+      <CheckboxField
+        label="Enable"
+        checked={props.enable}
+        onChange={(v) => setProps({ ...props, enable: v })}
+      />
       {props.enable ? (
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <div style={{ width: 280 }}>
@@ -87,7 +116,11 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({ activeTeam, acti
             />
           </div>
           <div style={{ width: 280 }}>
-            <QualitySelect marginTop={21} value={props.quality} onChnage={(v) => setProps({ ...props, quality: v })} />
+            <QualitySelect
+              marginTop={21}
+              value={props.quality}
+              onChnage={(v) => setProps({ ...props, quality: v })}
+            />
             <CheckboxField
               marginTop={43}
               label="StatTrack"

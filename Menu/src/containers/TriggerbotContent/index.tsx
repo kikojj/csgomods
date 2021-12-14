@@ -1,19 +1,32 @@
 import React from "react";
-
-import { DataContext, SettingsContext } from "@contexts";
+import {
+  getActiveWeapon,
+  selectActiveWeapon,
+  selectSettings,
+  updateValue,
+  useDataSelector,
+  useSettingsSelector,
+} from "@services";
 import { WeaponSelect } from "@containers";
-import { Group, CheckboxField, RangeField, SelectField, SelectItem, KeyInputField } from "@components";
-
+import {
+  Group,
+  CheckboxField,
+  RangeField,
+  SelectField,
+  SelectItem,
+  KeyInputField,
+} from "@components";
 import { TSettings, Weapon } from "@utils";
 import { useStyles } from "./styles";
 
 export const TriggerbotContent: React.FC = () => {
   const classes = useStyles();
 
-  const { settings, updateValue } = React.useContext(SettingsContext);
-  const { activeWeapon: gameActiveWeapon, getActiveWeapon } = React.useContext(DataContext);
+  const settings = useSettingsSelector(selectSettings);
+  const gameActiveWeapon = useDataSelector(selectActiveWeapon);
 
-  const [activeWeapon, setActiveWeapon] = React.useState<Weapon>(gameActiveWeapon);
+  const [activeWeapon, setActiveWeapon] =
+    React.useState<Weapon>(gameActiveWeapon);
 
   const triggerFields = {
     enable: `triggerbot_${activeWeapon.sectionName}_enable` as keyof TSettings,
@@ -44,7 +57,9 @@ export const TriggerbotContent: React.FC = () => {
             <CheckboxField
               label="Enable"
               checked={settings.triggerbot_enable}
-              onChange={(v) => updateValue("triggerbot_enable", v)}
+              onChange={(v) =>
+                updateValue({ name: "triggerbot_enable", value: v })
+              }
             />
             {settings.triggerbot_enable ? (
               <React.Fragment>
@@ -52,19 +67,25 @@ export const TriggerbotContent: React.FC = () => {
                   label="Flash check"
                   helperText="Check if you are blinded"
                   checked={settings.triggerbot_flash_check}
-                  onChange={(v) => updateValue("triggerbot_flash_check", v)}
+                  onChange={(v) =>
+                    updateValue({ name: "triggerbot_flash_check", value: v })
+                  }
                 />
                 <CheckboxField
                   label="Jump check"
                   helperText="Check if you are jumping"
                   checked={settings.triggerbot_jump_check}
-                  onChange={(v) => updateValue("triggerbot_jump_check", v)}
+                  onChange={(v) =>
+                    updateValue({ name: "triggerbot_jump_check", value: v })
+                  }
                 />
                 <CheckboxField
                   label="Friendly fire"
                   helperText="Aim if player is teammates"
                   checked={settings.triggerbot_friendly_fire}
-                  onChange={(v) => updateValue("triggerbot_friendly_fire", v)}
+                  onChange={(v) =>
+                    updateValue({ name: "triggerbot_friendly_fire", value: v })
+                  }
                 />
                 <RangeField
                   label={`Delay before: ${settings.triggerbot_delay_before_shoot}`}
@@ -73,7 +94,12 @@ export const TriggerbotContent: React.FC = () => {
                   max={2000}
                   step={10}
                   value={settings.triggerbot_delay_before_shoot}
-                  onChange={(v) => updateValue("triggerbot_delay_before_shoot", v)}
+                  onChange={(v) =>
+                    updateValue({
+                      name: "triggerbot_delay_before_shoot",
+                      value: v,
+                    })
+                  }
                 />
                 <RangeField
                   label={`Delay after: ${settings.triggerbot_delay_after_shoot}`}
@@ -82,19 +108,34 @@ export const TriggerbotContent: React.FC = () => {
                   max={2000}
                   step={10}
                   value={settings.triggerbot_delay_after_shoot}
-                  onChange={(v) => updateValue("triggerbot_delay_after_shoot", v)}
+                  onChange={(v) =>
+                    updateValue({
+                      name: "triggerbot_delay_after_shoot",
+                      value: v,
+                    })
+                  }
                 />
                 <SelectField
                   placeholder="Type"
                   helperText="Use key to activate aim"
                   value={settings.triggerbot_use_key ? "1" : "0"}
-                  onChange={(v) => updateValue("triggerbot_use_key", v === "1")}
+                  onChange={(v) =>
+                    updateValue({
+                      name: "triggerbot_use_key",
+                      value: v === "1",
+                    })
+                  }
                 >
                   <SelectItem value="0">Auto</SelectItem>
                   <SelectItem value="1">Key</SelectItem>
                 </SelectField>
                 {settings.triggerbot_use_key ? (
-                  <KeyInputField value={settings.triggerbot_key} onChange={(v) => updateValue("triggerbot_key", v)} />
+                  <KeyInputField
+                    value={settings.triggerbot_key}
+                    onChange={(v) =>
+                      updateValue({ name: "triggerbot_key", value: v })
+                    }
+                  />
                 ) : (
                   ""
                 )}
@@ -109,13 +150,17 @@ export const TriggerbotContent: React.FC = () => {
             <Group marginLeft={35} label="Weapon triggerbot">
               <WeaponSelect
                 value={activeWeapon.itemDI.toString()}
-                onChnage={(itemDI) => setActiveWeapon(new Weapon({ itemDI: +itemDI }))}
+                onChnage={(itemDI) =>
+                  setActiveWeapon(new Weapon({ itemDI: +itemDI }))
+                }
               />
               {activeWeapon.itemDI > 0 ? (
                 <CheckboxField
                   label="Enable"
                   checked={settings[triggerFields.enable] as boolean}
-                  onChange={(v) => updateValue(triggerFields.enable, v)}
+                  onChange={(v) =>
+                    updateValue({ name: triggerFields.enable, value: v })
+                  }
                 />
               ) : (
                 ""

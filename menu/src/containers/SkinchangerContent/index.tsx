@@ -1,42 +1,53 @@
 import React from "react";
-
-import { DataContext, SettingsContext } from "@contexts";
+import {
+  fullForceUpdate,
+  getActiveWeapon,
+  selectActiveWeapon,
+  selectSettings,
+  selectSkins,
+  selectTeam,
+  updateValue,
+  useDataSelector,
+  useSettingsSelector,
+} from "@services";
 import { LoadingContent } from "@containers";
 import { Group, CheckboxField } from "@components";
-
+import { TeamNum, Weapon } from "@utils";
 import { KnifeSelect } from "./KnifeSelect";
 import { WeaponSelect } from "./WeaponSelect";
 import { SkinSelect } from "./SkinSelect";
 import { WeaponSettings } from "./WeaponSettings";
 
-import { TeamNum, Weapon } from "@utils";
-import { useStyles } from "./styles";
-
 export const SkinchangerContent: React.FC = () => {
-  const classes = useStyles();
+  const skins = useDataSelector(selectSkins);
+  const gameActiveTeam = useDataSelector(selectTeam);
+  const settings = useSettingsSelector(selectSettings);
+  const gameActiveWeapon = useDataSelector(selectActiveWeapon);
 
-  const { settings, updateValue } = React.useContext(SettingsContext);
-  const {
-    activeWeapon: gameActiveWeapon,
-    getActiveWeapon,
-    team: gameActiveTeam,
-    skins,
-    fullForceUpdate,
-  } = React.useContext(DataContext);
-
-  const [activeWeapon, setActiveWeapon] = React.useState<Weapon | undefined>(undefined);
-  const [activeTeam, setActiveTeam] = React.useState<TeamNum | undefined>(undefined);
+  const [activeWeapon, setActiveWeapon] = React.useState<Weapon | undefined>(
+    undefined
+  );
+  const [activeTeam, setActiveTeam] = React.useState<TeamNum | undefined>(
+    undefined
+  );
 
   React.useEffect(() => {
     getActiveWeapon();
   }, []);
 
   React.useEffect(() => {
-    if (settings.skinchanger_enable && gameActiveWeapon.itemDI > 0 && gameActiveWeapon.isWeapon()) {
+    if (
+      settings.skinchanger_enable &&
+      gameActiveWeapon.itemDI > 0 &&
+      gameActiveWeapon.isWeapon()
+    ) {
       setActiveWeapon(new Weapon({ itemDI: gameActiveWeapon.itemDI }));
 
       if (gameActiveWeapon.isKnife()) {
-        if (gameActiveTeam === TeamNum.Terrorist || gameActiveTeam === TeamNum.CounterTerrorist) {
+        if (
+          gameActiveTeam === TeamNum.Terrorist ||
+          gameActiveTeam === TeamNum.CounterTerrorist
+        ) {
           setActiveTeam(gameActiveTeam);
         }
       } else {
@@ -57,14 +68,18 @@ export const SkinchangerContent: React.FC = () => {
             label="Enable"
             checked={settings.skinchanger_enable}
             onChange={(v) => {
-              updateValue("skinchanger_enable", v);
+              updateValue({ name: "skinchanger_enable", value: v });
               fullForceUpdate();
             }}
           />
-          {/* <SelectField placeholder="Type">
-          <SelectItem value="0">Weapons</SelectItem>
-          <SelectItem value="1">Inventory</SelectItem>
-        </SelectField> */}
+          {/*
+            TODO: Add inventory feature: we cant store in in local storage, fox example
+
+            <SelectField placeholder="Type">
+            <SelectItem value="0">Weapons</SelectItem>
+            <SelectItem value="1">Inventory</SelectItem>
+          </SelectField>
+          */}
         </Group>
       ) : (
         ""
@@ -90,7 +105,11 @@ export const SkinchangerContent: React.FC = () => {
               setActiveWeapon={setActiveWeapon}
             />
           ) : (
-            <SkinSelect activeTeam={activeTeam} activeWeapon={activeWeapon} setActiveWeapon={setActiveWeapon} />
+            <SkinSelect
+              activeTeam={activeTeam}
+              activeWeapon={activeWeapon}
+              setActiveWeapon={setActiveWeapon}
+            />
           )}
         </React.Fragment>
       ) : (

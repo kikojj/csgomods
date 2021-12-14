@@ -1,16 +1,23 @@
 import React from "react";
-
-import { ConfigContext, SocketContext } from "@contexts";
+import {
+  deleteConfig,
+  getConfigsList,
+  loadConfig,
+  saveConfig,
+  selectConnected,
+  useConfigSelector,
+  useSocketSelector,
+} from "@services";
 import { Group, TextField, Button, List } from "@components";
-
 import { SaveIcon, LoadIcon, DeleteIcon } from "./images";
 import { useStyles } from "./styles";
+import { selectConfigsList } from "@services/config/selectors";
 
 export const ConfigsContent: React.FC = () => {
   const classes = useStyles();
 
-  const { connected, send } = React.useContext(SocketContext);
-  const { configsList, getConfigsList, saveConfig, loadConfig, deleteConfig } = React.useContext(ConfigContext);
+  const connected = useSocketSelector(selectConnected);
+  const configsList = useConfigSelector(selectConfigsList);
 
   const [selectedConfig, setSelectedConfig] = React.useState<string>("");
   const [newConfigName, setNewConfigName] = React.useState<string>("");
@@ -67,11 +74,16 @@ export const ConfigsContent: React.FC = () => {
               >
                 <img src={SaveIcon} alt="save" />
               </Button>
-              <Button color="#E81A1A" onClick={() => selectedConfig && deleteConfig(selectedConfig)}>
+              <Button
+                color="#E81A1A"
+                onClick={() => selectedConfig && deleteConfig(selectedConfig)}
+              >
                 <img src={DeleteIcon} alt="delete" />
               </Button>
             </div>
-            <Button onClick={() => selectedConfig && loadConfig(selectedConfig)}>
+            <Button
+              onClick={() => selectedConfig && loadConfig(selectedConfig)}
+            >
               <img src={LoadIcon} alt="load" />
             </Button>
           </div>

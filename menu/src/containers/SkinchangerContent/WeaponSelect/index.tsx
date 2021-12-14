@@ -1,19 +1,20 @@
 import React from "react";
-
-import { DataContext, SettingsContext } from "@contexts";
+import { selectDefaultSkins, selectSettings, selectSkins, useDataSelector, useSettingsSelector } from "@services";
 import { Group, SkinchangerItem } from "@components";
-
 import { getWeaponName, SkinRarity, unique, Weapon } from "@utils";
 import { useStyles } from "../styles";
 
 export type WeaponSelectProps = {
   setActiveWeapon: React.Dispatch<React.SetStateAction<Weapon | undefined>>;
 };
-export const WeaponSelect: React.FC<WeaponSelectProps> = ({ setActiveWeapon }) => {
+export const WeaponSelect: React.FC<WeaponSelectProps> = ({
+  setActiveWeapon,
+}) => {
   const classes = useStyles();
 
-  const { settings } = React.useContext(SettingsContext);
-  const { skins, defaultSkins } = React.useContext(DataContext);
+  const skins = useDataSelector(selectSkins);
+  const settings = useSettingsSelector(selectSettings)
+  const defaultSkins = useDataSelector(selectDefaultSkins);
 
   const weapons = skins
     .map((s) => {
@@ -23,9 +24,13 @@ export const WeaponSelect: React.FC<WeaponSelectProps> = ({ setActiveWeapon }) =
     .filter((itemDI) => {
       const weapon = new Weapon({ itemDI });
 
-      return (defaultSkins[itemDI] || defaultSkins[weapon.name]) && !weapon.isKnife();
+      return (
+        (defaultSkins[itemDI] || defaultSkins[weapon.name]) && !weapon.isKnife()
+      );
     })
-    .sort((itemDI1, itemDI2) => (getWeaponName(itemDI1) > getWeaponName(itemDI2) ? 1 : -1));
+    .sort((itemDI1, itemDI2) =>
+      getWeaponName(itemDI1) > getWeaponName(itemDI2) ? 1 : -1
+    );
 
   return (
     <Group marginTop={35} width="100%" label="Weapons">
@@ -38,7 +43,8 @@ export const WeaponSelect: React.FC<WeaponSelectProps> = ({ setActiveWeapon }) =
           if (settings.skinchanger_weapons[itemDI]) {
             let skin = skins.find(
               (s) =>
-                +s.paintKit === +settings.skinchanger_weapons[itemDI]!.paint_kit! &&
+                +s.paintKit ===
+                  +settings.skinchanger_weapons[itemDI]!.paint_kit! &&
                 settings.skinchanger_weapons[itemDI]?.enable
             );
             if (skin) {
@@ -53,7 +59,9 @@ export const WeaponSelect: React.FC<WeaponSelectProps> = ({ setActiveWeapon }) =
               image={image}
               name={weapon.name}
               rarity={rarity}
-              onClick={() => setActiveWeapon(new Weapon({ itemDI: weapon.itemDI }))}
+              onClick={() =>
+                setActiveWeapon(new Weapon({ itemDI: weapon.itemDI }))
+              }
             />
           );
         })}

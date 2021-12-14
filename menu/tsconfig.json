@@ -16,8 +16,8 @@
       "@components/*": ["src/components/*"],
       "@containers": ["src/containers/index"],
       "@containers/*": ["src/containers/*"],
-      "@contexts": ["src/contexts/index"],
-      "@contexts/*": ["src/contexts/*"]
+      "@services": ["src/services/index"],
+      "@services/*": ["src/services/*"]
     },
     "strict": true,
     "esModuleInterop": true,

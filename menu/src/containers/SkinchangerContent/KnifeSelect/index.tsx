@@ -1,9 +1,22 @@
 import React from "react";
-
-import { DataContext, SettingsContext } from "@contexts";
+import {
+  applyKnifeModel,
+  fullForceUpdate,
+  selectDefaultSkins,
+  selectSettings,
+  selectSkins,
+  useDataSelector,
+  useSettingsSelector,
+} from "@services";
 import { Group, SkinchangerItem } from "@components";
-
-import { getWeaponName, ISkinchangerWeapon, ItemDefinitionIndex, SkinRarity, TeamNum, Weapon } from "@utils";
+import {
+  getWeaponName,
+  ISkinchangerWeapon,
+  ItemDefinitionIndex,
+  SkinRarity,
+  TeamNum,
+  Weapon,
+} from "@utils";
 import BackIcon from "../images/BackIcon.svg";
 import { useStyles } from "../styles";
 
@@ -13,13 +26,21 @@ export type KnifeSelectProps = {
   activeWeapon?: Weapon;
   setActiveWeapon: React.Dispatch<React.SetStateAction<Weapon | undefined>>;
 };
-export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveTeam, setActiveWeapon }) => {
+export const KnifeSelect: React.FC<KnifeSelectProps> = ({
+  activeTeam,
+  setActiveTeam,
+  setActiveWeapon,
+}) => {
   const classes = useStyles();
 
-  const { settings, setSettings } = React.useContext(SettingsContext);
-  const { defaultSkins, skins, fullForceUpdate } = React.useContext(DataContext);
+  const skins = useDataSelector(selectSkins);
+  const settings = useSettingsSelector(selectSettings);
+  const defaultSkins = useDataSelector(selectDefaultSkins);
 
-  const knifes = [ItemDefinitionIndex.WeaponKnifeT, ItemDefinitionIndex.WeaponKnifeCT2];
+  const knifes = [
+    ItemDefinitionIndex.WeaponKnifeT,
+    ItemDefinitionIndex.WeaponKnifeCT2,
+  ];
 
   const models = Object.keys(defaultSkins)
     .filter((k) => {
@@ -39,18 +60,12 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
     .map((k) => parseInt(k));
 
   function applyModel(itemDI: ItemDefinitionIndex) {
-    
-    if (activeTeam && (activeTeam === TeamNum.Terrorist || activeTeam === TeamNum.CounterTerrorist)) {
-      setSettings({
-        ...settings,
-        skinchanger_knives: {
-          ...settings.skinchanger_knives,
-          [activeTeam]: {
-            ...settings.skinchanger_knives[activeTeam],
-            item_di: itemDI,
-          },
-        },
-      });
+    if (
+      activeTeam &&
+      (activeTeam === TeamNum.Terrorist ||
+        activeTeam === TeamNum.CounterTerrorist)
+    ) {
+      applyKnifeModel({ activeTeam, itemDI });
       fullForceUpdate();
     }
   }
@@ -62,7 +77,11 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
       label={
         activeTeam ? (
           <div className={classes.title_back}>
-            <img src={BackIcon} alt="<-" onClick={() => setActiveTeam(undefined)} />
+            <img
+              src={BackIcon}
+              alt="<-"
+              onClick={() => setActiveTeam(undefined)}
+            />
             Models
           </div>
         ) : (
@@ -81,12 +100,16 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
 
                 const knifeSettings: ISkinchangerWeapon | undefined =
                   settings.skinchanger_knives[
-                    itemDI === ItemDefinitionIndex.WeaponKnifeT ? TeamNum.Terrorist : TeamNum.CounterTerrorist
+                    itemDI === ItemDefinitionIndex.WeaponKnifeT
+                      ? TeamNum.Terrorist
+                      : TeamNum.CounterTerrorist
                   ];
 
                 if (knifeSettings) {
                   let skin = skins.find(
-                    (s) => +s.paintKit === +knifeSettings.paint_kit && +s.weaponDI === +knifeSettings.item_di
+                    (s) =>
+                      +s.paintKit === +knifeSettings.paint_kit &&
+                      +s.weaponDI === +knifeSettings.item_di
                   );
                   if (skin) {
                     image = skin.image;
@@ -97,11 +120,17 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
                   <SkinchangerItem
                     key={key}
                     image={image}
-                    name={knife.itemDI === ItemDefinitionIndex.WeaponKnifeCT2 ? "Knife CT" : "Knife T"}
+                    name={
+                      knife.itemDI === ItemDefinitionIndex.WeaponKnifeCT2
+                        ? "Knife CT"
+                        : "Knife T"
+                    }
                     rarity={SkinRarity.RARITY_ANCIENT}
                     onClick={() =>
                       setActiveTeam(
-                        itemDI === ItemDefinitionIndex.WeaponKnifeT ? TeamNum.Terrorist : TeamNum.CounterTerrorist
+                        itemDI === ItemDefinitionIndex.WeaponKnifeT
+                          ? TeamNum.Terrorist
+                          : TeamNum.CounterTerrorist
                       )
                     }
                   />
@@ -110,8 +139,12 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({ activeTeam, setActiveT
           </React.Fragment>
         ) : (
           [
-            activeTeam === TeamNum.Terrorist ? ItemDefinitionIndex.WeaponKnifeT : ItemDefinitionIndex.WeaponKnifeCT2,
-            ...models.sort((m1, m2) => (getWeaponName(m1) > getWeaponName(m2) ? 1 : -1)),
+            activeTeam === TeamNum.Terrorist
+              ? ItemDefinitionIndex.WeaponKnifeT
+              : ItemDefinitionIndex.WeaponKnifeCT2,
+            ...models.sort((m1, m2) =>
+              getWeaponName(m1) > getWeaponName(m2) ? 1 : -1
+            ),
           ].map((itemDI, key) => {
             const model: Weapon = new Weapon({ itemDI });
 
