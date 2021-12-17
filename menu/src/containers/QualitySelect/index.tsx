@@ -1,6 +1,6 @@
 import React from "react";
 import { SelectField, SelectItem } from "@components";
-import { EntityQuality } from "@utils";
+import { EntityQuality, GenericObject } from "@utils";
 
 const qualities: { [T in EntityQuality]: string } = {
   [EntityQuality.Invalid]: "Invalid",
@@ -19,22 +19,32 @@ const qualities: { [T in EntityQuality]: string } = {
 
 export type QualitySelectProps = {
   value?: number;
-  onChnage?: (v: number) => void;
+  onChange?: (v: number) => void;
   marginTop?: number;
 };
-export const QualitySelect: React.FC<QualitySelectProps> = ({ marginTop, value, onChnage }) => {
+export const QualitySelect: React.FC<QualitySelectProps> = ({
+  marginTop,
+  value,
+  onChange,
+}) => {
+  const qualityItems = React.useMemo(
+    () =>
+      GenericObject.keys(qualities).map((qualityKey) => (
+        <SelectItem key={qualityKey} value={qualityKey.toString()}>
+          {qualities[qualityKey]}
+        </SelectItem>
+      )),
+    []
+  );
+
   return (
     <SelectField
       placeholder="Quality"
       value={value?.toString()}
-      onChange={onChnage ? (v) => onChnage(+v) : undefined}
+      onChange={(v) => onChange && onChange(+v)}
       marginTop={marginTop}
     >
-      {Object.keys(qualities).map((key) => (
-        <SelectItem key={key} value={key.toString()}>
-          {qualities[(key as any) as EntityQuality]}
-        </SelectItem>
-      ))}
+      {qualityItems}
     </SelectField>
   );
 };

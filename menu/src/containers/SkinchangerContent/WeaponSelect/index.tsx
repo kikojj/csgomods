@@ -25,7 +25,7 @@ export const WeaponSelect: React.FC<WeaponSelectProps> = ({
       const weapon = new Weapon({ itemDI });
 
       return (
-        (defaultSkins[itemDI] || defaultSkins[weapon.name]) && !weapon.isKnife()
+        (defaultSkins[itemDI] || defaultSkins[weapon.name]) && !weapon.isKnife
       );
     })
     .sort((itemDI1, itemDI2) =>

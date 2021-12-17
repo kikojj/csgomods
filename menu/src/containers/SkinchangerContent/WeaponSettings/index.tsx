@@ -35,7 +35,7 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({
     weaponSettings = settings.skinchanger_knives[activeTeam];
   }
   if (activeWeapon) {
-    if (!activeWeapon.isKnife()) {
+    if (!activeWeapon.isKnife) {
       weaponSettings = settings.skinchanger_weapons[activeWeapon.itemDI];
     }
   }
@@ -51,7 +51,7 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({
 
   function applyHandler() {
     if (activeWeapon) {
-      if (activeWeapon.isKnife() && activeTeam) {
+      if (activeWeapon.isKnife && activeTeam) {
         updateValue({
           name: "skinchanger_knives",
           value: {
@@ -63,7 +63,7 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({
           },
         });
         fullForceUpdate();
-      } else if (!activeWeapon.isKnife()) {
+      } else if (!activeWeapon.isKnife) {
         updateValue({
           name: "skinchanger_weapons",
           value: {
@@ -119,7 +119,7 @@ export const WeaponSettings: React.FC<WeaponSettingsProps> = ({
             <QualitySelect
               marginTop={21}
               value={props.quality}
-              onChnage={(v) => setProps({ ...props, quality: v })}
+              onChange={(v) => setProps({ ...props, quality: v })}
             />
             <CheckboxField
               marginTop={43}

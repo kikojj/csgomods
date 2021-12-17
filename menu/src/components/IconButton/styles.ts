@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/styles";
 import { colors } from "@utils";
 
 export const useStyles = makeStyles({
-  contanier: {
+  container: {
     width: 36,
     height: 36,
 

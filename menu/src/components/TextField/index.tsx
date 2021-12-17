@@ -27,8 +27,10 @@ export function TextField({
   const [focus, setFocus] = React.useState<boolean>(false);
   const [__value, __onChange] = React.useState<string>("");
 
-  const value = _value !== undefined && _onChange !== undefined ? _value : __value;
-  const onChange = _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const value =
+    _value !== undefined && _onChange !== undefined ? _value : __value;
+  const onChange =
+    _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
 
   function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
@@ -36,19 +38,23 @@ export function TextField({
   }
 
   return (
-    <div className={join(classes.preContainer, className)} style={{ marginTop, marginRight }}>
+    <div
+      className={join(classes.preContainer, className)}
+      style={{ marginTop, marginRight }}
+    >
       <div className={classes.container}>
-        {placeholder ? (
+        {placeholder && (
           <span
-            className={classes.placeholder + (focus || value ? ` ${classes.placeholder}-focus` : "")}
+            className={join(
+              classes.placeholder,
+              focus || (value && ` ${classes.placeholder}-focus`)
+            )}
             onClick={() => {
               ref.current?.focus();
             }}
           >
             {placeholder}
           </span>
-        ) : (
-          ""
         )}
         <input
           ref={ref}
@@ -60,7 +66,14 @@ export function TextField({
           onBlur={() => setFocus(false)}
         />
       </div>
-      <div className={classes.helperText + (helperText ? ` ${classes.helperText}-show` : "")}>{helperText}</div>
+      <div
+        className={join(
+          classes.helperText,
+          helperText && ` ${classes.helperText}-show`
+        )}
+      >
+        {helperText}
+      </div>
     </div>
   );
 }

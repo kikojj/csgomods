@@ -21,6 +21,7 @@ import {
   capitalizeFirstLetter,
   DEFAULT_AIMBOT_SETTINGS,
   IAimbotSettings,
+  selectWeaponAimbotSettings,
   TSettings,
   Weapon,
 } from "@utils";
@@ -35,69 +36,60 @@ export const AimbotContent: React.FC = () => {
   const [activeWeapon, setActiveWeapon] =
     React.useState<Weapon>(gameActiveWeapon);
 
+  const activeWeaponSettings = selectWeaponAimbotSettings(
+    settings,
+    activeWeapon.itemDI,
+    activeWeapon.sectionName
+  );
+
+  const activeWeaponAimbotSettings =
+    settings.aimbot_weapons[activeWeapon.itemDI];
+  const hasUsedActiveWeaponAimbotSettings =
+    activeWeaponAimbotSettings && activeWeaponAimbotSettings.use;
+
+  const activeWeaponSectionKey =
+    `aimbot_${activeWeapon.sectionName}` as keyof TSettings;
+  const activeWeaponSectionAimbotSettings = settings[
+    activeWeaponSectionKey
+  ] as IAimbotSettings;
+  const hasUsedActiveWeaponSectionAimbotSettings =
+    activeWeaponSectionAimbotSettings && activeWeaponSectionAimbotSettings.use;
+
   React.useEffect(() => {
     getActiveWeapon();
   }, []);
 
   React.useEffect(() => {
-    if (
-      gameActiveWeapon.isPistol() ||
-      gameActiveWeapon.isSMG() ||
-      gameActiveWeapon.isHeavy() ||
-      gameActiveWeapon.isShotgun() ||
-      gameActiveWeapon.isRifle() ||
-      gameActiveWeapon.isSnipers()
-    ) {
+    if (gameActiveWeapon.isWeapon && !gameActiveWeapon.isKnife) {
       setActiveWeapon(gameActiveWeapon);
     }
   }, [gameActiveWeapon]);
 
-  const weaponSettings: IAimbotSettings =
-    settings.aimbot_weapons[activeWeapon.itemDI] &&
-    settings.aimbot_weapons[activeWeapon.itemDI]?.use
-      ? (settings.aimbot_weapons[activeWeapon.itemDI] as IAimbotSettings)
-      : (
-          settings[
-            `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-          ] as IAimbotSettings
-        ).use
-      ? (settings[
-          `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-        ] as IAimbotSettings)
-      : settings.aimbot_global;
+  const changeSettings = React.useCallback(
+    (value: IAimbotSettings) => {
+      if (hasUsedActiveWeaponAimbotSettings) {
+        return updateValue({
+          name: "aimbot_weapons",
+          value: {
+            ...settings.aimbot_weapons,
+            [activeWeapon.itemDI]: {
+              ...activeWeaponAimbotSettings,
+              ...value,
+            },
+          },
+        });
+      }
 
-  function changeSettings(value: IAimbotSettings) {
-    if (
-      settings.aimbot_weapons[activeWeapon.itemDI] &&
-      settings.aimbot_weapons[activeWeapon.itemDI]?.use
-    ) {
-      updateValue({
-        name: "aimbot_weapons",
-        value: {
-          ...settings.aimbot_weapons,
-          [activeWeapon.itemDI]: {
-            ...settings.aimbot_weapons[activeWeapon.itemDI],
+      if (hasUsedActiveWeaponSectionAimbotSettings) {
+        return updateValue({
+          name: activeWeaponSectionKey,
+          value: {
+            ...activeWeaponSectionAimbotSettings,
             ...value,
           },
-        },
-      });
-    } else if (
-      (
-        settings[
-          `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-        ] as IAimbotSettings
-      ).use
-    ) {
-      updateValue({
-        name: `aimbot_${activeWeapon.sectionName}` as keyof TSettings,
-        value: {
-          ...(settings[
-            `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-          ] as IAimbotSettings),
-          ...value,
-        },
-      });
-    } else {
+        });
+      }
+
       updateValue({
         name: "aimbot_global",
         value: {
@@ -105,62 +97,66 @@ export const AimbotContent: React.FC = () => {
           ...value,
         },
       });
-    }
-  }
+    },
+    [
+      settings,
+      activeWeaponAimbotSettings,
+      hasUsedActiveWeaponAimbotSettings,
+      activeWeaponSectionKey,
+      activeWeaponSectionAimbotSettings,
+      hasUsedActiveWeaponSectionAimbotSettings,
+    ]
+  );
 
-  function addSectionSettings() {
+  const addSectionSettings = React.useCallback(() => {
     updateValue({
-      name: `aimbot_${activeWeapon.sectionName}` as keyof TSettings,
+      name: activeWeaponSectionKey,
       value: {
         ...DEFAULT_AIMBOT_SETTINGS,
-        ...(settings[
-          `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-        ] as IAimbotSettings),
+        ...activeWeaponSectionAimbotSettings,
         use: true,
       },
     });
-  }
+  }, [settings, activeWeaponSectionKey, activeWeaponSectionAimbotSettings]);
 
-  function removeSectionSettings() {
+  const removeSectionSettings = React.useCallback(() => {
     updateValue({
-      name: `aimbot_${activeWeapon.sectionName}` as keyof TSettings,
+      name: activeWeaponSectionKey,
       value: {
         ...DEFAULT_AIMBOT_SETTINGS,
-        ...(settings[
-          `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-        ] as IAimbotSettings),
+        ...activeWeaponSectionAimbotSettings,
         use: false,
       },
     });
-  }
+  }, [settings, activeWeaponSectionKey, activeWeaponSectionAimbotSettings]);
 
-  function addWeaponSettings() {
+  const addWeaponSettings = React.useCallback(() => {
     updateValue({
       name: "aimbot_weapons",
       value: {
         ...settings.aimbot_weapons,
         [activeWeapon.itemDI]: {
           ...DEFAULT_AIMBOT_SETTINGS,
-          ...settings.aimbot_weapons[activeWeapon.itemDI],
+          ...activeWeaponSettings,
           use: true,
         },
       },
     });
-  }
+  }, [settings, activeWeaponSettings]);
 
-  function removeWeaponSettings() {
+  const removeWeaponSettings = React.useCallback(() => {
     updateValue({
       name: "aimbot_weapons",
       value: {
         ...settings.aimbot_weapons,
         [activeWeapon.itemDI]: {
           ...DEFAULT_AIMBOT_SETTINGS,
-          ...settings.aimbot_weapons[activeWeapon.itemDI],
+          ...activeWeaponSettings,
           use: false,
         },
       },
     });
-  }
+  }, [settings, activeWeaponSettings]);
 
   return (
     <div>
@@ -172,7 +168,7 @@ export const AimbotContent: React.FC = () => {
               checked={settings.aimbot_enable}
               onChange={(v) => updateValue({ name: "aimbot_enable", value: v })}
             />
-            {settings.aimbot_enable ? (
+            {settings.aimbot_enable && (
               <React.Fragment>
                 <CheckboxField
                   label="Visible check"
@@ -182,7 +178,7 @@ export const AimbotContent: React.FC = () => {
                     updateValue({ name: "aimbot_visible_check", value: v })
                   }
                 />
-                {settings.aimbot_visible_check ? (
+                {settings.aimbot_visible_check && (
                   <CheckboxField
                     label="Smoke check"
                     helperText="Check if player is behind the smoke"
@@ -191,8 +187,6 @@ export const AimbotContent: React.FC = () => {
                       updateValue({ name: "aimbot_smoke_check", value: v })
                     }
                   />
-                ) : (
-                  ""
                 )}
                 <CheckboxField
                   label="Flash check"
@@ -244,154 +238,138 @@ export const AimbotContent: React.FC = () => {
                   <SelectItem value="0">Auto</SelectItem>
                   <SelectItem value="1">Key</SelectItem>
                 </SelectField>
-                {settings.aimbot_use_key ? (
+                {settings.aimbot_use_key && (
                   <KeyInputField
                     value={settings.aimbot_key}
                     onChange={(v) =>
                       updateValue({ name: "aimbot_key", value: v })
                     }
                   />
-                ) : (
-                  ""
                 )}
               </React.Fragment>
-            ) : (
-              ""
             )}
           </Group>
         </div>
-        {settings.aimbot_enable ? (
+        {settings.aimbot_enable && (
           <div>
             <Group
               marginLeft={35}
               label={
-                <React.Fragment>
-                  {settings.aimbot_weapons[activeWeapon.itemDI] &&
-                  settings.aimbot_weapons[activeWeapon.itemDI]?.use
-                    ? "Weapon settings"
-                    : (
-                        settings[
-                          `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-                        ] as IAimbotSettings
-                      ).use
-                    ? `${capitalizeFirstLetter(
-                        activeWeapon.sectionName
-                      )} settings`
-                    : "Global settings"}
-                </React.Fragment>
+                hasUsedActiveWeaponAimbotSettings
+                  ? "Weapon settings"
+                  : hasUsedActiveWeaponSectionAimbotSettings
+                  ? `${capitalizeFirstLetter(
+                      activeWeapon.sectionName
+                    )} settings`
+                  : "Global settings"
               }
             >
               <CheckboxField
                 label="Enable"
-                checked={weaponSettings.enable}
+                checked={activeWeaponSettings.enable}
                 onChange={(v) =>
-                  changeSettings({ ...weaponSettings, enable: v })
+                  changeSettings({ ...activeWeaponSettings, enable: v })
                 }
               />
-              {weaponSettings.enable ? (
+              {activeWeaponSettings.enable && (
                 <React.Fragment>
                   <CheckboxField
                     label="Perfect first"
                     helperText="First bullet will 100% hit the target"
-                    checked={weaponSettings.first_perfect_shoot}
+                    checked={activeWeaponSettings.first_perfect_shoot}
                     onChange={(v) =>
                       changeSettings({
-                        ...weaponSettings,
+                        ...activeWeaponSettings,
                         first_perfect_shoot: v,
                       })
                     }
                   />
                   <RangeField
-                    label={`Fov: ${weaponSettings.fov}`}
+                    label={`Fov: ${activeWeaponSettings.fov}`}
                     min={0}
                     max={180}
                     step={1}
-                    value={weaponSettings.fov}
+                    value={activeWeaponSettings.fov}
                     onChange={(v) =>
-                      changeSettings({ ...weaponSettings, fov: v })
+                      changeSettings({ ...activeWeaponSettings, fov: v })
                     }
                   />
                   <BoneSelect
-                    value={weaponSettings.bone.toString()}
-                    onChnage={(v) =>
-                      changeSettings({ ...weaponSettings, bone: +v })
+                    value={activeWeaponSettings.bone.toString()}
+                    onChange={(v) =>
+                      changeSettings({ ...activeWeaponSettings, bone: +v })
                     }
                   />
-                  {weaponSettings.bone === 0 ? (
+                  {!activeWeaponSettings.bone && (
                     <CheckboxField
                       label="Change bone"
                       helperText="Change the bone if it is not main(like shoulder, eblow, knee, etc.)"
-                      checked={weaponSettings.change_after_nearest}
+                      checked={activeWeaponSettings.change_after_nearest}
                       onChange={(v) =>
                         changeSettings({
-                          ...weaponSettings,
+                          ...activeWeaponSettings,
                           change_after_nearest: v,
                         })
                       }
                     />
-                  ) : (
-                    ""
                   )}
                   <RangeField
-                    label={`Smooth: ${weaponSettings.smooth}`}
+                    label={`Smooth: ${activeWeaponSettings.smooth}`}
                     helperText="Slowing down the movement of the aiming"
                     min={0}
                     max={100}
                     step={1}
-                    value={weaponSettings.smooth}
+                    value={activeWeaponSettings.smooth}
                     onChange={(v) =>
-                      changeSettings({ ...weaponSettings, smooth: v })
+                      changeSettings({ ...activeWeaponSettings, smooth: v })
                     }
                   />
                   <CheckboxField
                     label="RCS Enable"
-                    checked={weaponSettings.rcs_enable}
+                    checked={activeWeaponSettings.rcs_enable}
                     onChange={(v) =>
-                      changeSettings({ ...weaponSettings, rcs_enable: v })
+                      changeSettings({ ...activeWeaponSettings, rcs_enable: v })
                     }
                   />
-                  {weaponSettings.rcs_enable ? (
+                  {activeWeaponSettings.rcs_enable && (
                     <React.Fragment>
                       <RangeField
-                        label={`RCS X: ${weaponSettings.rcs_scale_x.toString()}%`}
+                        label={`RCS X: ${activeWeaponSettings.rcs_scale_x.toString()}%`}
                         helperText="Horizontal recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={weaponSettings.rcs_scale_x}
+                        value={activeWeaponSettings.rcs_scale_x}
                         onChange={(v) =>
-                          changeSettings({ ...weaponSettings, rcs_scale_x: v })
+                          changeSettings({
+                            ...activeWeaponSettings,
+                            rcs_scale_x: v,
+                          })
                         }
                       />
                       <RangeField
-                        label={`RCS Y: ${weaponSettings.rcs_scale_y.toString()}%`}
+                        label={`RCS Y: ${activeWeaponSettings.rcs_scale_y.toString()}%`}
                         helperText="Vertical recoil"
                         min={0}
                         max={100}
                         step={1}
-                        value={weaponSettings.rcs_scale_y}
+                        value={activeWeaponSettings.rcs_scale_y}
                         onChange={(v) =>
-                          changeSettings({ ...weaponSettings, rcs_scale_y: v })
+                          changeSettings({
+                            ...activeWeaponSettings,
+                            rcs_scale_y: v,
+                          })
                         }
                       />
                     </React.Fragment>
-                  ) : (
-                    ""
                   )}
                 </React.Fragment>
-              ) : (
-                ""
               )}
-              {settings.aimbot_weapons[activeWeapon.itemDI] &&
-              settings.aimbot_weapons[activeWeapon.itemDI]?.use ? (
+              {hasUsedActiveWeaponAimbotSettings ? (
                 <Button onClick={removeWeaponSettings} color="#FF0000">
                   Remove {activeWeapon.name} settings
                 </Button>
-              ) : (
-                  settings[
-                    `aimbot_${activeWeapon.sectionName}` as keyof TSettings
-                  ] as IAimbotSettings
-                ).use && !activeWeapon.isKnife() ? (
+              ) : hasUsedActiveWeaponSectionAimbotSettings ? (
                 <React.Fragment>
                   <Button onClick={removeSectionSettings} color="#FF0000">
                     Remove {capitalizeFirstLetter(activeWeapon.sectionName)}{" "}
@@ -401,7 +379,7 @@ export const AimbotContent: React.FC = () => {
                     Add {activeWeapon.name} settings
                   </Button>
                 </React.Fragment>
-              ) : !activeWeapon.isKnife() ? (
+              ) : (
                 <React.Fragment>
                   <Button onClick={addSectionSettings}>
                     Add {capitalizeFirstLetter(activeWeapon.sectionName)}{" "}
@@ -411,13 +389,9 @@ export const AimbotContent: React.FC = () => {
                     Add {activeWeapon.name} settings
                   </Button>
                 </React.Fragment>
-              ) : (
-                ""
               )}
             </Group>
           </div>
-        ) : (
-          ""
         )}
       </div>
     </div>

@@ -9,16 +9,21 @@ export type CheckboxFieldProps = {
   helperText?: string;
   marginTop?: number;
 };
-export const CheckboxField: React.FC<CheckboxFieldProps & CheckboxProps> = (props) => {
+export const CheckboxField: React.FC<CheckboxFieldProps & CheckboxProps> = ({
+  label = "Label",
+  helperText,
+  marginTop = 20,
+  ...checkboxProps
+}) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.container} style={{ marginTop: props.marginTop !== undefined ? props.marginTop : 20 }}>
+    <div className={classes.container} style={{ marginTop }}>
       <div className={classes.containerCheckbox}>
-        <h6 className={classes.label}>{props.label || "Label"}</h6>
-        <Checkbox {...props} />
+        <h6 className={classes.label}>{label}</h6>
+        <Checkbox {...checkboxProps} />
       </div>
-      {props.helperText ? <p className={classes.helperText}>{props.helperText}</p> : ""}
+      {helperText && <p className={classes.helperText}>{helperText}</p>}
     </div>
   );
 };

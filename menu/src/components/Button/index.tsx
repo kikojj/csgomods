@@ -1,8 +1,6 @@
 import React from "react";
-
 import { colors } from "@utils";
 import { join } from "../utils";
-
 import { useStyles } from "./styles";
 
 export type ButtonProps = {
@@ -22,6 +20,7 @@ export const Button: React.FC<ButtonProps> = ({
   color = colors.primary,
 }) => {
   const classes = useStyles({ color });
+
   return (
     <div className={join(classes.container, className)} onClick={onClick} style={{ marginTop, marginRight }}>
       {children}

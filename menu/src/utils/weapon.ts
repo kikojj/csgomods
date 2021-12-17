@@ -176,7 +176,7 @@ export const getWeaponName = (idi: ItemDefinitionIndex): string => {
   return "Unknown weapon";
 };
 
-export const getWeaponIDI = (name: string): ItemDefinitionIndex => {
+export const getWeaponDI = (name: string): ItemDefinitionIndex => {
   const weapon = weaponNames.find((w) => w.name === name);
   if (weapon) {
     return weapon.idi;
@@ -193,24 +193,24 @@ export class Weapon {
       this.itemDI = data.itemDI;
       this.name = getWeaponName(data.itemDI);
     } else if (data && data.name) {
-      this.itemDI = getWeaponIDI(data.name);
+      this.itemDI = getWeaponDI(data.name);
       this.name = data.name;
     }
   }
 
-  isWeapon = (): boolean => {
+  get isWeapon (): boolean {
     return (
-      this.isPistol() ||
-      this.isSMG() ||
-      this.isShotgun() ||
-      this.isRifle() ||
-      this.isHeavy() ||
-      this.isSnipers() ||
-      this.isKnife()
+      this.isPistol ||
+      this.isSMG ||
+      this.isShotgun ||
+      this.isRifle ||
+      this.isHeavy ||
+      this.isSnipers ||
+      this.isKnife
     );
   };
 
-  isPistol = (): boolean => {
+  get isPistol (): boolean  {
     if (
       this.itemDI == ItemDefinitionIndex.WeaponDesertEagle ||
       this.itemDI == ItemDefinitionIndex.WeaponDualBerettas ||
@@ -228,7 +228,7 @@ export class Weapon {
     return false;
   };
 
-  isSMG = (): boolean => {
+  get isSMG(): boolean  {
     if (
       this.itemDI == ItemDefinitionIndex.WeaponMAC10 ||
       this.itemDI == ItemDefinitionIndex.WeaponP90 ||
@@ -243,14 +243,14 @@ export class Weapon {
     return false;
   };
 
-  isHeavy = (): boolean => {
+  get isHeavy (): boolean  {
     if (this.itemDI == ItemDefinitionIndex.WeaponM249 || this.itemDI == ItemDefinitionIndex.WeaponNegev) {
       return true;
     }
     return false;
   };
 
-  isShotgun = (): boolean => {
+  get isShotgun (): boolean {
     if (
       this.itemDI == ItemDefinitionIndex.WeaponXM1014 ||
       this.itemDI == ItemDefinitionIndex.WeaponMAG7 ||
@@ -262,7 +262,7 @@ export class Weapon {
     return false;
   };
 
-  isRifle = (): boolean => {
+  get isRifle (): boolean {
     if (
       this.itemDI == ItemDefinitionIndex.WeaponAK47 ||
       this.itemDI == ItemDefinitionIndex.WeaponAUG ||
@@ -277,7 +277,7 @@ export class Weapon {
     return false;
   };
 
-  isSnipers = (): boolean => {
+  get isSnipers (): boolean {
     if (
       this.itemDI == ItemDefinitionIndex.WeaponAWP ||
       this.itemDI == ItemDefinitionIndex.WeaponG3SG1 ||
@@ -289,7 +289,7 @@ export class Weapon {
     return false;
   };
 
-  isKnife = (): boolean => {
+  get isKnife (): boolean {
     if (
       this.itemDI == ItemDefinitionIndex.WeaponKnife ||
       this.itemDI == ItemDefinitionIndex.WeaponKnifeCT ||
@@ -321,19 +321,19 @@ export class Weapon {
   };
 
   get sectionName() {
-    if (this.isPistol()) {
+    if (this.isPistol) {
       return "pistols";
     }
-    if (this.isSMG()) {
+    if (this.isSMG) {
       return "smgs";
     }
-    if (this.isHeavy()) {
+    if (this.isHeavy) {
       return "heavies";
     }
-    if (this.isShotgun()) {
+    if (this.isShotgun) {
       return "shoutguns";
     }
-    if (this.isRifle()) {
+    if (this.isRifle) {
       return "rifles";
     }
     return "snipers";

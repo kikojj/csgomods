@@ -85,7 +85,7 @@ export const getDefaultSkin = (weaponDI: ItemDefinitionIndex, image: string) => 
     paintKit: 0,
     image,
     rarity: "Common",
-    rarityID: new Weapon({ itemDI: weaponDI }).isKnife() ? SkinRarity.RARITY_ANCIENT : SkinRarity.RARITY_COMMON,
+    rarityID: new Weapon({ itemDI: weaponDI }).isKnife ? SkinRarity.RARITY_ANCIENT : SkinRarity.RARITY_COMMON,
     description: "",
   });
 };

@@ -9,6 +9,8 @@ export const useStyles = makeStyles({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
+
+    fontSize: 12,
   },
   player_info: {
     display: "flex",

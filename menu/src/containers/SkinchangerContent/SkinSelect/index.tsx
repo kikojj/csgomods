@@ -42,7 +42,7 @@ export const SkinSelect: React.FC<SkinSelectProps> = ({
 
   let weaponSettings: ISkinchangerWeapon | undefined = undefined;
   if (activeWeapon) {
-    if (activeWeapon.isKnife() && activeTeam) {
+    if (activeWeapon.isKnife && activeTeam) {
       weaponSettings = settings.skinchanger_knives[activeTeam];
     } else {
       weaponSettings = settings.skinchanger_weapons[activeWeapon.itemDI];
@@ -50,7 +50,7 @@ export const SkinSelect: React.FC<SkinSelectProps> = ({
   }
 
   function applyPaintKit(paintKit: number) {
-    if (activeWeapon.isKnife()) {
+    if (activeWeapon.isKnife) {
       if (
         activeTeam &&
         (activeTeam === TeamNum.Terrorist ||

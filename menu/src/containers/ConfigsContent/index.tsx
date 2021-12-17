@@ -7,11 +7,11 @@ import {
   selectConnected,
   useConfigSelector,
   useSocketSelector,
+  selectConfigsList,
 } from "@services";
 import { Group, TextField, Button, List } from "@components";
 import { SaveIcon, LoadIcon, DeleteIcon } from "./images";
 import { useStyles } from "./styles";
-import { selectConfigsList } from "@services/config/selectors";
 
 export const ConfigsContent: React.FC = () => {
   const classes = useStyles();
@@ -19,15 +19,26 @@ export const ConfigsContent: React.FC = () => {
   const connected = useSocketSelector(selectConnected);
   const configsList = useConfigSelector(selectConfigsList);
 
-  const [selectedConfig, setSelectedConfig] = React.useState<string>("");
   const [newConfigName, setNewConfigName] = React.useState<string>("");
+  const [selectedConfig, setSelectedConfig] = React.useState<string>("");
 
   React.useEffect(() => {
     if (!connected) {
       return;
     }
+
     getConfigsList();
   }, [connected]);
+
+  const configsListItems = React.useMemo(
+    () =>
+      configsList.map((name) => ({
+        content: name,
+        onClick: () => setSelectedConfig(name),
+        selected: selectedConfig === name,
+      })),
+    [configsList, selectedConfig, setSelectedConfig]
+  );
 
   return (
     <div>
@@ -57,15 +68,7 @@ export const ConfigsContent: React.FC = () => {
       </div>
       <div>
         <Group marginTop={35} width="100%" label="Configs list">
-          <List
-            items={configsList.map((name) => {
-              return {
-                content: name,
-                onClick: () => setSelectedConfig(name),
-                selected: selectedConfig === name,
-              };
-            })}
-          />
+          <List items={configsListItems} />
           <div className={classes.configListBtns}>
             <div className={classes.configListBtns_left}>
               <Button

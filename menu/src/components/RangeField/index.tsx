@@ -9,14 +9,19 @@ export type RangeFieldProps = {
   helperText?: string;
   marginTop?: number;
 };
-export const RangeField: React.FC<RangeFieldProps & RangeProps> = (props) => {
+export const RangeField: React.FC<RangeFieldProps & RangeProps> = ({
+  label = "Label",
+  helperText,
+  marginTop = 20,
+  ...rangeProps
+}) => {
   const classes = useStyles();
 
   return (
-    <div className={classes.container} style={{ marginTop: props.marginTop !== undefined ? props.marginTop : 20 }}>
-      <h6 className={classes.label}>{props.label || "Label"}</h6>
-      <Range {...props} />
-      {props.helperText ? <p className={classes.helperText}>{props.helperText}</p> : ""}
+    <div className={classes.container} style={{ marginTop }}>
+      <h6 className={classes.label}>{label}</h6>
+      <Range {...rangeProps} />
+      {helperText && <p className={classes.helperText}>{helperText}</p>}
     </div>
   );
 };

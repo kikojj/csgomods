@@ -38,12 +38,12 @@ export const TriggerbotContent: React.FC = () => {
 
   React.useEffect(() => {
     if (
-      gameActiveWeapon.isPistol() ||
-      gameActiveWeapon.isSMG() ||
-      gameActiveWeapon.isHeavy() ||
-      gameActiveWeapon.isShotgun() ||
-      gameActiveWeapon.isRifle() ||
-      gameActiveWeapon.isSnipers()
+      gameActiveWeapon.isPistol ||
+      gameActiveWeapon.isSMG ||
+      gameActiveWeapon.isHeavy ||
+      gameActiveWeapon.isShotgun ||
+      gameActiveWeapon.isRifle ||
+      gameActiveWeapon.isSnipers
     ) {
       setActiveWeapon(gameActiveWeapon);
     }
@@ -150,7 +150,7 @@ export const TriggerbotContent: React.FC = () => {
             <Group marginLeft={35} label="Weapon triggerbot">
               <WeaponSelect
                 value={activeWeapon.itemDI.toString()}
-                onChnage={(itemDI) =>
+                onChange={(itemDI) =>
                   setActiveWeapon(new Weapon({ itemDI: +itemDI }))
                 }
               />

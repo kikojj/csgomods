@@ -4,16 +4,22 @@ import { bones, Skeleton } from "@utils";
 
 export type BoneSelectProps = {
   value?: string;
-  onChnage?: (v: string) => void;
+  onChange?: (v: string) => void;
 };
-export const BoneSelect: React.FC<BoneSelectProps> = ({ value, onChnage }) => {
-  return (
-    <SelectField placeholder="Bone" value={value} onChange={onChnage}>
-      {bones.map((bone, key) => (
-        <SelectItem key={key} value={Skeleton[bone].toString()}>
+export const BoneSelect: React.FC<BoneSelectProps> = ({ value, onChange }) => {
+  const bonesSelectItems = React.useMemo(
+    () =>
+      bones.map((bone) => (
+        <SelectItem key={bone} value={Skeleton[bone].toString()}>
           {bone}
         </SelectItem>
-      ))}
+      )),
+    []
+  );
+
+  return (
+    <SelectField placeholder="Bone" value={value} onChange={onChange}>
+      {bonesSelectItems}
     </SelectField>
   );
 };

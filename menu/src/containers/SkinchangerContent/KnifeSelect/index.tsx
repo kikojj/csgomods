@@ -49,7 +49,7 @@ export const KnifeSelect: React.FC<KnifeSelectProps> = ({
 
       return (
         itemDI !== NaN &&
-        weapon.isKnife() &&
+        weapon.isKnife &&
         weapon.itemDI !== ItemDefinitionIndex.WeaponKnifeCT2 &&
         weapon.itemDI !== ItemDefinitionIndex.WeaponKnifeT &&
         (activeTeam === TeamNum.Terrorist

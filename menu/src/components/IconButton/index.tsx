@@ -12,7 +12,7 @@ export const IconButton: React.FC<IconButtonProps> = ({ className, iconUrl }) =>
   const classes = useStyles();
 
   return (
-    <div className={join(classes.contanier, className)}>
+    <div className={join(classes.container, className)}>
       <img src={iconUrl} />
     </div>
   );

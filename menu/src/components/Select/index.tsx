@@ -13,20 +13,26 @@ export type SelectProps = {
   placeholder?: string;
   value?: string;
   onChange?: (v: string) => void;
-  children: React.ReactComponentElement<typeof SelectItem> | React.ReactComponentElement<typeof SelectItem>[];
+  children:
+    | React.ReactComponentElement<typeof SelectItem>
+    | React.ReactComponentElement<typeof SelectItem>[];
 };
-export function Select({ className, placeholder, value: _value, onChange: _onChange, children }: SelectProps) {
+export function Select({
+  className,
+  placeholder,
+  value: _value,
+  onChange: _onChange,
+  children,
+}: SelectProps) {
   const classes = useStyles();
+
   const [isShow, setShow] = React.useState<boolean>(false);
   const [__value, __onChange] = React.useState<string>("");
 
-  const value = _value !== undefined && _onChange !== undefined ? _value : __value;
-  const onChange = _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
-
-  function clickHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    onChange((e.target as any).getAttribute("data-value"));
-    setShow(false);
-  }
+  const value =
+    _value !== undefined && _onChange !== undefined ? _value : __value;
+  const onChange =
+    _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
 
   if (!Array.isArray(children)) {
     children = [children];
@@ -34,23 +40,29 @@ export function Select({ className, placeholder, value: _value, onChange: _onCha
 
   const valueEl = children.find((child) => child.props.value === value);
 
+  function clickHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+    onChange((e.target as any).getAttribute("data-value"));
+    setShow(false);
+  }
+
   return (
     <div
-      className={
-        classes.selectContainer +
-        (value ? ` ${classes.selectContainer}-focus` : "") +
-        (className ? ` ${className}` : "")
-      }
+      className={join(
+        classes.selectContainer,
+        value && ` ${classes.selectContainer}-focus`,
+        className && ` ${className}`
+      )}
     >
-      {placeholder ? (
+      {placeholder && (
         <div
-          className={join(classes.placeholder, value ? `${classes.placeholder}-value` : undefined)}
+          className={join(
+            classes.placeholder,
+            value ? `${classes.placeholder}-value` : undefined
+          )}
           onClick={() => !value && setShow(true)}
         >
           {placeholder}
         </div>
-      ) : (
-        ""
       )}
       <div
         className={classes.select}

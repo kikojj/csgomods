@@ -1,6 +1,6 @@
 import React from "react";
 import { send } from "@services";
-import { Menu as CMenu } from "@components";
+import { Menu as CSGOModsMenu } from "@components";
 import { ActiveTab } from "@utils";
 import * as icons from "./images";
 
@@ -9,7 +9,7 @@ export type MenuProps = {
   setActiveTab: React.Dispatch<React.SetStateAction<ActiveTab>>;
 };
 export const Menu: React.FC<MenuProps> = ({ activeTab, setActiveTab }) => (
-  <CMenu
+  <CSGOModsMenu
     tabs={[
       {
         title: "Visuals",

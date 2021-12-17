@@ -1,5 +1,5 @@
 import React from "react";
-import { Range as RRange } from "react-range";
+import { Range as ReactRange } from "react-range";
 
 import { colors } from "@utils";
 import { join } from "../utils";
@@ -37,15 +37,13 @@ export const Range: React.FC<RangeProps> = ({
 
   return (
     <div className={join(classes.container, className)} onClick={onClick}>
-      {type === "float" ? (
+      {type === "float" && (
         <button className={classes.btn_minus} onClick={() => onChange(value - step < min ? min : value - step)}>
           -
         </button>
-      ) : (
-        ""
       )}
       <div className={classes.content}>
-        <RRange
+        <ReactRange
           values={[value]}
           step={step}
           min={min}
@@ -66,12 +64,10 @@ export const Range: React.FC<RangeProps> = ({
           renderThumb={({ props, isDragged }) => <div {...props} className={classes.valueMark} />}
         />
       </div>
-      {type === "float" ? (
+      {type === "float" && (
         <button className={classes.btn_plus} onClick={() => onChange(value + step > max ? max : value + step)}>
           +
         </button>
-      ) : (
-        ""
       )}
     </div>
   );

@@ -16,6 +16,7 @@ export const Logo: React.FC<LogoProps> = ({ className, useText = true, size = "s
   if (!useText) {
     return <img className={join(classes.image, className)} src={LogoPng} alt="logo" />;
   }
+  
   return (
     <div className={join(classes.container, className)}>
       <img className={classes.image} src={LogoPng} alt="logo" />

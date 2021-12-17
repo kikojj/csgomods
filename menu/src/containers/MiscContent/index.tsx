@@ -28,7 +28,7 @@ export const MiscContent: React.FC = () => {
               updateValue({ name: "misc_auto_pistols_enable", value: v })
             }
           />
-          {settings.misc_auto_accept_enable ? (
+          {settings.misc_auto_accept_enable && (
             <RangeField
               label={`Delay: ${settings.misc_auto_pistols_delay}`}
               helperText="Delay between shoots"
@@ -40,8 +40,6 @@ export const MiscContent: React.FC = () => {
                 updateValue({ name: "misc_auto_pistols_delay", value: v })
               }
             />
-          ) : (
-            ""
           )}
         </Group>
         <Group marginTop={35} label="Anti flash">
@@ -52,7 +50,7 @@ export const MiscContent: React.FC = () => {
               updateValue({ name: "misc_anti_flash_enable", value: v })
             }
           />
-          {settings.misc_anti_flash_enable ? (
+          {settings.misc_anti_flash_enable && (
             <RangeField
               label={`Max alpha: ${settings.misc_anti_flash_max_alpha}`}
               min={0}
@@ -63,8 +61,6 @@ export const MiscContent: React.FC = () => {
                 updateValue({ name: "misc_anti_flash_max_alpha", value: v })
               }
             />
-          ) : (
-            ""
           )}
         </Group>
       </div>

@@ -15,8 +15,9 @@ import { useStyles } from "./styles";
 
 const Header: React.FC = () => {
   const classes = useStyles();
+
   return (
-    <div className={classes.player} style={{ fontSize: 12 }}>
+    <div className={classes.player}>
       <div className={classes.player_info}>
         <div className={classes.player_stat}>Ping</div>
         <div className={classes.player_name}>Name</div>
@@ -42,9 +43,7 @@ export const PlayersListContent: React.FC = () => {
   const radarData = useDataSelector(selectRadarData);
   const settings = useSettingsSelector(selectSettings);
 
-  const [selectedPlayer, setSelectedPlayer] = React.useState<
-    IRadarData | undefined
-  >(undefined);
+  const [selectedPlayer, setSelectedPlayer] = React.useState<IRadarData>();
 
   const Ts = radarData
     .filter((d) => d.team_num === TeamNum.Terrorist)
@@ -137,7 +136,7 @@ export const PlayersListContent: React.FC = () => {
           <TList />
           <CTList />
         </Group>
-        {selectedPlayer ? (
+        {selectedPlayer && (
           <Group
             marginTop={35}
             label={`Personal settings for ${selectedPlayer.name}`}
@@ -148,17 +147,15 @@ export const PlayersListContent: React.FC = () => {
               onChange={(v) => updatePersonalSettings("enable", v)}
             />
           </Group>
-        ) : (
-          ""
         )}
-        {selectedPlayer && personalSettings && personalSettings.enable ? (
+        {selectedPlayer && personalSettings && personalSettings.enable && (
           <Group marginTop={35} label="Glow ESP">
             <CheckboxField
               label="Enable"
               checked={personalSettings.glow_settings.enable}
               onChange={(v) => updatePersonalGlowSettings("enable", v)}
             />
-            {personalSettings.glow_settings.enable ? (
+            {personalSettings.glow_settings.enable && (
               <React.Fragment>
                 <GlowStyle
                   value={personalSettings.glow_settings.style.toString()}
@@ -225,12 +222,8 @@ export const PlayersListContent: React.FC = () => {
                   </React.Fragment>
                 )}
               </React.Fragment>
-            ) : (
-              ""
             )}
           </Group>
-        ) : (
-          ""
         )}
       </div>
     </div>

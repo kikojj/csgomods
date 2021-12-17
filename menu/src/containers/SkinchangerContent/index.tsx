@@ -39,11 +39,11 @@ export const SkinchangerContent: React.FC = () => {
     if (
       settings.skinchanger_enable &&
       gameActiveWeapon.itemDI > 0 &&
-      gameActiveWeapon.isWeapon()
+      gameActiveWeapon.isWeapon
     ) {
       setActiveWeapon(new Weapon({ itemDI: gameActiveWeapon.itemDI }));
 
-      if (gameActiveWeapon.isKnife()) {
+      if (gameActiveWeapon.isKnife) {
         if (
           gameActiveTeam === TeamNum.Terrorist ||
           gameActiveTeam === TeamNum.CounterTerrorist

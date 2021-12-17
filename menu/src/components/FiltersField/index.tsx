@@ -24,28 +24,42 @@ export const FiltersField: React.FC<FiltersFieldProps> = ({
 
   const [__values, __onChange] = React.useState<string[]>([]);
 
-  const values = _values !== undefined && _onChange !== undefined ? _values : __values;
-  const onChange = _values !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const values =
+    _values !== undefined && _onChange !== undefined ? _values : __values;
+  const onChange =
+    _values !== undefined && _onChange !== undefined ? _onChange : __onChange;
+
+  const filtersItems = React.useMemo(
+    () =>
+      filters.map((filter, key) => {
+        const checked = values.includes(filter);
+
+        return (
+          <div key={key}>
+            <div
+              className={join(
+                classes.filter,
+                checked ? `${classes.filter}-active` : undefined
+              )}
+              onClick={() =>
+                checked
+                  ? onChange(values.filter((v) => v !== filter))
+                  : onChange([...values, filter])
+              }
+            >
+              {filter}
+            </div>
+          </div>
+        );
+      }),
+    [values, onChange]
+  );
 
   return (
     <div className={classes.container} style={{ marginTop }}>
       <h5 className={classes.label}>{label}</h5>
-      {helperText ? <p className={classes.helperText}>{helperText}</p> : ""}
-      <div className={classes.filters}>
-        {filters.map((filter, key) => {
-          const checked = values.includes(filter);
-          return (
-            <div key={key}>
-              <div
-                className={join(classes.filter, checked ? `${classes.filter}-active` : undefined)}
-                onClick={() => (checked ? onChange(values.filter((v) => v !== filter)) : onChange([...values, filter]))}
-              >
-                {filter}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      {helperText && <p className={classes.helperText}>{helperText}</p>}
+      <div className={classes.filters}>{filtersItems}</div>
     </div>
   );
 };

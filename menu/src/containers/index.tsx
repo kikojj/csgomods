@@ -1,15 +1,15 @@
-export { WeaponSelect, WeaponSelectProps } from "./WeaponSelect";
-export { BoneSelect, BoneSelectProps } from "./BoneSelect";
-export { QualitySelect, QualitySelectProps } from "./QualitySelect";
+export * from "./WeaponSelect";
+export * from "./BoneSelect";
+export * from "./QualitySelect";
 
-export { LoadingContent } from "./LoadingContent";
-export { VisualsContent } from "./VisualsContent";
-export { AimbotContent } from "./AimbotContent";
-export { TriggerbotContent } from "./TriggerbotContent";
-export { SkinchangerContent } from "./SkinchangerContent";
-export { MiscContent } from "./MiscContent";
-export { ConfigsContent } from "./ConfigsContent";
-export { PlayersListContent } from "./PlayersListContent";
+export * from "./LoadingContent";
+export * from "./VisualsContent";
+export * from "./AimbotContent";
+export * from "./TriggerbotContent";
+export * from "./SkinchangerContent";
+export * from "./MiscContent";
+export * from "./ConfigsContent";
+export * from "./PlayersListContent";
 
-export { Menu, MenuProps } from "./Menu";
-export { Window } from "./Window";
+export * from "./Menu";
+export * from "./Window";

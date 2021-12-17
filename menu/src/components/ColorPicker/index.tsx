@@ -26,7 +26,7 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color: _color, onChnag
   return (
     <div className={classes.container}>
       <div className={classes.colorContainer} onClick={() => setShow(true)} />
-      {show ? (
+      {show && (
         <ClickAwayListener
           onClickAway={() => {
             setShow(false);
@@ -37,8 +37,6 @@ export const ColorPicker: React.FC<ColorPickerProps> = ({ color: _color, onChnag
             <Picker color={color} onChange={setColor} />
           </div>
         </ClickAwayListener>
-      ) : (
-        ""
       )}
     </div>
   );
