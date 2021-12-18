@@ -1,8 +1,14 @@
 import { makeStyles } from "@material-ui/styles";
 import { colors, hexAlpha } from "@utils";
 
+export type Props = {
+  marginTop?: number;
+  marginRight?: number;
+}
 export const useStyles = makeStyles({
   preContainer: {
+    marginTop: ({ marginTop }: Props) => marginTop,
+    marginRight: ({ marginRight }: Props) => marginRight,
     paddingTop: 7,
     width: "100%",
   },

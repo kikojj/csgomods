@@ -1,11 +1,8 @@
 import React from "react";
 import ClickAwayListener from "react-click-away-listener";
-
 import { SelectItem } from "@components";
-
-import { join } from "../utils";
-
-import SelectIcon from "./images/SelectIcon.svg";
+import { join, useProvidableState } from "@components/utils";
+import { SelectIcon } from "./images";
 import { useStyles } from "./styles";
 
 export type SelectProps = {
@@ -27,39 +24,55 @@ export function Select({
   const classes = useStyles();
 
   const [isShow, setShow] = React.useState<boolean>(false);
-  const [__value, __onChange] = React.useState<string>("");
-
-  const value =
-    _value !== undefined && _onChange !== undefined ? _value : __value;
-  const onChange =
-    _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const [value, onChange] = useProvidableState("", _value, _onChange);
 
   if (!Array.isArray(children)) {
     children = [children];
   }
 
-  const valueEl = children.find((child) => child.props.value === value);
+  const valueElement = children.find((child) => child.props.value === value);
 
-  function clickHandler(e: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    onChange((e.target as any).getAttribute("data-value"));
-    setShow(false);
-  }
+  const onPlaceholderClick = React.useCallback(
+    () => !value && setShow(true),
+    [value, setShow]
+  );
+
+  const onClick = React.useCallback(() => setShow(true), [setShow]);
+
+  const onKeyDown = React.useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === "Enter") {
+        setShow(true);
+      }
+    },
+    [setShow]
+  );
+
+  const onSelectListClick = React.useCallback(
+    (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+      onChange((e.target as any).getAttribute("data-value"));
+      setShow(false);
+    },
+    [onChange, setShow]
+  );
+
+  const onClickAway = React.useCallback(() => setShow(false), [setShow]);
 
   return (
     <div
       className={join(
         classes.selectContainer,
-        value && ` ${classes.selectContainer}-focus`,
-        className && ` ${className}`
+        value && `${classes.selectContainer}-focus`,
+        className
       )}
     >
       {placeholder && (
         <div
           className={join(
             classes.placeholder,
-            value ? `${classes.placeholder}-value` : undefined
+            value && `${classes.placeholder}-value`
           )}
-          onClick={() => !value && setShow(true)}
+          onClick={onPlaceholderClick}
         >
           {placeholder}
         </div>
@@ -67,21 +80,19 @@ export function Select({
       <div
         className={classes.select}
         tabIndex={0}
-        onClick={() => setShow(true)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") {
-            setShow(true);
-          }
-        }}
+        onClick={onClick}
+        onKeyDown={onKeyDown}
       >
-        <div className={classes.value}>{valueEl?.props.children || ""}</div>
+        <div className={classes.value}>
+          {valueElement?.props.children || ""}
+        </div>
         <span>
           <img src={SelectIcon} />
         </span>
       </div>
       {isShow && (
-        <ClickAwayListener onClickAway={() => setShow(false)}>
-          <div className={classes.selectItemList} onClick={clickHandler}>
+        <ClickAwayListener onClickAway={onClickAway}>
+          <div className={classes.selectItemList} onClick={onSelectListClick}>
             {children}
           </div>
         </ClickAwayListener>

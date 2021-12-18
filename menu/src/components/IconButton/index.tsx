@@ -1,12 +1,10 @@
 import React from "react";
-
-import { join } from "../utils";
-
+import { join } from "@components/utils";
 import { useStyles } from "./styles";
 
 export type IconButtonProps = {
-  className?: string;
   iconUrl: string;
+  className?: string;
 };
 export const IconButton: React.FC<IconButtonProps> = ({ className, iconUrl }) => {
   const classes = useStyles();

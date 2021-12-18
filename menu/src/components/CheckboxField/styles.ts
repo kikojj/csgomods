@@ -1,5 +1,4 @@
 import { makeStyles } from "@material-ui/styles";
-import { colors } from "@utils";
 
 export const useStyles = makeStyles({
   container: {
@@ -17,7 +16,7 @@ export const useStyles = makeStyles({
 
     fontWeight: 400,
     fontSize: 14,
-    lineHeight: "14px",
+    lineHeight: 14,
 
     color: "#fff",
   },

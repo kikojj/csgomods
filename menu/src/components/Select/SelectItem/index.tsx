@@ -5,8 +5,9 @@ export type SelectItemProps = {
   value: string;
   children: React.ReactNode;
 };
-export function SelectItem({ value, children }: SelectItemProps) {
+export const SelectItem: React.FC<SelectItemProps> = ({ value, children }) => {
   const classes = useStyles();
+
   return (
     <button className={classes.selectItem} data-value={value}>
       {children}

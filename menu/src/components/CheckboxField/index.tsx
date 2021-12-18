@@ -1,15 +1,13 @@
 import React from "react";
-
 import { Checkbox, CheckboxProps } from "@components";
-
 import { useStyles } from "./styles";
 
-export type CheckboxFieldProps = {
+export type CheckboxFieldProps = CheckboxProps & {
   label?: string;
   helperText?: string;
   marginTop?: number;
 };
-export const CheckboxField: React.FC<CheckboxFieldProps & CheckboxProps> = ({
+export const CheckboxField: React.FC<CheckboxFieldProps> = ({
   label = "Label",
   helperText,
   marginTop = 20,

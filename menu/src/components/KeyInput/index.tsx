@@ -1,22 +1,39 @@
 import React from "react";
-
-import { join } from "../utils";
-
+import { join, useProvidableState } from "@components/utils";
+import { emptyHandler } from "@utils";
 import { MouseIcon, KeyboardIcon } from "./images";
 import { useStyles } from "./styles";
 
 export type KeyInputProps = {
-  className?: string;
   value?: number;
+  className?: string;
   onChange?: (v: number) => void;
 };
-export const KeyInput: React.FC<KeyInputProps> = ({ className, value: _value, onChange: _onChange }) => {
+export const KeyInput: React.FC<KeyInputProps> = ({
+  className,
+  value: _value,
+  onChange: _onChange,
+}) => {
   const classes = useStyles();
 
-  const [__value, __onChange] = React.useState<number>(1);
+  const [value, onChange] = useProvidableState(1, _value, _onChange);
 
-  const value = _value !== undefined && _onChange !== undefined ? _value : __value;
-  const onChange = _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const onKeyDown = React.useCallback(
+    // TODO: Check @deprecated keyCode and remove it
+    (event: React.KeyboardEvent<HTMLInputElement>) => onChange(event.keyCode),
+    [onChange]
+  );
+
+  const onMouseDown = React.useCallback(
+    (event: React.MouseEvent<HTMLInputElement, MouseEvent>) => {
+      if (event.button === 0) {
+        onChange(1);
+      } else if (event.button === 2) {
+        onChange(2);
+      }
+    },
+    [onChange]
+  );
 
   return (
     <div className={join(classes.container, className)}>
@@ -27,17 +44,9 @@ export const KeyInput: React.FC<KeyInputProps> = ({ className, value: _value, on
       <input
         className={classes.input}
         value={value.toString()}
-        onKeyDown={(e) => {
-          onChange(e.keyCode);
-        }}
-        onMouseDown={(e) => {
-          if (e.button === 0) {
-            onChange(1);
-          } else if (e.button === 2) {
-            onChange(2);
-          }
-        }}
-        onChange={() => 0}
+        onKeyDown={onKeyDown}
+        onMouseDown={onMouseDown}
+        onChange={emptyHandler}
       />
     </div>
   );

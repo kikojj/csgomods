@@ -1,7 +1,5 @@
 import React from "react";
-
 import { Select, SelectProps } from "@components";
-
 import { useStyles } from "./styles";
 
 export type SelectFieldProps = {

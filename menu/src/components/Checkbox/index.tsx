@@ -1,5 +1,5 @@
 import React from "react";
-
+import { useProvidableState } from "@components/utils";
 import { useStyles } from "./styles";
 
 export type CheckboxProps = {
@@ -10,16 +10,14 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   checked: _checked,
   onChange: _onChange,
 }) => {
-  const [__checked, __onChange] = React.useState<boolean>(_checked || false);
-
-  let checked =
-    _checked !== undefined && _onChange !== undefined ? _checked : __checked;
-  let onChange =
-    _checked !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const [checked, onChange] = useProvidableState(false, _checked, _onChange);
 
   const classes = useStyles({ checked });
 
-  return (
-    <div className={classes.container} onClick={() => onChange(!checked)} />
+  const onClick = React.useCallback(
+    () => onChange(!checked),
+    [checked, onChange]
   );
+
+  return <div className={classes.container} onClick={onClick} />;
 };

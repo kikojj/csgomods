@@ -1,7 +1,5 @@
 import { makeStyles } from "@material-ui/styles";
-
 import { colors } from "@utils";
-
 import { ColorRGBA } from ".";
 
 export type Props = {

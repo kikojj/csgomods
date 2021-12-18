@@ -1,7 +1,5 @@
 import React from "react";
-
 import { Range, RangeProps } from "@components";
-
 import { useStyles } from "./styles";
 
 export type RangeFieldProps = {

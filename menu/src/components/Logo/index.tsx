@@ -1,9 +1,8 @@
 import React from "react";
-
-import { join } from "../utils";
-
+import { join } from "@components/utils";
+import { appName } from "@utils";
+import { LogoImage } from "./images";
 import { useStyles } from "./styles";
-import LogoPng from "./images/logo.png";
 
 export type LogoProps = {
   className?: string;
@@ -14,13 +13,13 @@ export const Logo: React.FC<LogoProps> = ({ className, useText = true, size = "s
   const classes = useStyles({ size });
 
   if (!useText) {
-    return <img className={join(classes.image, className)} src={LogoPng} alt="logo" />;
+    return <img className={join(classes.image, className)} src={LogoImage} alt="logo" />;
   }
   
   return (
     <div className={join(classes.container, className)}>
-      <img className={classes.image} src={LogoPng} alt="logo" />
-      <h2 className={classes.text}>csgomods</h2>
+      <img className={classes.image} src={LogoImage} alt="logo" />
+      <h2 className={classes.text}>{appName}</h2>
     </div>
   );
 };

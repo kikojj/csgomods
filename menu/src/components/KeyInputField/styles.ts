@@ -1,8 +1,11 @@
 import { makeStyles } from "@material-ui/styles";
-import { colors } from "@utils";
 
+export type Props = {
+  marginTop?: number;
+}
 export const useStyles = makeStyles({
   container: {
+    marginTop: ({ marginTop }: Props) => marginTop,
     width: "100%",
   },
   helperText: {

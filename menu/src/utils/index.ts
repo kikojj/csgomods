@@ -1,3 +1,4 @@
+export * as ranks from "./ranks";
 export * from "./colors";
 export * from "./globalStyles";
 export * from "./settings";
@@ -9,7 +10,8 @@ export * from "./weapon";
 export * from "./skin";
 export * from "./unique";
 export * from "./capitalizeFirstLetter";
-export * as ranks from "./ranks";
 export * from "./isObjectsEqual";
-export * from "./selectWeaponAimbotSettings"
-export * from "./genericObject"
+export * from "./selectWeaponAimbotSettings";
+export * from "./genericObject";
+export * from "./emptyHandler";
+export * from "./appName";

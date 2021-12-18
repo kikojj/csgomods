@@ -4,25 +4,25 @@ import { join } from "../utils";
 import { useStyles } from "./styles";
 
 export type ButtonProps = {
-  className?: string;
-  onClick?: () => void;
   children?: React.ReactNode;
+  color?: string;
   marginTop?: number;
   marginRight?: number;
-  color?: string;
+  className?: string;
+  onClick?: () => void;
 };
 export const Button: React.FC<ButtonProps> = ({
-  className,
   children,
-  onClick,
+  color = colors.primary,
   marginTop = 20,
   marginRight,
-  color = colors.primary,
+  className,
+  onClick,
 }) => {
-  const classes = useStyles({ color });
+  const classes = useStyles({ color, marginRight, marginTop });
 
   return (
-    <div className={join(classes.container, className)} onClick={onClick} style={{ marginTop, marginRight }}>
+    <div className={join(classes.container, className)} onClick={onClick}>
       {children}
     </div>
   );

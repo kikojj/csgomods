@@ -7,7 +7,7 @@ export * from "./Checkbox";
 export * from "./CheckboxField";
 
 export * from "./ColorPicker";
-export * from "./ColoPickerField";
+export * from "./ColorPickerField";
 
 export * from "./FiltersField";
 

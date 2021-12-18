@@ -192,7 +192,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="Color"
                   color={settings.visuals_glow_esp_friends.visible_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_friends",
                       value: {
@@ -208,7 +208,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="0hp color"
                   color={settings.visuals_glow_esp_friends.hp_based_0hp_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_friends",
                       value: {
@@ -221,7 +221,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="100hp color"
                   color={settings.visuals_glow_esp_friends.hp_based_100hp_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_friends",
                       value: {
@@ -269,7 +269,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="Visible color"
                   color={settings.visuals_glow_esp_enemies.visible_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_enemies",
                       value: {
@@ -282,7 +282,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="Invisible color"
                   color={settings.visuals_glow_esp_enemies.invisible_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_enemies",
                       value: {
@@ -298,7 +298,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="0hp color"
                   color={settings.visuals_glow_esp_enemies.hp_based_0hp_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_enemies",
                       value: {
@@ -311,7 +311,7 @@ export const VisualsContent: React.FC = () => {
                 <ColorPickerField
                   label="100hp color"
                   color={settings.visuals_glow_esp_enemies.hp_based_100hp_color}
-                  onChnage={(v) =>
+                  onChange={(v) =>
                     updateValue({
                       name: "visuals_glow_esp_enemies",
                       value: {
@@ -345,7 +345,7 @@ export const VisualsContent: React.FC = () => {
             <ColorPickerField
               label="Color"
               color={settings.visuals_glow_esp_c4.visible_color}
-              onChnage={(v) =>
+              onChange={(v) =>
                 updateValue({
                   name: "visuals_glow_esp_c4",
                   value: {
@@ -377,7 +377,7 @@ export const VisualsContent: React.FC = () => {
             <ColorPickerField
               label="Color"
               color={settings.visuals_glow_esp_defusing.visible_color}
-              onChnage={(v) =>
+              onChange={(v) =>
                 updateValue({
                   name: "visuals_glow_esp_defusing",
                   value: {
@@ -409,7 +409,7 @@ export const VisualsContent: React.FC = () => {
             <ColorPickerField
               label="Color"
               color={settings.visuals_glow_esp_grenades.visible_color}
-              onChnage={(v) =>
+              onChange={(v) =>
                 updateValue({
                   name: "visuals_glow_esp_grenades",
                   value: {
@@ -451,7 +451,7 @@ export const VisualsContent: React.FC = () => {
             <ColorPickerField
               label="Color"
               color={settings.visuals_chams_friends.color}
-              onChnage={(v) =>
+              onChange={(v) =>
                 updateValue({
                   name: "visuals_chams_friends",
                   value: {
@@ -471,7 +471,7 @@ export const VisualsContent: React.FC = () => {
             <ColorPickerField
               label="Color"
               color={settings.visuals_chams_enemies.color}
-              onChnage={(v) =>
+              onChange={(v) =>
                 updateValue({
                   name: "visuals_chams_enemies",
                   value: {

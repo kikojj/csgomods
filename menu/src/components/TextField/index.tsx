@@ -1,6 +1,5 @@
 import React from "react";
-import { join } from "../utils";
-import { useNumberHandler, usePhoneHandler } from "./utils";
+import { join, useProvidableState } from "../utils";
 import { useStyles } from "./styles";
 
 export type TextFieldProps = {
@@ -8,62 +7,62 @@ export type TextFieldProps = {
   placeholder?: string;
   value?: string;
   helperText?: string;
-  onChange?: (v: string) => void;
   marginTop?: number;
   marginRight?: number;
+  onChange?: (v: string) => void;
 };
 export function TextField({
   className,
   placeholder,
   value: _value,
   helperText = "",
-  onChange: _onChange,
   marginTop = 20,
   marginRight,
+  onChange: _onChange,
 }: TextFieldProps) {
-  const classes = useStyles();
-  const ref = React.createRef<HTMLInputElement>();
+  const classes = useStyles({ marginTop, marginRight });
+  const inputRef = React.createRef<HTMLInputElement>();
 
   const [focus, setFocus] = React.useState<boolean>(false);
-  const [__value, __onChange] = React.useState<string>("");
+  const [value, setValue] = useProvidableState("", _value, _onChange);
 
-  const value =
-    _value !== undefined && _onChange !== undefined ? _value : __value;
-  const onChange =
-    _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const onPlaceholderClick = React.useCallback(
+    () => inputRef.current?.focus(),
+    [inputRef]
+  );
 
-  function changeHandler(e: React.ChangeEvent<HTMLInputElement>) {
-    const value = e.target.value;
-    onChange(value);
-  }
+  const onChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) =>
+      setValue(event.target.value),
+    [setValue]
+  );
+
+  const onFocus = React.useCallback(() => setFocus(true), [setFocus]);
+
+  const onBlur = React.useCallback(() => setFocus(false), [setFocus]);
 
   return (
-    <div
-      className={join(classes.preContainer, className)}
-      style={{ marginTop, marginRight }}
-    >
+    <div className={join(classes.preContainer, className)}>
       <div className={classes.container}>
         {placeholder && (
           <span
             className={join(
               classes.placeholder,
-              focus || (value && ` ${classes.placeholder}-focus`)
+              (focus || value) && ` ${classes.placeholder}-focus`
             )}
-            onClick={() => {
-              ref.current?.focus();
-            }}
+            onClick={onPlaceholderClick}
           >
             {placeholder}
           </span>
         )}
         <input
-          ref={ref}
+          ref={inputRef}
           className={classes.input}
-          type={"text"}
+          type="text"
           value={value}
-          onChange={changeHandler}
-          onFocus={() => setFocus(true)}
-          onBlur={() => setFocus(false)}
+          onChange={onChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
       </div>
       <div

@@ -1,21 +1,22 @@
 import React from "react";
 import { Range as ReactRange } from "react-range";
-
+import { join, useProvidableState } from "@components/utils";
 import { colors } from "@utils";
-import { join } from "../utils";
-
+import { Track } from "./Track";
 import { useStyles } from "./styles";
 
 export type RangeProps = {
   className?: string;
   type?: "int" | "float";
   value?: number;
-  onChange?: (n: number) => void;
   min?: number;
   max?: number;
   step?: number;
   color?: string;
-  onClick?: (e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>) => void;
+  onChange?: (value: number) => void;
+  onClick?: (
+    e: React.MouseEvent<HTMLDivElement, globalThis.MouseEvent>
+  ) => void;
 };
 export const Range: React.FC<RangeProps> = ({
   className,
@@ -28,17 +29,32 @@ export const Range: React.FC<RangeProps> = ({
   color = colors.primary,
   onClick,
 }) => {
-  const [__value, __onChange] = React.useState<number>(min);
+  const [value, onChange] = useProvidableState(min, _value, _onChange);
 
-  let value = _value !== undefined && _onChange !== undefined ? _value : __value;
-  let onChange = _value !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const classes = useStyles({ type });
 
-  const classes = useStyles({ value: ((value - min) / (max - min)) * 100, type, color });
+  const valueInPercents = ((value - min) / (max - min)) * 100;
+  const renderAdditionalButtons = type === "float";
+
+  const onMinusClick = React.useCallback(
+    () => onChange(value - step < min ? min : value - step),
+    [min, step, value, onChange]
+  );
+
+  const onPlusClick = React.useCallback(
+    () => onChange(value + step > max ? max : value + step),
+    [max, step, value, onChange]
+  );
+
+  const onRangeChange = React.useCallback(
+    (values: number[]) => onChange(values[0]),
+    [onChange]
+  );
 
   return (
     <div className={join(classes.container, className)} onClick={onClick}>
-      {type === "float" && (
-        <button className={classes.btn_minus} onClick={() => onChange(value - step < min ? min : value - step)}>
+      {renderAdditionalButtons && (
+        <button className={classes.btn_minus} onClick={onMinusClick}>
           -
         </button>
       )}
@@ -48,24 +64,17 @@ export const Range: React.FC<RangeProps> = ({
           step={step}
           min={min}
           max={max}
-          onChange={(values) => onChange(values[0])}
-          renderTrack={({ props, children }) => (
-            <div
-              onMouseDown={props.onMouseDown}
-              onTouchStart={props.onTouchStart}
-              style={props.style}
-              className={classes.trackBackground}
-            >
-              <div ref={props.ref} className={classes.trackValue}>
-                {children}
-              </div>
-            </div>
+          onChange={onRangeChange}
+          renderTrack={(props) => (
+            <Track color={color} valueInPercents={valueInPercents} {...props} />
           )}
-          renderThumb={({ props, isDragged }) => <div {...props} className={classes.valueMark} />}
+          renderThumb={({ props }) => (
+            <div {...props} className={classes.valueMark} />
+          )}
         />
       </div>
-      {type === "float" && (
-        <button className={classes.btn_plus} onClick={() => onChange(value + step > max ? max : value + step)}>
+      {renderAdditionalButtons && (
+        <button className={classes.btn_plus} onClick={onPlusClick}>
           +
         </button>
       )}

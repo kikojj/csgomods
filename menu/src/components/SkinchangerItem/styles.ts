@@ -4,6 +4,7 @@ import { colors, SkinRarity, rarityColors } from "@utils";
 type Props = {
   rarity: SkinRarity;
   active: boolean;
+  url: string;
 };
 export const useStyles = makeStyles({
   background: {
@@ -51,8 +52,13 @@ export const useStyles = makeStyles({
     borderRadius: 5,
   },
   image: {
-    maxWidth: 113,
-    maxHeight: 114,
+    width: 100,
+    height: 100,
+
+    backgroundImage: (props: Props) => `url(${props.url})`,
+    backgroundSize: 'contain',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center'
   },
   name: {
     marginTop: 15,

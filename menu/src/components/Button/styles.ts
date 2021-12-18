@@ -1,11 +1,14 @@
 import { makeStyles } from "@material-ui/styles";
-import { colors, hexAlpha } from "@utils";
 
 export type Props = {
   color: string;
+  marginTop?: number;
+  marginRight?: number;
 };
 export const useStyles = makeStyles({
   container: {
+    marginTop: ({ marginTop }: Props) => marginTop,
+    marginRight: ({ marginRight }: Props) => marginRight,
     padding: "7px 15px",
 
     display: "flex",

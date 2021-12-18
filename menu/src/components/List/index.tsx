@@ -1,31 +1,18 @@
 import React from "react";
-
-import { join } from "../utils";
-
+import { ListItem, ListItemProps } from "./ListItem";
 import { useStyles } from "./styles";
 
 export type ListProps = {
-  items?: { content: React.ReactChild; onClick?: () => void; selected?: boolean }[];
+  items?: ListItemProps[];
   marginTop?: number;
 };
 export const List: React.FC<ListProps> = ({ items = [], marginTop = 20 }) => {
-  const classes = useStyles();
+  const classes = useStyles({marginTop});
 
-  return (
-    <div style={{ marginTop }}>
-      {items.map((item, key) => (
-        <div
-          key={key}
-          className={join(
-            classes.item,
-            item.onClick ? `${classes.item}-active` : undefined,
-            item.selected ? `${classes.item}-selected` : undefined
-          )}
-          onClick={item.onClick}
-        >
-          {item.content}
-        </div>
-      ))}
-    </div>
+  const listItems = React.useMemo(
+    () => items.map((item, key) => <ListItem key={key} {...item} />),
+    [items]
   );
+
+  return <div className={classes.container}>{listItems}</div>;
 };

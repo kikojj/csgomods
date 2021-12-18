@@ -1,31 +1,27 @@
 import React from "react";
-
 import { SkinRarity } from "@utils";
-
 import { useStyles } from "./styles";
 
 export type SkinchangerItemProps = {
-  image: string;
-  alt?: string;
   name: string;
-  onClick?: () => void;
-  rarity?: SkinRarity;
   active?: boolean;
+  image: string;
+  rarity?: SkinRarity;
+  onClick?: () => void;
 };
 export const SkinchangerItem: React.FC<SkinchangerItemProps> = ({
-  image,
-  alt,
   name,
-  onClick,
-  rarity = SkinRarity.RARITY_COMMON,
   active = false,
+  image,
+  rarity = SkinRarity.RARITY_COMMON,
+  onClick,
 }) => {
-  const classes = useStyles({ rarity, active });
+  const classes = useStyles({ rarity, active, url: image });
 
   return (
     <div className={classes.background} onClick={onClick}>
       <div className={classes.content}>
-        <img className={classes.image} src={image} alt={alt} />
+        <div className={classes.image} />
         <h5 className={classes.name}>{name}</h5>
       </div>
     </div>

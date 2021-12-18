@@ -3,11 +3,16 @@ import { colors } from "@utils";
 
 export type Props = {
   width: number | string;
+  marginTop?: number;
+  marginRight?: number;
 };
 export const useStyles = makeStyles({
   container: {
+    marginTop: ({ marginTop }: Props) => marginTop,
+    marginRight: ({ marginRight }: Props) => marginRight,
     padding: "35px 0",
-    width: (props: Props) => props.width,
+
+    width: ({ width }: Props) => width,
     background: colors.teritary,
     borderRadius: 5,
   },
@@ -26,7 +31,7 @@ export const useStyles = makeStyles({
     height: 4,
 
     background: colors.blue,
-    borderRadius: "2px",
+    borderRadius: 2,
   },
   content: {
     marginTop: 30,

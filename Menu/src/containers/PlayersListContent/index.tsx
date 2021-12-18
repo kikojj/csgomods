@@ -166,7 +166,7 @@ export const PlayersListContent: React.FC = () => {
                     <ColorPickerField
                       label="Color"
                       color={personalSettings.glow_settings.visible_color}
-                      onChnage={(v) =>
+                      onChange={(v) =>
                         updatePersonalGlowSettings("visible_color", v)
                       }
                     />
@@ -182,14 +182,14 @@ export const PlayersListContent: React.FC = () => {
                         <ColorPickerField
                           label="Visible color"
                           color={personalSettings.glow_settings.visible_color}
-                          onChnage={(v) =>
+                          onChange={(v) =>
                             updatePersonalGlowSettings("visible_color", v)
                           }
                         />
                         <ColorPickerField
                           label="Invisible color"
                           color={personalSettings.glow_settings.invisible_color}
-                          onChnage={(v) =>
+                          onChange={(v) =>
                             updatePersonalGlowSettings("invisible_color", v)
                           }
                         />
@@ -201,7 +201,7 @@ export const PlayersListContent: React.FC = () => {
                           color={
                             personalSettings.glow_settings.hp_based_0hp_color
                           }
-                          onChnage={(v) =>
+                          onChange={(v) =>
                             updatePersonalGlowSettings("hp_based_0hp_color", v)
                           }
                         />
@@ -210,7 +210,7 @@ export const PlayersListContent: React.FC = () => {
                           color={
                             personalSettings.glow_settings.hp_based_100hp_color
                           }
-                          onChnage={(v) =>
+                          onChange={(v) =>
                             updatePersonalGlowSettings(
                               "hp_based_100hp_color",
                               v

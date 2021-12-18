@@ -1,7 +1,6 @@
 import React from "react";
-
-import { join } from "../utils";
-
+import { useProvidableState } from "@components/utils";
+import { Filter } from "./Filter";
 import { useStyles } from "./styles";
 
 export type FiltersFieldProps = {
@@ -22,36 +21,18 @@ export const FiltersField: React.FC<FiltersFieldProps> = ({
 }) => {
   const classes = useStyles();
 
-  const [__values, __onChange] = React.useState<string[]>([]);
-
-  const values =
-    _values !== undefined && _onChange !== undefined ? _values : __values;
-  const onChange =
-    _values !== undefined && _onChange !== undefined ? _onChange : __onChange;
+  const [values, onChange] = useProvidableState([], _values, _onChange);
 
   const filtersItems = React.useMemo(
     () =>
-      filters.map((filter, key) => {
-        const checked = values.includes(filter);
-
-        return (
-          <div key={key}>
-            <div
-              className={join(
-                classes.filter,
-                checked ? `${classes.filter}-active` : undefined
-              )}
-              onClick={() =>
-                checked
-                  ? onChange(values.filter((v) => v !== filter))
-                  : onChange([...values, filter])
-              }
-            >
-              {filter}
-            </div>
-          </div>
-        );
-      }),
+      filters.map((filter) => (
+        <Filter
+          filter={filter}
+          checked={values.includes(filter)}
+          values={values}
+          onChange={onChange}
+        />
+      )),
     [values, onChange]
   );
 
